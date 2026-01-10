@@ -67,14 +67,14 @@
                                 <div class="account-menu-item" onclick="logout()">
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </div>
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
 
                         <button class="btn-icon cart-btn" onclick="alert('Demo: View cart functionality')">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
-                    </div>
+                                </div>
                 </div>
             </div>
         </div>
@@ -86,13 +86,13 @@
             <!-- Breadcrumb -->
             <div class="breadcrumb">
                 <a href="/">Home</a> / <span>Products</span>
-            </div>
+                                            </div>
 
             <!-- Page Header -->
             <div class="page-header">
                 <h1 class="page-title">All Products</h1>
                 <p class="page-subtitle">Browse our complete collection of electronics components</p>
-            </div>
+                                        </div>
 
             <!-- Filters and Sorting -->
             <div class="products-controls">
@@ -105,7 +105,7 @@
                     <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
                     <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
                     <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
-                </div>
+                                            </div>
                 <select id="sortFilter" onchange="sortProducts()">
                     <option value="name">Sort by Name</option>
                     <option value="price-low">Price: Low to High</option>
@@ -115,7 +115,7 @@
 
             <div class="products-grid" id="productsGrid">
                 <!-- All 61+ products from DEMO_PRODUCTS array -->
-                <div class="product-card fade-in" data-id="11" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="11" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://m.media-amazon.com/images/I/51+N-57gSiL.jpg" alt="Arduino Uno R3" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -129,10 +129,10 @@
                                 <i class="fas fa-cart-plus"></i> Add to cart
                             </button>
                         </div>
-                    </div>
-                </div>
+                                            </div>
+                                        </div>
 
-                <div class="product-card fade-in" data-id="12" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="12" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%)">
                         <img src="https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg" alt="ESP32 Development Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -144,12 +144,12 @@
                         <div class="product-actions">
                             <button class="btn btn-primary btn-small" onclick="addToCart(12)">
                                 <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
+                                        </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="13" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="13" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff4757 0%, #ff6b35 100%)">
                         <img src="https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg" alt="DHT11 Temperature Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-thermometer-half" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -161,12 +161,12 @@
                         <div class="product-actions">
                             <button class="btn btn-primary btn-small" onclick="addToCart(13)">
                                 <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
+                                        </button>
                         </div>
-                    </div>
-                </div>
+                                    </div>
+                                </div>
 
-                <div class="product-card fade-in" data-id="14" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="14" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg" alt="HC-SR04 Ultrasonic Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -178,12 +178,12 @@
                         <div class="product-actions">
                             <button class="btn btn-primary btn-small" onclick="addToCart(14)">
                                 <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
+                                        </button>
+                                    </div>
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="15" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="15" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg" alt="SG90 Servo Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -196,11 +196,11 @@
                             <button class="btn btn-primary btn-small" onclick="addToCart(15)">
                                 <i class="fas fa-cart-plus"></i> Add to cart
                             </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="product-card fade-in" data-id="16" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="16" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg" alt="DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -212,16 +212,16 @@
                         <div class="product-actions">
                             <button class="btn btn-primary btn-small" onclick="addToCart(16)">
                                 <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <div class="product-card fade-in" data-id="17" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="17" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://m.media-amazon.com/images/I/51fLU88NI6L.jpg" alt="Stepper Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
+        </div>
                     <div class="product-content">
                         <h3 class="product-title">Stepper Motor</h3>
                         <p class="product-description">NEMA 17 stepper motor with 1.8° step angle</p>
@@ -234,7 +234,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="18" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="18" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg" alt="16x2 LCD Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -249,9 +249,9 @@
                             </button>
                         </div>
                     </div>
-                </div>
+            </div>
 
-                <div class="product-card fade-in" data-id="19" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="19" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg" alt="OLED Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -265,10 +265,10 @@
                                 <i class="fas fa-cart-plus"></i> Add to cart
                             </button>
                         </div>
-                    </div>
                 </div>
+            </div>
 
-                <div class="product-card fade-in" data-id="20" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="20" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg" alt="TFT Screen" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -285,7 +285,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="21" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="21" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg" alt="7-Segment Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -302,7 +302,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="22" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="22" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg" alt="LED Matrix Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -319,7 +319,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="23" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="23" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg" alt="E-paper Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -336,7 +336,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="24" data-category="Displays">
+                <div class="product-card" style="display: none;" fade-in" data-id="24" data-category="Displays">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg" alt="LCD Touchscreen Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -353,7 +353,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="25" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="25" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg" alt="9V Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -370,7 +370,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="26" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="26" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg" alt="AA Battery Holder" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -387,7 +387,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="27" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="27" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg" alt="DC-DC Converter" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -404,7 +404,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="28" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="28" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg" alt="Power Bank Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -421,7 +421,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="29" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="29" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg" alt="Breadboard" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -438,7 +438,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="30" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="30" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg" alt="Male-Male Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -455,7 +455,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="31" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="31" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg" alt="Male-Female Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -472,7 +472,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="32" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="32" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg" alt="Lithium Polymer Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -489,7 +489,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="33" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="33" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg" alt="PCB Prototyping Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -506,7 +506,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="34" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="34" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg" alt="Nuts & Bolts Kit" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -523,7 +523,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="38" data-category="Power Supply">
+                <div class="product-card" style="display: none;" fade-in" data-id="38" data-category="Power Supply">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg" alt="Linear Voltage Regulator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -540,7 +540,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="39" data-category="Audio Components">
+                <div class="product-card" style="display: none;" fade-in" data-id="39" data-category="Audio Components">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg" alt="Audio Adapter Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -557,7 +557,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="40" data-category="Tools & Accessories">
+                <div class="product-card" style="display: none;" fade-in" data-id="40" data-category="Tools & Accessories">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg" alt="USB Cable" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -574,7 +574,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="41" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="41" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg" alt="Brushless DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -591,7 +591,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="42" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="42" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg" alt="Bluetooth Controlled Linear Actuator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -608,7 +608,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="44" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="44" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg" alt="Motor Driver Shield" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -625,7 +625,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="45" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="45" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg" alt="H-Bridge Motor Control Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -642,7 +642,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="46" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="46" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg" alt="Raspberry Pi Zero W" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -659,7 +659,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="47" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="47" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg" alt="Arduino Mega" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -676,7 +676,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="49" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="49" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg" alt="Arduino Due" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -693,7 +693,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="51" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="51" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg" alt="Adafruit Feather M0" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -710,7 +710,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="53" data-category="Microcontrollers">
+                <div class="product-card" style="display: none;" fade-in" data-id="53" data-category="Microcontrollers">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg" alt="Banana Pi" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -727,7 +727,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="56" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="56" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/4e/8f/7a/4e8f7a4b5a2c5d8f5c9b8a7e6d4c2b1a.jpg" alt="Sound Vibration Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -744,7 +744,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="57" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="57" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/3c/7a/9d/3c7a9d2b5e8f4a6c8b7d9e2f1a5c8b7.jpg" alt="Color Sensor (TCS34725)" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -761,7 +761,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="58" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="58" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/8f/5c/9b/8f5c9b7a4e2d6f8c9b5a7e3d1f2c8b6.jpg" alt="Sound Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -778,7 +778,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="59" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="59" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/6b/9c/8d/6b9c8d5a7e3f2c9b8d6a4e1f5c2b7a9.jpg" alt="Water Level Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -795,7 +795,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="60" data-category="Actuators">
+                <div class="product-card" style="display: none;" fade-in" data-id="60" data-category="Actuators">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/7d/2c/9f/7d2c9f8b5a6e4d1c8f7b9a3e2d5c6b4.jpg" alt="5V Relay Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -812,7 +812,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="61" data-category="Sensors">
+                <div class="product-card" style="display: none;" fade-in" data-id="61" data-category="Sensors">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/9a/3d/7c/9a3d7c8b5f2e6d4a9c8b7e1f3d5a2c6.jpg" alt="Electret Microphone Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -829,7 +829,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="62" data-category="Audio Components">
+                <div class="product-card" style="display: none;" fade-in" data-id="62" data-category="Audio Components">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://i.pinimg.com/1200x/5c/8b/9a/5c8b9a7d3e6f2b8c9a5d7e1f4c2b6a8.jpg" alt="Voice Recognition Microphone Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -846,7 +846,7 @@
                     </div>
                 </div>
 
-                <div class="product-card fade-in" data-id="63" data-category="Audio Components">
+                <div class="product-card" style="display: none;" fade-in" data-id="63" data-category="Audio Components">
                     <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
                         <img src="https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg" alt="Robocraze Speech Recognition Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
                         <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
@@ -1919,20 +1919,20 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             // Map DEMO_PRODUCTS to match expected format
             allProducts = DEMO_PRODUCTS.map(product => ({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                category: product.category,
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            category: product.category,
                 description: product.description,
-                image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
-            }));
+                            image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
+                        }));
 
             console.log('🔍 First product:', allProducts[0]);
             console.log('🔍 All product IDs:', allProducts.map(p => ({id: p.id, name: p.name})));
-
-            filteredProducts = [...allProducts];
-            displayProducts();
-            updatePagination();
+                        
+                        filteredProducts = [...allProducts];
+                        displayProducts();
+                        updatePagination();
             return;
             
             // OLD HARDCODED ARRAY (DISABLED - NOW USING API)
@@ -2475,25 +2475,28 @@ Is NaN: ${isNaN(parseInt(userId))}`);
             console.log('🎴 displayProducts: currentPage =', currentPage);
             console.log('🎴 displayProducts: filteredProducts.length =', filteredProducts.length);
 
+            // Hide ALL cards first (both in DOM and in filteredProducts)
+            const allCards = document.querySelectorAll('.product-card');
+            console.log('🎴 displayProducts: Hiding ALL', allCards.length, 'cards in DOM');
+            allCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
             // Calculate which filtered products to show based on current page
             const startIndex = (currentPage - 1) * productsPerPage;
             const endIndex = startIndex + productsPerPage;
 
             console.log(`📄 Page ${currentPage}: showing filtered products ${startIndex + 1} to ${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} total filtered`);
 
-            // Hide all cards first
-            const allCards = document.querySelectorAll('.product-card');
-            console.log('🎴 displayProducts: Hiding', allCards.length, 'total cards');
-            allCards.forEach(card => {
-                card.style.display = 'none';
-            });
-
             // Show only the filtered products for current page
             let shownCount = 0;
             for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
                 if (filteredProducts[i] && filteredProducts[i].element) {
+                    console.log('🎴 Showing product:', filteredProducts[i].name);
                     filteredProducts[i].element.style.display = 'block';
                     shownCount++;
+                } else {
+                    console.error('🎴 Missing element for product at index', i);
                 }
             }
 
@@ -2514,25 +2517,32 @@ Is NaN: ${isNaN(parseInt(userId))}`);
                 return;
             }
 
-            let paginationHTML = '<div class="pagination-controls">';
+            let paginationHTML = '<div class="pagination-controls" style="display: flex; justify-content: center; gap: 0.5rem; margin: 2rem 0;">';
+
+            console.log('📄 Creating pagination HTML for', totalPages, 'pages, current page:', currentPage);
 
             // Previous button
             if (currentPage > 1) {
-                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: white; cursor: pointer;">Previous</button>`;
+                console.log('📄 Added Previous button');
             }
 
             // Page numbers
             for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-                paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                const isActive = i === currentPage;
+                paginationHTML += `<button class="page-btn ${isActive ? 'active' : ''}" onclick="changePage(${i})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: ${isActive ? '#ff6b35' : 'white'}; color: ${isActive ? 'white' : 'black'}; cursor: pointer;">${i}</button>`;
+                console.log(`📄 Added page ${i} button${isActive ? ' (active)' : ''}`);
             }
 
             // Next button
             if (currentPage < totalPages) {
-                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: white; cursor: pointer;">Next</button>`;
+                console.log('📄 Added Next button');
             }
 
             paginationHTML += '</div>';
             pagination.innerHTML = paginationHTML;
+            console.log('📄 Pagination HTML set:', paginationHTML);
         }
 
         function changePage(page) {
