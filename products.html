@@ -1520,7 +1520,7 @@
 
             // Initialize products from static HTML instead of DEMO_PRODUCTS
             initializeProductsFromHTML();
-            setupPagination();
+            updatePagination();
             updateCartCount();
             initializeProductsPage();
         });
@@ -1534,8 +1534,8 @@
             filteredProducts = [];
             productCards.forEach((card, index) => {
                 const name = card.querySelector('.product-title')?.textContent || 'Unknown Product';
-                const priceText = card.querySelector('.product-price')?.textContent || '₹0';
-                const price = parseFloat(priceText.replace('₹', '')) || 0;
+                const priceText = card.querySelector('.product-price')?.textContent || 'Rs 0';
+                const price = parseFloat(priceText.replace('Rs ', '').split(' ')[0]) || 0;
                 const category = card.getAttribute('data-category') || 'General';
 
                 filteredProducts.push({
@@ -2472,27 +2472,26 @@ Is NaN: ${isNaN(parseInt(userId))}`);
         function displayProducts() {
             console.log('🎴 displayProducts: Working with pagination (6 products per page)');
 
-            // Get all product cards
-            const allCards = document.querySelectorAll('.product-card');
-            console.log('📦 Total product cards in DOM:', allCards.length);
-
-            // Calculate which products to show based on current page
+            // Calculate which filtered products to show based on current page
             const startIndex = (currentPage - 1) * productsPerPage;
             const endIndex = startIndex + productsPerPage;
 
-            console.log(`📄 Page ${currentPage}: showing products ${startIndex + 1} to ${Math.min(endIndex, allCards.length)}`);
+            console.log(`📄 Page ${currentPage}: showing filtered products ${startIndex + 1} to ${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} total filtered`);
 
             // Hide all cards first
+            const allCards = document.querySelectorAll('.product-card');
             allCards.forEach(card => {
                 card.style.display = 'none';
             });
 
-            // Show only the products for current page
-            for (let i = startIndex; i < endIndex && i < allCards.length; i++) {
-                allCards[i].style.display = 'block';
+            // Show only the filtered products for current page
+            for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
+                if (filteredProducts[i] && filteredProducts[i].element) {
+                    filteredProducts[i].element.style.display = 'block';
+                }
             }
 
-            console.log(`✅ Displayed ${Math.min(productsPerPage, allCards.length - startIndex)} products on page ${currentPage}`);
+            console.log(`✅ Displayed ${Math.min(productsPerPage, filteredProducts.length - startIndex)} products on page ${currentPage}`);
         }
 
         function updatePagination() {
@@ -2508,17 +2507,17 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             // Previous button
             if (currentPage > 1) {
-                paginationHTML += `<button onclick="changePage(${currentPage - 1})">Previous</button>`;
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
             }
 
             // Page numbers
             for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
             }
 
             // Next button
             if (currentPage < totalPages) {
-                paginationHTML += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
             }
 
             paginationHTML += '</div>';
@@ -2561,7 +2560,7 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             currentPage = 1;
             displayProducts();
-            setupPagination();
+            updatePagination();
 
             console.log(`✅ Filtered to ${filteredProducts.length} products in category "${category || 'All'}"`);
         }
@@ -2589,7 +2588,7 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             currentPage = 1;
             displayProducts();
-            setupPagination();
+            updatePagination();
 
             console.log(`✅ Sorted ${filteredProducts.length} products by ${sortFilter}`);
         }
