@@ -197,15 +197,662 @@
         let currentPage = 1;
         const productsPerPage = 12;
 
+        // DEMO_PRODUCTS data for GitHub Pages - Complete list of all 61 products
+        const DEMO_PRODUCTS = [
+            {
+                "id": 11,
+                "name": "Arduino Uno R3",
+                "description": "ATmega328P microcontroller board with USB interface",
+                "price": 450.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 30,
+                "image_url": "https://m.media-amazon.com/images/I/51+N-57gSiL.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 12,
+                "name": "ESP32 Development Board",
+                "description": "WiFi & Bluetooth enabled microcontroller",
+                "price": 350.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 40,
+                "image_url": "https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 13,
+                "name": "DHT11 Temperature & Humidity Sensor",
+                "description": "Digital temperature and humidity sensor with 1-wire interface",
+                "price": 45.0,
+                "category": "Sensors",
+                "stock_quantity": 100,
+                "image_url": "https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 14,
+                "name": "HC-SR04 Ultrasonic Sensor",
+                "description": "Ultrasonic ranging sensor for distance measurement",
+                "price": 85.0,
+                "category": "Sensors",
+                "stock_quantity": 75,
+                "image_url": "https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 15,
+                "name": "SG90 Servo Motor",
+                "description": "9g micro servo motor for robotics",
+                "price": 95.0,
+                "category": "Actuators",
+                "stock_quantity": 120,
+                "image_url": "https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 16,
+                "name": "DC Motor",
+                "description": "12V DC geared motor for robotics and automation projects",
+                "price": 150.0,
+                "category": "Actuators",
+                "stock_quantity": 85,
+                "image_url": "https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 17,
+                "name": "Stepper Motor",
+                "description": "NEMA 17 stepper motor with 1.8° step angle for precision control",
+                "price": 450.0,
+                "category": "Actuators",
+                "stock_quantity": 45,
+                "image_url": "https://m.media-amazon.com/images/I/51fLU88NI6L.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 18,
+                "name": "LCD Crystal Display",
+                "description": "16x2 character LCD display module with backlight",
+                "price": 120.0,
+                "category": "Displays",
+                "stock_quantity": 85,
+                "image_url": "https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 19,
+                "name": "OLED Display",
+                "description": "0.96 inch I2C OLED display module with 128x64 resolution",
+                "price": 150.0,
+                "category": "Displays",
+                "stock_quantity": 60,
+                "image_url": "https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 20,
+                "name": "TFT Screen",
+                "description": "2.8 inch TFT LCD color touch screen display",
+                "price": 850.0,
+                "category": "Displays",
+                "stock_quantity": 25,
+                "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 21,
+                "name": "7-Segment Display",
+                "description": "4-digit 7-segment display with decimal points",
+                "price": 65.0,
+                "category": "Displays",
+                "stock_quantity": 80,
+                "image_url": "https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 22,
+                "name": "E-paper Display",
+                "description": "1.54 inch e-paper display for low power applications",
+                "price": 650.0,
+                "category": "Displays",
+                "stock_quantity": 30,
+                "image_url": "https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 23,
+                "name": "LED Matrix Display",
+                "description": "8x8 LED matrix display with MAX7219 driver",
+                "price": 95.0,
+                "category": "Displays",
+                "stock_quantity": 70,
+                "image_url": "https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 24,
+                "name": "LCD Touchscreen Module",
+                "description": "2.4 inch LCD touchscreen module for user interfaces",
+                "price": 1200.0,
+                "category": "Displays",
+                "stock_quantity": 15,
+                "image_url": "https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 25,
+                "name": "2 Battery Holders",
+                "description": "AA battery holder for 2 batteries in series",
+                "price": 25.0,
+                "category": "Power Supply",
+                "stock_quantity": 150,
+                "image_url": "https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 26,
+                "name": "3 Battery Holders",
+                "description": "AA battery holder for 3 batteries in series",
+                "price": 35.0,
+                "category": "Power Supply",
+                "stock_quantity": 120,
+                "image_url": "https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 27,
+                "name": "DC-DC Converter",
+                "description": "Adjustable DC-DC buck converter module 5V-35V",
+                "price": 85.0,
+                "category": "Power Supply",
+                "stock_quantity": 90,
+                "image_url": "https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 28,
+                "name": "Power Bank Module",
+                "description": "18650 lithium battery power bank module",
+                "price": 180.0,
+                "category": "Power Supply",
+                "stock_quantity": 60,
+                "image_url": "https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 29,
+                "name": "Breadboard",
+                "description": "830 tie-point solderless breadboard for prototyping",
+                "price": 85.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 120,
+                "image_url": "https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 30,
+                "name": "Male-Male Jumper Wires",
+                "description": "40-piece male-to-male jumper wire set",
+                "price": 45.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 200,
+                "image_url": "https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 31,
+                "name": "Male-Female Jumper Wires",
+                "description": "40-piece male-to-female jumper wire set",
+                "price": 50.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 180,
+                "image_url": "https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 32,
+                "name": "Lithium Polymer Battery",
+                "description": "3.7V 1000mAh LiPo battery with JST connector",
+                "price": 250.0,
+                "category": "Power Supply",
+                "stock_quantity": 75,
+                "image_url": "https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 33,
+                "name": "PCB Prototyping Board",
+                "description": "Double-sided PCB prototyping board with copper pads",
+                "price": 120.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 100,
+                "image_url": "https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 34,
+                "name": "Nuts & Bolts Kit",
+                "description": "Assorted nuts and bolts set for electronics projects",
+                "price": 65.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 80,
+                "image_url": "https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 38,
+                "name": "Linear Voltage Regulator",
+                "description": "LM7805 5V linear voltage regulator IC",
+                "price": 15.0,
+                "category": "Power Supply",
+                "stock_quantity": 300,
+                "image_url": "https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 39,
+                "name": "Audio Adapter Board",
+                "description": "Audio amplifier board with speaker connector",
+                "price": 120.0,
+                "category": "Audio Components",
+                "stock_quantity": 50,
+                "image_url": "https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 40,
+                "name": "USB Cable",
+                "description": "USB 2.0 A to B cable for programming and data transfer",
+                "price": 35.0,
+                "category": "Tools & Accessories",
+                "stock_quantity": 250,
+                "image_url": "https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 41,
+                "name": "Brushless DC Motor",
+                "description": "High-efficiency brushless DC motor for precision applications",
+                "price": 850.0,
+                "category": "Actuators",
+                "stock_quantity": 15,
+                "image_url": "https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 42,
+                "name": "Bluetooth Controlled Linear Actuator",
+                "description": "Wireless controlled linear motion actuator",
+                "price": 2500.0,
+                "category": "Actuators",
+                "stock_quantity": 8,
+                "image_url": "https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 43,
+                "name": "Continuous Rotation Robot Servo",
+                "description": "360-degree continuous rotation servo motor",
+                "price": 180.0,
+                "category": "Actuators",
+                "stock_quantity": 45,
+                "image_url": "https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 44,
+                "name": "Motor Driver Shield",
+                "description": "Arduino shield for motor control applications",
+                "price": 350.0,
+                "category": "Actuators",
+                "stock_quantity": 25,
+                "image_url": "https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 45,
+                "name": "H-Bridge DC Stepper Motor Control Module",
+                "description": "Dual H-bridge motor driver for stepper motors",
+                "price": 120.0,
+                "category": "Actuators",
+                "stock_quantity": 30,
+                "image_url": "https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 46,
+                "name": "Raspberry Pi Zero W",
+                "description": "Compact single-board computer with WiFi and Bluetooth",
+                "price": 1200.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 35,
+                "image_url": "https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 47,
+                "name": "Arduino Mega",
+                "description": "ATmega2560 microcontroller board with expanded I/O",
+                "price": 1800.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 20,
+                "image_url": "https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 48,
+                "name": "Arduino Nano",
+                "description": "Compact ATmega328 microcontroller board",
+                "price": 250.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 50,
+                "image_url": "https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 49,
+                "name": "Arduino Due",
+                "description": "ARM Cortex-M3 microcontroller board with 32-bit architecture",
+                "price": 2200.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 15,
+                "image_url": "https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 50,
+                "name": "ESP8266",
+                "description": "WiFi enabled microcontroller module",
+                "price": 150.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 60,
+                "image_url": "https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 51,
+                "name": "Adafruit Feather M0",
+                "description": "ARM Cortex-M0+ microcontroller board with Bluetooth",
+                "price": 650.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 25,
+                "image_url": "https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 52,
+                "name": "Teensy 4.1",
+                "description": "ARM Cortex-M7 microcontroller development board",
+                "price": 850.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 22,
+                "image_url": "https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 53,
+                "name": "Banana Pi",
+                "description": "Single-board computer with Allwinner A20 processor",
+                "price": 2500.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 12,
+                "image_url": "https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 54,
+                "name": "Orange Pi",
+                "description": "Single-board computer with H3 processor",
+                "price": 1800.0,
+                "category": "Microcontrollers",
+                "stock_quantity": 18,
+                "image_url": "https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 55,
+                "name": "Rain Sensor",
+                "description": "Rain detection sensor module",
+                "price": 75.0,
+                "category": "Sensors",
+                "stock_quantity": 55,
+                "image_url": "https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 56,
+                "name": "Sound Vibration Sensor",
+                "description": "Vibration and sound detection sensor",
+                "price": 55.0,
+                "category": "Sensors",
+                "stock_quantity": 70,
+                "image_url": "https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 57,
+                "name": "Color Sensor (TCS34725)",
+                "description": "RGB color sensor with IR blocking filter",
+                "price": 180.0,
+                "category": "Sensors",
+                "stock_quantity": 40,
+                "image_url": "https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 58,
+                "name": "Sound Sensor",
+                "description": "Microphone sound detection module",
+                "price": 45.0,
+                "category": "Sensors",
+                "stock_quantity": 80,
+                "image_url": "https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 59,
+                "name": "Water Level Sensor",
+                "description": "Liquid level detection sensor",
+                "price": 65.0,
+                "category": "Sensors",
+                "stock_quantity": 60,
+                "image_url": "https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 60,
+                "name": "5V Relay Module",
+                "description": "Electromagnetic relay module for switching applications",
+                "price": 35.0,
+                "category": "Actuators",
+                "stock_quantity": 80,
+                "image_url": "https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 61,
+                "name": "Electret Microphone Module",
+                "description": "Condenser microphone module for audio input",
+                "price": 40.0,
+                "category": "Audio Components",
+                "stock_quantity": 75,
+                "image_url": "https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 62,
+                "name": "Voice Recognition Microphone Board",
+                "description": "Advanced voice recognition and processing board",
+                "price": 350.0,
+                "category": "Audio Components",
+                "stock_quantity": 25,
+                "image_url": "https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 63,
+                "name": "Robocraze Speech Recognition Module",
+                "description": "Voice command recognition module",
+                "price": 450.0,
+                "category": "Audio Components",
+                "stock_quantity": 20,
+                "image_url": "https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg",
+                "is_featured": true
+            },
+            {
+                "id": 64,
+                "name": "Active Buzzer Module",
+                "description": "Piezoelectric buzzer for sound generation",
+                "price": 25.0,
+                "category": "Audio Components",
+                "stock_quantity": 100,
+                "image_url": "https://i.pinimg.com/1200x/85/6b/89/856b89b9a45e6b7b26fb7a8a4d3b8b7a.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 65,
+                "name": "Passive Buzzer",
+                "description": "Passive buzzer module for tone generation",
+                "price": 30.0,
+                "category": "Audio Components",
+                "stock_quantity": 90,
+                "image_url": "https://i.pinimg.com/1200x/8f/3b/9c/8f3b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 66,
+                "name": "IR Remote Control",
+                "description": "Infrared remote control for device operation",
+                "price": 120.0,
+                "category": "Sensors",
+                "stock_quantity": 45,
+                "image_url": "https://i.pinimg.com/1200x/7f/5b/9c/7f5b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 67,
+                "name": "IR Receiver Module",
+                "description": "Infrared receiver for remote control applications",
+                "price": 15.0,
+                "category": "Sensors",
+                "stock_quantity": 150,
+                "image_url": "https://i.pinimg.com/736x/5f/8b/9c/5f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 68,
+                "name": "Infrared Obstacle Sensor",
+                "description": "IR proximity sensor for obstacle detection",
+                "price": 35.0,
+                "category": "Sensors",
+                "stock_quantity": 85,
+                "image_url": "https://i.pinimg.com/1200x/9f/8b/9c/9f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 69,
+                "name": "PIR Motion Sensor",
+                "description": "Passive infrared motion detection sensor",
+                "price": 85.0,
+                "category": "Sensors",
+                "stock_quantity": 65,
+                "image_url": "https://i.pinimg.com/736x/1f/8b/9c/1f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 70,
+                "name": "Gas Sensor (MQ-2)",
+                "description": "Combustible gas and smoke detector",
+                "price": 95.0,
+                "category": "Sensors",
+                "stock_quantity": 40,
+                "image_url": "https://i.pinimg.com/1200x/3f/8b/9c/3f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 71,
+                "name": "Gas Sensor (MQ-135)",
+                "description": "Air quality sensor for detecting pollutants",
+                "price": 110.0,
+                "category": "Sensors",
+                "stock_quantity": 35,
+                "image_url": "https://i.pinimg.com/736x/4f/8b/9c/4f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 72,
+                "name": "Gas Sensor (MQ-2)",
+                "description": "LPG, propane and hydrogen gas detector",
+                "price": 90.0,
+                "category": "Sensors",
+                "stock_quantity": 45,
+                "image_url": "https://i.pinimg.com/1200x/5f/8b/9c/5f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 73,
+                "name": "Gas Sensor (MQ-135)",
+                "description": "Ammonia, nitrogen oxide and benzene detector",
+                "price": 105.0,
+                "category": "Sensors",
+                "stock_quantity": 40,
+                "image_url": "https://i.pinimg.com/736x/6f/8b/9c/6f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 74,
+                "name": "Tilt Sensor",
+                "description": "Mercury tilt switch for orientation detection",
+                "price": 20.0,
+                "category": "Sensors",
+                "stock_quantity": 120,
+                "image_url": "https://i.pinimg.com/1200x/7f/8b/9c/7f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 75,
+                "name": "Hall Effect Sensor",
+                "description": "Magnetic field detection sensor",
+                "price": 45.0,
+                "category": "Sensors",
+                "stock_quantity": 70,
+                "image_url": "https://i.pinimg.com/736x/8f/8b/9c/8f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": false
+            },
+            {
+                "id": 76,
+                "name": "TFT Screen",
+                "description": "2.4 inch TFT LCD display with touchscreen",
+                "price": 1200.0,
+                "category": "Displays",
+                "stock_quantity": 10,
+                "image_url": "https://i.pinimg.com/1200x/9f/8b/9c/9f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
+                "is_featured": true
+            }
+        ];
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Products page DOM loaded, initializing...');
-            // Immediate check for corrupted data
-            const storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            if (storedUserId && (storedUserId === 'NaN' || isNaN(parseInt(storedUserId)) || storedUserId.includes('demo_'))) {
-                console.log('Found corrupted data on products page load, clearing...');
-                forceLogout();
-            }
+            // Use DEMO_PRODUCTS directly instead of fetching from API
+            console.log('✅ Using DEMO_PRODUCTS with', DEMO_PRODUCTS.length, 'products');
+
+            // Map DEMO_PRODUCTS to match expected format
+            allProducts = DEMO_PRODUCTS.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                category: product.category,
+                description: product.description,
+                image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
+            }));
+
+            console.log('🔍 First product:', allProducts[0]);
+            console.log('🔍 All product IDs:', allProducts.map(p => ({id: p.id, name: p.name})));
+
+            displayProducts();
+            setupPagination();
+            updateCartCount();
             initializeProductsPage();
         });
 
