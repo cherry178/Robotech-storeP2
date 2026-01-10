@@ -26,14 +26,9 @@
     </style>
 </head>
 <body>
-    <div class="demo-banner">
-        🚀 DEMO MODE - <a href="/" style="color: white; text-decoration: underline;">Back to Home</a> |
-        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
-        <button id="debugBtn" style="margin-left: 5px; padding: 5px 10px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔍 Debug</button>
-    </div>
 
     <!-- Header -->
-    <header class="header" style="margin-top: 40px;">
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
@@ -1235,42 +1230,26 @@ Is NaN: ${isNaN(parseInt(userId))}`);
         }
 
         function loadAllProducts() {
-            // Fetch products from backend API to ensure IDs match
-            console.log('🔄 Loading products from backend API...');
-            fetch('http://127.0.0.1:8888/api/products?limit=100')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.products) {
-                        console.log('✅ Loaded', data.products.length, 'products from API');
-                        console.log('🔍 First product from API:', data.products[0]);
-                        console.log('🔍 All product IDs:', data.products.map(p => ({id: p.id, name: p.name})));
-                        
-                        // Map API response to match expected format
-                        allProducts = data.products.map(product => ({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            category: product.category,
-                            description: product.description || 'High-quality electronics component',
-                            image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
-                        }));
-                        
-                        filteredProducts = [...allProducts];
-                        displayProducts();
-                        updatePagination();
-                    } else {
-                        console.error('❌ Failed to load products from API:', data.error);
-                        // Fallback to empty array
-                        allProducts = [];
-                        filteredProducts = [];
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ Error fetching products:', error);
-                    // Fallback to empty array
-                    allProducts = [];
-                    filteredProducts = [];
-                });
+            // Use DEMO_PRODUCTS directly for GitHub Pages
+            console.log('🔄 Loading products from DEMO_PRODUCTS...');
+            console.log('✅ Using DEMO_PRODUCTS with', DEMO_PRODUCTS.length, 'products');
+
+            // Map DEMO_PRODUCTS to match expected format
+            allProducts = DEMO_PRODUCTS.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                category: product.category,
+                description: product.description,
+                image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
+            }));
+
+            console.log('🔍 First product:', allProducts[0]);
+            console.log('🔍 All product IDs:', allProducts.map(p => ({id: p.id, name: p.name})));
+
+            filteredProducts = [...allProducts];
+            displayProducts();
+            updatePagination();
             return;
             
             // OLD HARDCODED ARRAY (DISABLED - NOW USING API)
