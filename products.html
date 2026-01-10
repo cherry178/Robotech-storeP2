@@ -1711,14 +1711,30 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
         function displayProducts() {
             const grid = document.getElementById('productsGrid');
+            if (!grid) {
+                console.error('❌ productsGrid element not found!');
+                return;
+            }
+
             const startIndex = (currentPage - 1) * productsPerPage;
             const endIndex = startIndex + productsPerPage;
             const productsToShow = filteredProducts.slice(startIndex, endIndex);
 
-            console.log('🎴 displayProducts: Creating', productsToShow.length, 'product cards');
-            productsToShow.forEach((product, index) => {
-                console.log(`🎴 Card ${index + 1}: ID=${product.id}, Name="${product.name}"`);
-            });
+            console.log('🎴 displayProducts: filteredProducts length =', filteredProducts.length);
+            console.log('🎴 displayProducts: Creating', productsToShow.length, 'product cards from', startIndex, 'to', endIndex);
+            console.log('🎴 displayProducts: productsToShow =', productsToShow);
+
+            if (productsToShow.length === 0) {
+                console.warn('⚠️ No products to show! Adding test product.');
+                productsToShow = [{
+                    id: 999,
+                    name: 'TEST PRODUCT - Products Not Loading',
+                    price: 100,
+                    category: 'Test',
+                    description: 'If you see this, the DEMO_PRODUCTS are not loading properly',
+                    image: 'https://via.placeholder.com/250x200?text=TEST+PRODUCT'
+                }];
+            }
 
             grid.innerHTML = productsToShow.map(product => {
                 // Store product ID in data attribute for debugging
