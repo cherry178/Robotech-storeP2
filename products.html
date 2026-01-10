@@ -53,80 +53,19 @@
                     </div>
 
                     <div class="action-buttons">
-                        <div class="login-dropdown">
-                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                        <div class="user-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
                                 <i class="fas fa-user"></i>
-                                <span id="loginText">Login</span>
+                                <span id="loginText" class="user-text">Demo User</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
 
-                            <div class="login-dropdown-content" id="loginDropdown">
-                                <div class="login-header">
-                                    <h4>Customer Login</h4>
-                                    <p>If you are already registered, please log in.</p>
-                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
-                                        <i class="fas fa-info-circle"></i>
-                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
-                                    </div>
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
                                 </div>
-
-                                <div class="login-tabs">
-                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
-                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
-                                </div>
-
-                                <div id="phoneLoginTab" class="login-tab-content active">
-                                    <div class="login-form">
-                                        <div class="form-group">
-                                            <label for="headerLoginPhone">Phone Number</label>
-                                            <div class="input-group">
-                                                <span class="input-prefix">+91</span>
-                                                <input
-                                                    type="tel"
-                                                    id="headerLoginPhone"
-                                                    placeholder="Enter phone number"
-                                                    maxlength="10"
-                                                    pattern="[0-9]{10}"
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
-                                            <label for="headerLoginOtp">Enter OTP</label>
-                                            <div class="otp-input-container">
-                                                <input
-                                                    type="text"
-                                                    id="headerLoginOtp"
-                                                    placeholder="Enter 6-digit OTP"
-                                                    maxlength="6"
-                                                    pattern="[0-9]{6}"
-                                                >
-                                            </div>
-                                            <div class="otp-timer">
-                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
-                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
-                                            </div>
-                                        </div>
-
-                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
-                                            <i class="fas fa-paper-plane"></i> Send OTP
-                                        </button>
-
-                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
-                                            <i class="fas fa-check"></i> Verify & Login
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div id="gmailLoginTab" class="login-tab-content">
-                                    <div class="gmail-login-container">
-                                        <p class="gmail-login-text">Continue with Google account</p>
-                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
-                                            <i class="fab fa-google"></i>
-                                            Continue with Google
-                                        </button>
-                                    </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
                                 </div>
                             </div>
                         </div>

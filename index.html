@@ -650,18 +650,7 @@
             // Landing page proceed button
             const proceedBtn = document.getElementById('proceedBtn');
             if (proceedBtn) {
-                proceedBtn.addEventListener('click', function() {
-                    // For GitHub Pages demo, directly show main content without login
-                    const landingOverlay = document.getElementById('landingOverlay');
-                    const mainContent = document.getElementById('mainContent');
-
-                    if (landingOverlay) landingOverlay.style.display = 'none';
-                    if (mainContent) mainContent.style.display = 'block';
-
-                    // Generate a demo user ID
-                    const userId = 1000 + Math.floor(Math.random() * 9000);
-                    document.getElementById('loginText').textContent = 'User ' + userId;
-                });
+                proceedBtn.addEventListener('click', showLoginModal);
             }
 
             // Login modal close (click outside)
