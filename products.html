@@ -793,23 +793,6 @@
         function initializeProductsPage() {
             console.log('Initializing products page...');
 
-            // Setup buttons
-            const clearBtn = document.getElementById('clearDataBtn');
-            if (clearBtn) {
-                clearBtn.onclick = forceLogout;
-                console.log('Clear data button attached');
-            } else {
-                console.error('Clear data button not found');
-            }
-
-            const debugBtn = document.getElementById('debugBtn');
-            if (debugBtn) {
-                debugBtn.onclick = showDebugInfo;
-                console.log('Debug button attached');
-            } else {
-                console.error('Debug button not found');
-            }
-
             checkUserLoginStatus();
             loadAllProducts();
             setupSearch();
