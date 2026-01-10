@@ -1520,7 +1520,8 @@
 
             // Initialize products from static HTML instead of DEMO_PRODUCTS
             initializeProductsFromHTML();
-            updatePagination();
+            displayProducts(); // Show initial products
+            updatePagination(); // Then create pagination
             updateCartCount();
             initializeProductsPage();
         });
@@ -2471,6 +2472,8 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
         function displayProducts() {
             console.log('🎴 displayProducts: Working with pagination (6 products per page)');
+            console.log('🎴 displayProducts: currentPage =', currentPage);
+            console.log('🎴 displayProducts: filteredProducts.length =', filteredProducts.length);
 
             // Calculate which filtered products to show based on current page
             const startIndex = (currentPage - 1) * productsPerPage;
@@ -2480,25 +2483,33 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             // Hide all cards first
             const allCards = document.querySelectorAll('.product-card');
+            console.log('🎴 displayProducts: Hiding', allCards.length, 'total cards');
             allCards.forEach(card => {
                 card.style.display = 'none';
             });
 
             // Show only the filtered products for current page
+            let shownCount = 0;
             for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
                 if (filteredProducts[i] && filteredProducts[i].element) {
                     filteredProducts[i].element.style.display = 'block';
+                    shownCount++;
                 }
             }
 
-            console.log(`✅ Displayed ${Math.min(productsPerPage, filteredProducts.length - startIndex)} products on page ${currentPage}`);
+            console.log(`✅ Displayed ${shownCount} products on page ${currentPage}`);
         }
 
         function updatePagination() {
             const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
             const pagination = document.getElementById('pagination');
 
+            console.log('📄 updatePagination: filteredProducts.length =', filteredProducts.length);
+            console.log('📄 updatePagination: productsPerPage =', productsPerPage);
+            console.log('📄 updatePagination: totalPages =', totalPages);
+
             if (totalPages <= 1) {
+                console.log('📄 updatePagination: Only 1 page, hiding pagination');
                 pagination.innerHTML = '';
                 return;
             }
