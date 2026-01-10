@@ -115,531 +115,751 @@
 
             <div class="products-grid" id="productsGrid">
                 <!-- All 61+ products from DEMO_PRODUCTS array -->
-                <div class="product-card" data-id="11" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://m.media-amazon.com/images/I/51+N-57gSiL.jpg" alt="Arduino Uno R3" loading="lazy">
+                <div class="product-card fade-in" data-id="11" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://m.media-amazon.com/images/I/51+N-57gSiL.jpg" alt="Arduino Uno R3" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Arduino Uno R3</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Arduino Uno R3</h3>
                         <p class="product-description">ATmega328P microcontroller board with USB interface</p>
-                        <div class="product-price">₹450</div>
-                        <button class="btn btn-primary" onclick="addToCart(11)">Add to Cart</button>
+                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(11)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="12" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg" alt="ESP32 Development Board" loading="lazy">
+                <div class="product-card fade-in" data-id="12" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%)">
+                        <img src="https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg" alt="ESP32 Development Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">ESP32 Development Board</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">ESP32 Development Board</h3>
                         <p class="product-description">WiFi & Bluetooth enabled microcontroller</p>
-                        <div class="product-price">₹650</div>
-                        <button class="btn btn-primary" onclick="addToCart(12)">Add to Cart</button>
+                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(12)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="13" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg" alt="DHT11 Temperature Sensor" loading="lazy">
+                <div class="product-card fade-in" data-id="13" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff4757 0%, #ff6b35 100%)">
+                        <img src="https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg" alt="DHT11 Temperature Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-thermometer-half" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">DHT11 Temperature & Humidity Sensor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">DHT11 Temperature & Humidity Sensor</h3>
                         <p class="product-description">Digital temperature and humidity sensor</p>
-                        <div class="product-price">₹120</div>
-                        <button class="btn btn-primary" onclick="addToCart(13)">Add to Cart</button>
+                        <div class="product-price">Rs 120<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(13)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="14" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg" alt="HC-SR04 Ultrasonic Sensor" loading="lazy">
+                <div class="product-card fade-in" data-id="14" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg" alt="HC-SR04 Ultrasonic Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">HC-SR04 Ultrasonic Sensor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">HC-SR04 Ultrasonic Sensor</h3>
                         <p class="product-description">Ultrasonic ranging sensor for distance measurement</p>
-                        <div class="product-price">₹85</div>
-                        <button class="btn btn-primary" onclick="addToCart(14)">Add to Cart</button>
+                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(14)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="15" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg" alt="SG90 Servo Motor" loading="lazy">
+                <div class="product-card fade-in" data-id="15" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg" alt="SG90 Servo Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">SG90 Servo Motor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">SG90 Servo Motor</h3>
                         <p class="product-description">9g micro servo motor for robotics</p>
-                        <div class="product-price">₹95</div>
-                        <button class="btn btn-primary" onclick="addToCart(15)">Add to Cart</button>
+                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(15)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="16" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg" alt="DC Motor" loading="lazy">
+                <div class="product-card fade-in" data-id="16" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg" alt="DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">DC Motor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">DC Motor</h3>
                         <p class="product-description">12V DC geared motor for robotics</p>
-                        <div class="product-price">₹150</div>
-                        <button class="btn btn-primary" onclick="addToCart(16)">Add to Cart</button>
+                        <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(16)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="17" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://m.media-amazon.com/images/I/51fLU88NI6L.jpg" alt="Stepper Motor" loading="lazy">
+                <div class="product-card fade-in" data-id="17" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://m.media-amazon.com/images/I/51fLU88NI6L.jpg" alt="Stepper Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Stepper Motor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Stepper Motor</h3>
                         <p class="product-description">NEMA 17 stepper motor with 1.8° step angle</p>
-                        <div class="product-price">₹450</div>
-                        <button class="btn btn-primary" onclick="addToCart(17)">Add to Cart</button>
+                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(17)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="18" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg" alt="16x2 LCD Display" loading="lazy">
+                <div class="product-card fade-in" data-id="18" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg" alt="16x2 LCD Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">16x2 LCD Display</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">16x2 LCD Display</h3>
                         <p class="product-description">Character LCD display with I2C interface</p>
-                        <div class="product-price">₹180</div>
-                        <button class="btn btn-primary" onclick="addToCart(18)">Add to Cart</button>
+                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(18)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="19" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg" alt="OLED Display" loading="lazy">
+                <div class="product-card fade-in" data-id="19" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg" alt="OLED Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">OLED Display</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">OLED Display</h3>
                         <p class="product-description">0.96 inch I2C OLED display module</p>
-                        <div class="product-price">₹220</div>
-                        <button class="btn btn-primary" onclick="addToCart(19)">Add to Cart</button>
+                        <div class="product-price">Rs 220<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(19)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="20" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg" alt="TFT Screen" loading="lazy">
+                <div class="product-card fade-in" data-id="20" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg" alt="TFT Screen" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">TFT Screen</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">TFT Screen</h3>
                         <p class="product-description">2.8 inch TFT LCD color touch screen display</p>
-                        <div class="product-price">₹850</div>
-                        <button class="btn btn-primary" onclick="addToCart(20)">Add to Cart</button>
+                        <div class="product-price">Rs 850<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(20)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="21" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg" alt="7-Segment Display" loading="lazy">
+                <div class="product-card fade-in" data-id="21" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg" alt="7-Segment Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">7-Segment Display</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">7-Segment Display</h3>
                         <p class="product-description">4-digit 7-segment LED display module</p>
-                        <div class="product-price">₹95</div>
-                        <button class="btn btn-primary" onclick="addToCart(21)">Add to Cart</button>
+                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(21)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="22" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg" alt="LED Matrix Display" loading="lazy">
+                <div class="product-card fade-in" data-id="22" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg" alt="LED Matrix Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">LED Matrix Display</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">LED Matrix Display</h3>
                         <p class="product-description">8x8 LED matrix display with MAX7219 driver</p>
-                        <div class="product-price">₹180</div>
-                        <button class="btn btn-primary" onclick="addToCart(22)">Add to Cart</button>
+                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(22)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="23" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg" alt="E-paper Display" loading="lazy">
+                <div class="product-card fade-in" data-id="23" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg" alt="E-paper Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">E-paper Display</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">E-paper Display</h3>
                         <p class="product-description">1.54 inch e-paper display for low power applications</p>
-                        <div class="product-price">₹450</div>
-                        <button class="btn btn-primary" onclick="addToCart(23)">Add to Cart</button>
+                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(23)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="24" data-category="Displays">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg" alt="LCD Touchscreen Module" loading="lazy">
+                <div class="product-card fade-in" data-id="24" data-category="Displays">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg" alt="LCD Touchscreen Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">LCD Touchscreen Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">LCD Touchscreen Module</h3>
                         <p class="product-description">2.4 inch LCD touchscreen module for user interfaces</p>
-                        <div class="product-price">₹650</div>
-                        <button class="btn btn-primary" onclick="addToCart(24)">Add to Cart</button>
+                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(24)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="25" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg" alt="9V Battery" loading="lazy">
+                <div class="product-card fade-in" data-id="25" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg" alt="9V Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">9V Battery</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">9V Battery</h3>
                         <p class="product-description">Standard 9V alkaline battery</p>
-                        <div class="product-price">₹25</div>
-                        <button class="btn btn-primary" onclick="addToCart(25)">Add to Cart</button>
+                        <div class="product-price">Rs 25<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(25)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="26" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg" alt="AA Battery Holder" loading="lazy">
+                <div class="product-card fade-in" data-id="26" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg" alt="AA Battery Holder" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">AA Battery Holder</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">AA Battery Holder</h3>
                         <p class="product-description">4x AA battery holder with switch</p>
-                        <div class="product-price">₹35</div>
-                        <button class="btn btn-primary" onclick="addToCart(26)">Add to Cart</button>
+                        <div class="product-price">Rs 35<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(26)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="27" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg" alt="DC-DC Converter" loading="lazy">
+                <div class="product-card fade-in" data-id="27" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg" alt="DC-DC Converter" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">DC-DC Converter</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">DC-DC Converter</h3>
                         <p class="product-description">Adjustable DC-DC buck converter module</p>
-                        <div class="product-price">₹85</div>
-                        <button class="btn btn-primary" onclick="addToCart(27)">Add to Cart</button>
+                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(27)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="28" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg" alt="Power Bank Module" loading="lazy">
+                <div class="product-card fade-in" data-id="28" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg" alt="Power Bank Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Power Bank Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Power Bank Module</h3>
                         <p class="product-description">18650 lithium battery power bank module</p>
-                        <div class="product-price">₹150</div>
-                        <button class="btn btn-primary" onclick="addToCart(28)">Add to Cart</button>
+                        <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(28)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="29" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg" alt="Breadboard" loading="lazy">
+                <div class="product-card fade-in" data-id="29" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg" alt="Breadboard" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Breadboard</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Breadboard</h3>
                         <p class="product-description">830 tie-point solderless breadboard</p>
-                        <div class="product-price">₹85</div>
-                        <button class="btn btn-primary" onclick="addToCart(29)">Add to Cart</button>
+                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(29)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="30" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg" alt="Male-Male Jumper Wires" loading="lazy">
+                <div class="product-card fade-in" data-id="30" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg" alt="Male-Male Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Male-Male Jumper Wires</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Male-Male Jumper Wires</h3>
                         <p class="product-description">40-piece male-to-male jumper wire set</p>
-                        <div class="product-price">₹45</div>
-                        <button class="btn btn-primary" onclick="addToCart(30)">Add to Cart</button>
+                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(30)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="31" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg" alt="Male-Female Jumper Wires" loading="lazy">
+                <div class="product-card fade-in" data-id="31" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg" alt="Male-Female Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Male-Female Jumper Wires</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Male-Female Jumper Wires</h3>
                         <p class="product-description">40-piece male-to-female jumper wire set</p>
-                        <div class="product-price">₹50</div>
-                        <button class="btn btn-primary" onclick="addToCart(31)">Add to Cart</button>
+                        <div class="product-price">Rs 50<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(31)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="32" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg" alt="Lithium Polymer Battery" loading="lazy">
+                <div class="product-card fade-in" data-id="32" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg" alt="Lithium Polymer Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Lithium Polymer Battery</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Lithium Polymer Battery</h3>
                         <p class="product-description">3.7V 1000mAh LiPo battery with JST connector</p>
-                        <div class="product-price">₹180</div>
-                        <button class="btn btn-primary" onclick="addToCart(32)">Add to Cart</button>
+                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(32)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="33" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg" alt="PCB Prototyping Board" loading="lazy">
+                <div class="product-card fade-in" data-id="33" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg" alt="PCB Prototyping Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">PCB Prototyping Board</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">PCB Prototyping Board</h3>
                         <p class="product-description">Double-sided PCB prototyping board</p>
-                        <div class="product-price">₹95</div>
-                        <button class="btn btn-primary" onclick="addToCart(33)">Add to Cart</button>
+                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(33)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="34" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg" alt="Nuts & Bolts Kit" loading="lazy">
+                <div class="product-card fade-in" data-id="34" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg" alt="Nuts & Bolts Kit" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Nuts & Bolts Kit</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Nuts & Bolts Kit</h3>
                         <p class="product-description">Assorted nuts and bolts set for electronics projects</p>
-                        <div class="product-price">₹120</div>
-                        <button class="btn btn-primary" onclick="addToCart(34)">Add to Cart</button>
+                        <div class="product-price">Rs 120<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(34)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="38" data-category="Power Supply">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg" alt="Linear Voltage Regulator" loading="lazy">
+                <div class="product-card fade-in" data-id="38" data-category="Power Supply">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg" alt="Linear Voltage Regulator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Linear Voltage Regulator</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Linear Voltage Regulator</h3>
                         <p class="product-description">LM7805 5V linear voltage regulator IC</p>
-                        <div class="product-price">₹15</div>
-                        <button class="btn btn-primary" onclick="addToCart(38)">Add to Cart</button>
+                        <div class="product-price">Rs 15<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(38)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="39" data-category="Audio Components">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg" alt="Audio Adapter Board" loading="lazy">
+                <div class="product-card fade-in" data-id="39" data-category="Audio Components">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg" alt="Audio Adapter Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Audio Adapter Board</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Audio Adapter Board</h3>
                         <p class="product-description">Audio amplifier board with speaker connector</p>
-                        <div class="product-price">₹95</div>
-                        <button class="btn btn-primary" onclick="addToCart(39)">Add to Cart</button>
+                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(39)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="40" data-category="Tools & Accessories">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg" alt="USB Cable" loading="lazy">
+                <div class="product-card fade-in" data-id="40" data-category="Tools & Accessories">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg" alt="USB Cable" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">USB Cable</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">USB Cable</h3>
                         <p class="product-description">USB 2.0 A to B cable for programming</p>
-                        <div class="product-price">₹45</div>
-                        <button class="btn btn-primary" onclick="addToCart(40)">Add to Cart</button>
+                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(40)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="41" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg" alt="Brushless DC Motor" loading="lazy">
+                <div class="product-card fade-in" data-id="41" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg" alt="Brushless DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Brushless DC Motor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Brushless DC Motor</h3>
                         <p class="product-description">High-efficiency brushless DC motor</p>
-                        <div class="product-price">₹450</div>
-                        <button class="btn btn-primary" onclick="addToCart(41)">Add to Cart</button>
+                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(41)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="42" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg" alt="Bluetooth Controlled Linear Actuator" loading="lazy">
+                <div class="product-card fade-in" data-id="42" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg" alt="Bluetooth Controlled Linear Actuator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Bluetooth Controlled Linear Actuator</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Bluetooth Controlled Linear Actuator</h3>
                         <p class="product-description">Wireless controlled linear motion actuator</p>
-                        <div class="product-price">₹1200</div>
-                        <button class="btn btn-primary" onclick="addToCart(42)">Add to Cart</button>
+                        <div class="product-price">Rs 1200<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(42)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="44" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg" alt="Motor Driver Shield" loading="lazy">
+                <div class="product-card fade-in" data-id="44" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg" alt="Motor Driver Shield" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Motor Driver Shield</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Motor Driver Shield</h3>
                         <p class="product-description">Arduino shield for motor control applications</p>
-                        <div class="product-price">₹350</div>
-                        <button class="btn btn-primary" onclick="addToCart(44)">Add to Cart</button>
+                        <div class="product-price">Rs 350<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(44)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="45" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg" alt="H-Bridge Motor Control Module" loading="lazy">
+                <div class="product-card fade-in" data-id="45" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg" alt="H-Bridge Motor Control Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">H-Bridge DC Stepper Motor Control Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">H-Bridge DC Stepper Motor Control Module</h3>
                         <p class="product-description">Dual H-bridge motor driver for stepper motors</p>
-                        <div class="product-price">₹180</div>
-                        <button class="btn btn-primary" onclick="addToCart(45)">Add to Cart</button>
+                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(45)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="46" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg" alt="Raspberry Pi Zero W" loading="lazy">
+                <div class="product-card fade-in" data-id="46" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg" alt="Raspberry Pi Zero W" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Raspberry Pi Zero W</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Raspberry Pi Zero W</h3>
                         <p class="product-description">Compact single-board computer with WiFi</p>
-                        <div class="product-price">₹1200</div>
-                        <button class="btn btn-primary" onclick="addToCart(46)">Add to Cart</button>
+                        <div class="product-price">Rs 1200<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(46)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="47" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg" alt="Arduino Mega" loading="lazy">
+                <div class="product-card fade-in" data-id="47" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg" alt="Arduino Mega" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Arduino Mega</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Arduino Mega</h3>
                         <p class="product-description">ATmega2560 microcontroller board</p>
-                        <div class="product-price">₹850</div>
-                        <button class="btn btn-primary" onclick="addToCart(47)">Add to Cart</button>
+                        <div class="product-price">Rs 850<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(47)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="49" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg" alt="Arduino Due" loading="lazy">
+                <div class="product-card fade-in" data-id="49" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg" alt="Arduino Due" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Arduino Due</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Arduino Due</h3>
                         <p class="product-description">ARM Cortex-M3 microcontroller board</p>
-                        <div class="product-price">₹1800</div>
-                        <button class="btn btn-primary" onclick="addToCart(49)">Add to Cart</button>
+                        <div class="product-price">Rs 1800<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(49)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="51" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg" alt="Adafruit Feather M0" loading="lazy">
+                <div class="product-card fade-in" data-id="51" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg" alt="Adafruit Feather M0" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Adafruit Feather M0</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Adafruit Feather M0</h3>
                         <p class="product-description">ARM Cortex-M0+ microcontroller board</p>
-                        <div class="product-price">₹950</div>
-                        <button class="btn btn-primary" onclick="addToCart(51)">Add to Cart</button>
+                        <div class="product-price">Rs 950<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(51)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="53" data-category="Microcontrollers">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg" alt="Banana Pi" loading="lazy">
+                <div class="product-card fade-in" data-id="53" data-category="Microcontrollers">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg" alt="Banana Pi" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Banana Pi</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Banana Pi</h3>
                         <p class="product-description">Single-board computer with Allwinner A20 processor</p>
-                        <div class="product-price">₹2200</div>
-                        <button class="btn btn-primary" onclick="addToCart(53)">Add to Cart</button>
+                        <div class="product-price">Rs 2200<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(53)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="56" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/4e/8f/7a/4e8f7a4b5a2c5d8f5c9b8a7e6d4c2b1a.jpg" alt="Sound Vibration Sensor" loading="lazy">
+                <div class="product-card fade-in" data-id="56" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/4e/8f/7a/4e8f7a4b5a2c5d8f5c9b8a7e6d4c2b1a.jpg" alt="Sound Vibration Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Sound Vibration Sensor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Sound Vibration Sensor</h3>
                         <p class="product-description">Vibration and sound detection sensor</p>
-                        <div class="product-price">₹45</div>
-                        <button class="btn btn-primary" onclick="addToCart(56)">Add to Cart</button>
+                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(56)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="57" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/3c/7a/9d/3c7a9d2b5e8f4a6c8b7d9e2f1a5c8b7.jpg" alt="Color Sensor (TCS34725)" loading="lazy">
+                <div class="product-card fade-in" data-id="57" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/3c/7a/9d/3c7a9d2b5e8f4a6c8b7d9e2f1a5c8b7.jpg" alt="Color Sensor (TCS34725)" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Color Sensor (TCS34725)</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Color Sensor (TCS34725)</h3>
                         <p class="product-description">RGB color sensor with IR blocking filter</p>
-                        <div class="product-price">₹180</div>
-                        <button class="btn btn-primary" onclick="addToCart(57)">Add to Cart</button>
+                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(57)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="58" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/8f/5c/9b/8f5c9b7a4e2d6f8c9b5a7e3d1f2c8b6.jpg" alt="Sound Sensor" loading="lazy">
+                <div class="product-card fade-in" data-id="58" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/8f/5c/9b/8f5c9b7a4e2d6f8c9b5a7e3d1f2c8b6.jpg" alt="Sound Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Sound Sensor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Sound Sensor</h3>
                         <p class="product-description">Microphone sound detection module</p>
-                        <div class="product-price">₹35</div>
-                        <button class="btn btn-primary" onclick="addToCart(58)">Add to Cart</button>
+                        <div class="product-price">Rs 35<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(58)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="59" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/6b/9c/8d/6b9c8d5a7e3f2c9b8d6a4e1f5c2b7a9.jpg" alt="Water Level Sensor" loading="lazy">
+                <div class="product-card fade-in" data-id="59" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/6b/9c/8d/6b9c8d5a7e3f2c9b8d6a4e1f5c2b7a9.jpg" alt="Water Level Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Water Level Sensor</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Water Level Sensor</h3>
                         <p class="product-description">Liquid level detection sensor</p>
-                        <div class="product-price">₹55</div>
-                        <button class="btn btn-primary" onclick="addToCart(59)">Add to Cart</button>
+                        <div class="product-price">Rs 55<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(59)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="60" data-category="Actuators">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/7d/2c/9f/7d2c9f8b5a6e4d1c8f7b9a3e2d5c6b4.jpg" alt="5V Relay Module" loading="lazy">
+                <div class="product-card fade-in" data-id="60" data-category="Actuators">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/7d/2c/9f/7d2c9f8b5a6e4d1c8f7b9a3e2d5c6b4.jpg" alt="5V Relay Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">5V Relay Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">5V Relay Module</h3>
                         <p class="product-description">Electromagnetic relay module for switching</p>
-                        <div class="product-price">₹45</div>
-                        <button class="btn btn-primary" onclick="addToCart(60)">Add to Cart</button>
+                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(60)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="61" data-category="Sensors">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/9a/3d/7c/9a3d7c8b5f2e6d4a9c8b7e1f3d5a2c6.jpg" alt="Electret Microphone Module" loading="lazy">
+                <div class="product-card fade-in" data-id="61" data-category="Sensors">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/9a/3d/7c/9a3d7c8b5f2e6d4a9c8b7e1f3d5a2c6.jpg" alt="Electret Microphone Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Electret Microphone Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Electret Microphone Module</h3>
                         <p class="product-description">Condenser microphone module for audio input</p>
-                        <div class="product-price">₹25</div>
-                        <button class="btn btn-primary" onclick="addToCart(61)">Add to Cart</button>
+                        <div class="product-price">Rs 25<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(61)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="62" data-category="Audio Components">
-                    <div class="product-image">
-                        <img src="https://i.pinimg.com/1200x/5c/8b/9a/5c8b9a7d3e6f2b8c9a5d7e1f4c2b6a8.jpg" alt="Voice Recognition Microphone Board" loading="lazy">
+                <div class="product-card fade-in" data-id="62" data-category="Audio Components">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://i.pinimg.com/1200x/5c/8b/9a/5c8b9a7d3e6f2b8c9a5d7e1f4c2b6a8.jpg" alt="Voice Recognition Microphone Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Voice Recognition Microphone Board</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Voice Recognition Microphone Board</h3>
                         <p class="product-description">Advanced voice recognition and processing board</p>
-                        <div class="product-price">₹650</div>
-                        <button class="btn btn-primary" onclick="addToCart(62)">Add to Cart</button>
+                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(62)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="63" data-category="Audio Components">
-                    <div class="product-image">
-                        <img src="https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg" alt="Robocraze Speech Recognition Module" loading="lazy">
+                <div class="product-card fade-in" data-id="63" data-category="Audio Components">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                        <img src="https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg" alt="Robocraze Speech Recognition Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
+                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Robocraze Speech Recognition Module</h3>
+                    <div class="product-content">
+                        <h3 class="product-title">Robocraze Speech Recognition Module</h3>
                         <p class="product-description">Voice command recognition module</p>
-                        <div class="product-price">₹450</div>
-                        <button class="btn btn-primary" onclick="addToCart(63)">Add to Cart</button>
+                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(63)">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1313,7 +1533,7 @@
             // Initialize filteredProducts with all products (no allProducts array needed for static HTML)
             filteredProducts = [];
             productCards.forEach((card, index) => {
-                const name = card.querySelector('.product-name')?.textContent || 'Unknown Product';
+                const name = card.querySelector('.product-title')?.textContent || 'Unknown Product';
                 const priceText = card.querySelector('.product-price')?.textContent || '₹0';
                 const price = parseFloat(priceText.replace('₹', '')) || 0;
                 const category = card.getAttribute('data-category') || 'General';
@@ -2362,8 +2582,8 @@ Is NaN: ${isNaN(parseInt(userId))}`);
                 }
 
                 // Default: sort by name
-                const aName = aElement.querySelector('.product-name').textContent || '';
-                const bName = bElement.querySelector('.product-name').textContent || '';
+                const aName = aElement.querySelector('.product-title').textContent || '';
+                const bName = bElement.querySelector('.product-title').textContent || '';
                 return aName.localeCompare(bName);
             });
 
