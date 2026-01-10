@@ -94,27 +94,23 @@
                 <p class="page-subtitle">Browse our complete collection of electronics components</p>
             </div>
 
-            <!-- Filters -->
-            <div class="filters-bar">
-                <div class="filters">
-                    <select id="categoryFilter" onchange="filterProducts()">
-                        <option value="">All Categories</option>
-                        <option value="Microcontrollers">Microcontrollers</option>
-                        <option value="Sensors">Sensors</option>
-                        <option value="Actuators">Actuators</option>
-                        <option value="Displays">Displays</option>
-                        <option value="Power Supply">Power Supply</option>
-                        <option value="Tools & Accessories">Tools & Accessories</option>
-                        <option value="Audio Components">Audio Components</option>
-                        <option value="Communication">Communication</option>
-                        <option value="Robotics">Robotics</option>
-                    </select>
-                    <select id="sortFilter" onchange="sortProducts()">
-                        <option value="name">Sort by Name</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                    </select>
+            <!-- Filters and Sorting -->
+            <div class="products-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('')">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('Microcontrollers')">Microcontrollers</button>
+                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
+                    <button class="filter-btn" onclick="filterByCategory('Actuators')">Actuators</button>
+                    <button class="filter-btn" onclick="filterByCategory('Displays')">Displays</button>
+                    <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
+                    <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
+                    <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
                 </div>
+                <select id="sortFilter" onchange="sortProducts()">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
             </div>
 
             <div class="products-grid" id="productsGrid">
@@ -2316,9 +2312,18 @@ Is NaN: ${isNaN(parseInt(userId))}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function filterProducts() {
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            console.log('🔍 Filtering by category:', categoryFilter);
+        function filterByCategory(category) {
+            console.log('🔍 Filtering by category:', category);
+
+            // Update active button state
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Find and activate the clicked button
+            const activeButton = document.querySelector(`.filter-btn[onclick="filterByCategory('${category}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
 
             // Get all product cards and filter them
             const allCards = document.querySelectorAll('.product-card');
@@ -2326,7 +2331,7 @@ Is NaN: ${isNaN(parseInt(userId))}`);
 
             allCards.forEach(card => {
                 const cardCategory = card.getAttribute('data-category') || '';
-                if (categoryFilter === '' || cardCategory === categoryFilter) {
+                if (category === '' || cardCategory === category) {
                     filteredProducts.push({
                         element: card,
                         category: cardCategory
@@ -2338,7 +2343,7 @@ Is NaN: ${isNaN(parseInt(userId))}`);
             displayProducts();
             setupPagination();
 
-            console.log(`✅ Filtered to ${filteredProducts.length} products in category "${categoryFilter}"`);
+            console.log(`✅ Filtered to ${filteredProducts.length} products in category "${category || 'All'}"`);
         }
 
         function sortProducts() {
