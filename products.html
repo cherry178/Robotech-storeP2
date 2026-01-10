@@ -928,28 +928,43 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Products page DOM loaded, initializing...');
-            // Use DEMO_PRODUCTS directly instead of fetching from API
-            console.log('✅ Using DEMO_PRODUCTS with', DEMO_PRODUCTS.length, 'products');
+            console.log('🚀 Products page DOM loaded, initializing...');
 
-            // Map DEMO_PRODUCTS to match expected format
-            allProducts = DEMO_PRODUCTS.map(product => ({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                category: product.category,
-                description: product.description,
-                image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
-            }));
-
-            console.log('🔍 First product:', allProducts[0]);
-            console.log('🔍 All product IDs:', allProducts.map(p => ({id: p.id, name: p.name})));
-
-            displayProducts();
+            // Initialize products from static HTML instead of DEMO_PRODUCTS
+            initializeProductsFromHTML();
             setupPagination();
             updateCartCount();
             initializeProductsPage();
         });
+
+        function initializeProductsFromHTML() {
+            // Get all product cards from the static HTML
+            const productCards = document.querySelectorAll('.product-card');
+            console.log('📦 Found', productCards.length, 'product cards in HTML');
+
+            allProducts = [];
+            productCards.forEach((card, index) => {
+                const name = card.querySelector('.product-name')?.textContent || 'Unknown Product';
+                const priceText = card.querySelector('.product-price')?.textContent || '₹0';
+                const price = parseFloat(priceText.replace('₹', '')) || 0;
+                const category = card.querySelector('.product-category')?.textContent || 'General';
+                const description = card.querySelector('.product-description')?.textContent || '';
+                const image = card.querySelector('img')?.src || '';
+
+                allProducts.push({
+                    id: index + 1,
+                    name: name,
+                    price: price,
+                    category: category,
+                    description: description,
+                    image: image,
+                    element: card // Keep reference to the DOM element
+                });
+            });
+
+            filteredProducts = [...allProducts];
+            console.log('✅ Initialized', allProducts.length, 'products from HTML');
+        }
 
         function initializeProductsPage() {
             console.log('Initializing products page...');
@@ -1871,49 +1886,24 @@ Is NaN: ${isNaN(parseInt(userId))}`);
         }
 
         function displayProducts() {
-            const grid = document.getElementById('productsGrid');
-            if (!grid) {
-                console.error('❌ productsGrid element not found!');
-                return;
-            }
+            console.log('🎴 displayProducts: Working with static HTML products');
 
-            const startIndex = (currentPage - 1) * productsPerPage;
-            const endIndex = startIndex + productsPerPage;
-            const productsToShow = filteredProducts.slice(startIndex, endIndex);
+            // Get all product cards
+            const allCards = document.querySelectorAll('.product-card');
+            console.log('📦 Total product cards in DOM:', allCards.length);
 
-            console.log('🎴 displayProducts: filteredProducts length =', filteredProducts.length);
-            console.log('🎴 displayProducts: Creating', productsToShow.length, 'product cards from', startIndex, 'to', endIndex);
-            console.log('🎴 displayProducts: productsToShow =', productsToShow);
+            // Hide all cards first
+            allCards.forEach(card => {
+                card.style.display = 'none';
+            });
 
-            if (productsToShow.length === 0) {
-                console.warn('⚠️ No products to show! Adding test product.');
-                productsToShow = [{
-                    id: 999,
-                    name: 'TEST PRODUCT - Products Not Loading',
-                    price: 100,
-                    category: 'Test',
-                    description: 'If you see this, the DEMO_PRODUCTS are not loading properly',
-                    image: 'https://via.placeholder.com/250x200?text=TEST+PRODUCT'
-                }];
-            }
+            // Show only the products that should be visible (for now, show all since we have static HTML)
+            // In a real implementation, this would filter based on category/search
+            allCards.forEach(card => {
+                card.style.display = 'block';
+            });
 
-            grid.innerHTML = productsToShow.map(product => {
-                // Store product ID in data attribute for debugging
-                const productId = product.id;
-                const productName = product.name.replace(/'/g, "\\'");
-                console.log(`🎴 Generating HTML for: ID=${productId}, Name="${productName}"`);
-                
-                return `
-                <div class="product-card">
-                    <div style="background: red; color: white; padding: 2px 5px; font-size: 10px; display: inline-block; margin-bottom: 5px;">ID: ${productId}</div>
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/250x200?text=${product.name}'">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <div class="price">₹${product.price}</div>
-                    <button data-product-id="${productId}" data-product-name="${productName}" onclick="var btn = this; var pid = parseInt(btn.getAttribute('data-product-id')); var pname = btn.getAttribute('data-product-name'); console.log('🛒 BUTTON CLICKED: ID=' + pid + ', Name=' + pname); alert('Adding to cart: ID ' + pid + ' - ' + pname); addToCart(pid)">Add to Cart</button>
-                </div>
-            `;
-            }).join('');
+            console.log('✅ Displayed all static products');
         }
 
         function updatePagination() {
