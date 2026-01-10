@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Checkout Flow</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Checkout Flow Test</h1>
+
+    <div class="test-section">
+        <h2>Step 1: Simulate Cart with Checkout Button</h2>
+        <p>This simulates the cart page with the checkout button that should now work.</p>
+        <button onclick="window.location.href='payment.html'">✅ Proceed to Checkout</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 2: Test Storage Setup</h2>
+        <p>Set up some test user data in storage (simulating a user who has added items to cart):</p>
+        <button onclick="setupTestUser()">Setup Test User Data</button>
+        <button onclick="clearTestUser()">Clear Test User Data</button>
+        <div id="storageStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 3: Direct Links</h2>
+        <p>Direct links to test pages:</p>
+        <a href="cart.html"><button type="button">Go to Cart Page</button></a>
+        <a href="payment.html"><button type="button">Go to Payment Page</button></a>
+    </div>
+
+    <script>
+        function setupTestUser() {
+            // Simulate user data that would be set after adding items to cart
+            sessionStorage.setItem('user_id', '1234');
+            sessionStorage.setItem('phone', '9876543210');
+            sessionStorage.setItem('logged_in', 'true');
+
+            localStorage.setItem('user_id', '1234');
+            localStorage.setItem('phone', '9876543210');
+            localStorage.setItem('logged_in', 'true');
+
+            updateStorageStatus();
+            alert('Test user data set! User ID: 1234, Phone: 9876543210');
+        }
+
+        function clearTestUser() {
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('logged_in');
+
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+
+            updateStorageStatus();
+            alert('Test user data cleared!');
+        }
+
+        function updateStorageStatus() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            document.getElementById('storageStatus').innerHTML = `
+                <p><strong>User ID:</strong> ${userId || 'Not set'}</p>
+                <p><strong>Phone:</strong> ${phone || 'Not set'}</p>
+                <p><strong>Logged In:</strong> ${loggedIn || 'Not set'}</p>
+            `;
+        }
+
+        // Update status on page load
+        updateStorageStatus();
+    </script>
+</body>
+</html>

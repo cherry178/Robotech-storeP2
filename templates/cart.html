@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="/products" class="nav-link">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="/products?category=Resistors">Resistors</a>
+                                <a href="/products?category=Capacitors">Capacitors</a>
+                                <a href="/products?category=LEDs">LEDs</a>
+                                <a href="/products?category=Diodes">Diodes</a>
+                                <a href="/products?category=Transistors">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="/products?category=Microcontrollers">Microcontrollers</a>
+                                <a href="/products?category=Arduino">Arduino</a>
+                                <a href="/products?category=Raspberry%20Pi">Raspberry Pi</a>
+                                <a href="/products?category=ESP">ESP Boards</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Sensors</h4>
+                                <a href="/products?category=Sensors">All Sensors</a>
+                                <a href="/products?category=Temperature%20Sensors">Temperature</a>
+                                <a href="/products?category=Motion%20Sensors">Motion</a>
+                                <a href="/products?category=Distance%20Sensors">Distance</a>
+                                <a href="/products?category=Light%20Sensors">Light</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#categories" class="nav-link">Categories</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">My User ID: Loading...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item" onclick="window.location.href = 'http://127.0.0.1:8888/orders'">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/cart'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container">
+            <div class="cart-header">
+                <h1 class="page-title">Shopping Cart</h1>
+                <p class="page-subtitle">Review your items and proceed to checkout</p>
+            </div>
+
+            <div class="cart-content">
+                <div id="cartContent">
+                    <!-- Cart items will be loaded here -->
+                    <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px; margin: 2rem 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                        <h2 style="color: #6c757d; margin-bottom: 1rem;">Loading Your Cart...</h2>
+                        <p style="color: #6c757d;">Please wait while we load your cart items.</p>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>Robotech Store</span>
+                    </div>
+                    <p>Your trusted partner for IoT and electronics components. Quality products, fast delivery, and excellent support.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>POLICIES</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li>Robotech Store, Plot No. 39, 200 Feet SEZ Road</li>
+                        <li>Near Malot Hospital, Mahapura, Jaipur - 302026</li>
+                        <li><i class="fas fa-phone"></i> Phone: 0141-4946677</li>
+                        <li><i class="fas fa-envelope"></i> Email: support@robotechstore.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>© 2024 Robotech Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+        console.log('🛒 CART PAGE: Script starting...');
+
+        // Initialize cart loading when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🛒 CART PAGE: DOMContentLoaded fired, loading cart...');
+            loadCartFromAPI();
+        });
+
+        // Function to load cart items from backend API
+        function loadCartFromAPI() {
+            console.log('🛒 CART PAGE: Loading cart from API...');
+
+            // Get user ID from storage (same as add-to-cart uses)
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            console.log('🛒 CART PAGE: User ID from storage:', userId);
+
+            if (!userId) {
+                console.log('🛒 CART PAGE: No user ID found, showing login prompt');
+                showLoginPrompt();
+                return;
+            }
+
+            // Make API call to get cart items - use relative URL since we're served by Flask
+            const apiUrl = `/api/cart?user_id=${userId}`;
+            console.log('🛒 CART PAGE: Fetching from:', apiUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log('🛒 CART PAGE: API response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('🛒 CART PAGE: API response data:', data);
+                    if (data.success && data.cart) {
+                        console.log('🛒 CART PAGE: Cart loaded with', data.cart.length, 'items');
+                        displayCartItems(data.cart);
+                    } else {
+                        console.log('🛒 CART PAGE: API returned success but no cart data');
+                        showEmptyCart();
+                    }
+                })
+                .catch(error => {
+                    console.error('🛒 CART PAGE: Error loading cart:', error);
+                    showErrorMessage('Failed to load cart: ' + error.message);
+                });
+        }
+
+        // Function to display cart items
+        function displayCartItems(cartItems) {
+            console.log('🛒 CART PAGE: Displaying', cartItems.length, 'cart items');
+
+            const cartContent = document.getElementById('cartContent');
+            if (!cartContent) {
+                console.error('🛒 CART PAGE: cartContent element not found!');
+                return;
+            }
+
+            if (cartItems.length === 0) {
+                showEmptyCart();
+                return;
+            }
+
+            // Build cart items HTML
+            let cartHTML = '<div class="cart-items" style="margin-bottom: 2rem; max-width: 800px; margin: 0 auto 2rem auto;">';
+            let totalPrice = 0;
+            let totalItems = 0;
+
+            cartItems.forEach((item) => {
+                const name = item.name || 'Unknown Product';
+                const price = parseFloat(item.price) || 0;
+                const quantity = parseInt(item.quantity) || 1;
+                const image = item.image_url || 'https://via.placeholder.com/80x80?text=Product';
+                const description = item.description || '';
+
+                totalItems += quantity;
+                totalPrice += price * quantity;
+
+                cartHTML += `
+                    <div class="cart-item" style="display: flex; align-items: center; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <img src="${image}" alt="${name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem; border: 2px solid #f0f0f0;">
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; color: #2c3e50; font-weight: 600;">${name}</h3>
+                            <p style="margin: 0 0 1rem 0; color: #7f8c8d; font-size: 0.95rem; line-height: 1.4;">${description}</p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <span style="font-weight: 600; color: #e74c3c; font-size: 1.1rem;">₹${price.toFixed(2)} each</span>
+                                    <span style="background: #f8f9fa; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: #495057;">Qty: ${quantity}</span>
+                                    <button onclick="removeFromCart(${item.product_id})" style="background: #dc3545; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                                <span style="font-weight: 700; font-size: 1.2rem; color: #27ae60;">₹${(price * quantity).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += '</div>';
+
+            // Cart summary
+            cartHTML += `
+                <div style="padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <h3 style="margin-top: 0; color: white; font-size: 1.4rem;">🛒 Cart Summary</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3);">
+                        <span style="font-size: 1.1rem; font-weight: 500;">Total Items:</span>
+                        <span style="font-size: 1.3rem; font-weight: 700;">${totalItems}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding-top: 1rem;">
+                        <span style="font-size: 1.4rem; font-weight: 600;">Total Price:</span>
+                        <span style="font-size: 1.6rem; font-weight: 800;">₹${totalPrice.toFixed(2)}</span>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="proceedToCheckout()" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(40,167,69,0.3);" onmouseover="this.style.background='#218838'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(40,167,69,0.4)';" onmouseout="this.style.background='#28a745'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(40,167,69,0.3)';">✅ Proceed to Checkout</button>
+                        <a href="/products" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,123,255,0.3);" onmouseover="this.style.background='#0056b3'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,123,255,0.4)';" onmouseout="this.style.background='#007bff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,123,255,0.3)';">🛍️ Continue Shopping</a>
+                    </div>
+                </div>
+            `;
+
+            cartContent.innerHTML = cartHTML;
+            console.log('🛒 CART PAGE: Cart display completed');
+        }
+
+        // Function to show empty cart
+        function showEmptyCart() {
+            console.log('🛒 CART PAGE: Showing empty cart');
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px;">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                        <h2 style="color: #6c757d;">Your cart is empty</h2>
+                        <p style="color: #6c757d;">Add some products to get started!</p>
+                        <a href="/products" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Browse Products</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to show login prompt
+        function showLoginPrompt() {
+            console.log('🛒 CART PAGE: Showing login prompt');
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #856404;"></i>
+                        <h2>Please Login</h2>
+                        <p>You need to login to view your cart.</p>
+                        <a href="/" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #ffc107; color: #212529; text-decoration: none; border-radius: 4px;">Go to Login</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to show error message
+        function showErrorMessage(message) {
+            console.error('🛒 CART PAGE: Showing error:', message);
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #f8d7da; border-radius: 8px; color: #721c24;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h2>Failed to Load Cart</h2>
+                        <p>${message}</p>
+                        <button onclick="loadCartFromAPI()" style="margin-top: 1rem; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to proceed to checkout
+        async function proceedToCheckout() {
+            console.log('🛒 CART PAGE: Proceeding to checkout...');
+
+            // Check if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
+                              (localStorage.getItem('logged_in') === 'true') ||
+                              (userId && parseInt(userId) > 0);
+
+            if (!userId || !isLoggedIn) {
+                alert('Please login to proceed to checkout');
+                window.location.href = '/';
+                return;
+            }
+
+            // Check if cart has items
+            try {
+                const response = await fetch(`http://127.0.0.1:8888/api/cart?user_id=${userId}`);
+                const data = await response.json();
+                
+                if (!data.success || !data.cart || data.cart.length === 0) {
+                    alert('Your cart is empty. Add some items first.');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error checking cart:', error);
+            }
+
+            // Redirect to payment page
+            window.location.href = '/payment';
+        }
+
+        // Function to remove item from cart
+        async function removeFromCart(productId) {
+            console.log('🛒 CART PAGE: Removing item from cart:', productId);
+
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                alert('Please login to remove items from cart');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/cart/remove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        product_id: productId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('🛒 CART PAGE: Item removed successfully');
+                    // Reload cart to show updated items
+                    loadCartFromAPI();
+                } else {
+                    alert('Failed to remove item from cart: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('🛒 CART PAGE: Error removing item:', error);
+                alert('Error removing item from cart: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

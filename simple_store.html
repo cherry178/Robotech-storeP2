@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotech Store - Simple Version</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .header { background: #2c3e50; color: white; padding: 1rem; position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .login-btn { background: #3498db; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+        .login-btn:hover { background: #2980b9; }
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 1rem; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+        .products { padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        .products h2 { text-align: center; margin-bottom: 2rem; font-size: 2rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .product-card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem; }
+        .product-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .product-card .price { font-size: 1.2rem; font-weight: bold; color: #e74c3c; margin-bottom: 1rem; }
+        .product-card button { background: #27ae60; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        .product-card button:hover { background: #229954; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; margin: 10% auto; padding: 2rem; border-radius: 8px; max-width: 400px; position: relative; }
+        .close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; }
+        .form-group input { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+        .btn { background: #3498db; color: white; padding: 0.7rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        .btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                Robotech Store
+            </div>
+            <button class="login-btn" onclick="openLoginModal()">
+                <i class="fas fa-user"></i> Login
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to Robotech Store</h1>
+        <p>Your complete electronics components marketplace</p>
+    </section>
+
+    <section class="products">
+        <h2>Featured Products</h2>
+        <div class="product-grid" id="productGrid">
+            <!-- Products will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Customer Login</h2>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter 10-digit phone" maxlength="10">
+            </div>
+            <div class="form-group" id="otpGroup" style="display: none;">
+                <label for="otp">Enter OTP</label>
+                <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6">
+            </div>
+            <button id="sendOtpBtn" class="btn" onclick="sendOTP()">Send OTP</button>
+            <button id="verifyOtpBtn" class="btn" style="display: none;" onclick="verifyOTP()">Verify & Login</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample products
+        const products = [
+            {
+                id: 1,
+                name: 'Arduino Uno R3',
+                price: 450,
+                image: 'https://m.media-amazon.com/images/I/51+N-57gSiL.jpg',
+                description: 'Microcontroller board'
+            },
+            {
+                id: 2,
+                name: 'ESP32 Development Board',
+                price: 350,
+                image: 'https://i.pinimg.com/736x/d1/66/1b/d1661bdecf277684181694a4fedbf9bf.jpg',
+                description: 'WiFi & Bluetooth board'
+            },
+            {
+                id: 3,
+                name: 'DHT11 Temperature Sensor',
+                price: 45,
+                image: 'https://i.pinimg.com/1200x/a1/50/a6/a150a6b5db3d525533522fbba78d999b.jpg',
+                description: 'Temperature & humidity sensor'
+            },
+            {
+                id: 4,
+                name: 'HC-SR04 Ultrasonic Sensor',
+                price: 85,
+                image: 'https://i.pinimg.com/1200x/5b/09/06/5b09066c572846471a3df3242abd4375.jpg',
+                description: 'Distance measuring sensor'
+            },
+            {
+                id: 5,
+                name: 'SG90 Servo Motor',
+                price: 95,
+                image: 'https://i.pinimg.com/1200x/c6/da/02/c6da024f4702e68756c6d466894a027c.jpg',
+                description: '9g servo motor'
+            },
+            {
+                id: 6,
+                name: 'LCD 16x2 Display',
+                price: 120,
+                image: 'https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg',
+                description: 'Character LCD display'
+            }
+        ];
+
+        let currentUser = null;
+
+        // Load products
+        function loadProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/250x200?text=${product.name}'">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div class="price">₹${product.price}</div>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            // Reset form
+            document.getElementById('otpGroup').style.display = 'none';
+            document.getElementById('sendOtpBtn').style.display = 'block';
+            document.getElementById('verifyOtpBtn').style.display = 'none';
+            document.getElementById('phone').value = '';
+            document.getElementById('otp').value = '';
+        }
+
+        // Login functions
+        function sendOTP() {
+            const phone = document.getElementById('phone').value;
+            if (!phone || phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+
+            // Show OTP input
+            document.getElementById('otpGroup').style.display = 'block';
+            document.getElementById('sendOtpBtn').style.display = 'none';
+            document.getElementById('verifyOtpBtn').style.display = 'block';
+
+            alert(`Demo OTP: 123456\n\nEnter this code to login.`);
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otp').value;
+            if (otp !== '123456') {
+                alert('Invalid OTP. Use 123456 for demo.');
+                return;
+            }
+
+            // Generate user ID
+            const userId = Math.floor(Math.random() * 9000) + 1000;
+            currentUser = { user_id: userId, phone: document.getElementById('phone').value };
+
+            // Update UI
+            document.querySelector('.login-btn').innerHTML = `<i class="fas fa-user"></i> User ${userId}`;
+            document.querySelector('.login-btn').onclick = () => alert('Logged in as User ' + userId);
+
+            // Close modal
+            closeLoginModal();
+
+            alert(`Login successful! Welcome User ${userId}`);
+        }
+
+        function addToCart(productId) {
+            if (!currentUser) {
+                alert('Please login to add items to cart');
+                openLoginModal();
+                return;
+            }
+
+            alert('Item added to cart! (Demo mode)');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

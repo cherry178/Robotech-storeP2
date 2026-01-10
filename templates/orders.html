@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <style>
+        body { background: #f8f9fa; font-family: 'Inter', sans-serif; }
+        .orders-container { max-width: 1000px; margin: 20px auto; padding: 0 1rem; }
+        .orders-header { text-align: center; margin-bottom: 2rem; }
+        .orders-header h1 { color: #2c3e50; margin-bottom: 0.5rem; }
+        .orders-header p { color: #7f8c8d; font-size: 1.1rem; }
+
+        .orders-list { display: grid; gap: 1rem; }
+        .order-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); overflow: hidden; }
+        .order-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; }
+        .order-header h3 { margin: 0 0 0.5rem 0; }
+        .order-status { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.9rem; }
+
+        .order-body { padding: 1.5rem; }
+        .order-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f1f3f4; }
+        .order-item:last-child { border-bottom: none; }
+        .item-info { display: flex; align-items: center; }
+        .item-info img { width: 50px; height: 50px; border-radius: 6px; margin-right: 1rem; object-fit: cover; }
+        .item-details h4 { margin: 0 0 0.25rem 0; font-size: 1rem; color: #2c3e50; }
+        .item-details p { margin: 0; color: #7f8c8d; font-size: 0.9rem; }
+
+        .order-footer { background: #f8f9fa; padding: 1.5rem; border-top: 1px solid #e9ecef; }
+        .order-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 600; color: #2c3e50; }
+
+        .no-orders { text-align: center; padding: 4rem 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
+        .no-orders i { font-size: 4rem; color: #bdc3c7; margin-bottom: 1rem; }
+        .no-orders h2 { color: #2c3e50; margin-bottom: 1rem; }
+
+        .loading-state { text-align: center; padding: 4rem 2rem; }
+        .loading-state i { font-size: 3rem; color: #3498db; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/cart" class="nav-link">Cart</a>
+                    <a href="/orders" class="nav-link active">Orders</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">My User ID: Loading...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item" onclick="window.location.href = 'http://127.0.0.1:8888/orders'">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1><i class="fas fa-list"></i> My Orders</h1>
+            <p>Track and manage your orders</p>
+        </div>
+
+        <div id="ordersContent">
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading your orders...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUserLoginStatus();
+            setTimeout(() => {
+                loadOrders();
+            }, 1000);
+        });
+
+        function checkUserLoginStatus() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+
+            if (!userId || !phone) {
+                window.location.href = '/';
+                return;
+            }
+
+            currentUser = { user_id: userId, phone: phone };
+        }
+
+        async function loadOrders() {
+            
+            try {
+                const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                
+
+                const response = await fetch(`/api/orders?user_id=${userId}`);
+                
+
+                const data = await response.json();
+                
+
+                if (data.success && data.orders && data.orders.length > 0) {
+                    
+                    displayOrders(data.orders);
+                } else {
+                    
+                    showNoOrders();
+                }
+            } catch (error) {
+                showError('Failed to load orders');
+            }
+        }
+
+        function displayOrders(orders) {
+            const ordersContent = document.getElementById('ordersContent');
+
+            if (!ordersContent) {
+                // Try again in 100ms if element not found
+                setTimeout(() => displayOrders(orders), 100);
+                return;
+            }
+
+
+            let html = '<div class="orders-list">';
+
+            orders.forEach(order => {
+                const orderDate = new Date(order.created_at).toLocaleDateString();
+                const statusColor = getStatusColor(order.status);
+
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Order #${order.user_order_number}</h3>
+                            <span class="order-status" style="background: ${statusColor};">${order.status}</span>
+                            <p>Ordered on ${orderDate}</p>
+                        </div>
+                        <div class="order-body">
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <div class="item-details">
+                                        <h4>Order Items</h4>
+                                        <p>${order.items}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-footer">
+                            <div class="order-total">
+                                <span>Total:</span>
+                                <span>₹${order.total_amount}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            ordersContent.innerHTML = html;
+        }
+
+        function getStatusColor(status) {
+            switch (status.toLowerCase()) {
+                case 'pending': return '#f39c12';
+                case 'processing': return '#3498db';
+                case 'shipped': return '#27ae60';
+                case 'delivered': return '#2ecc71';
+                case 'cancelled': return '#e74c3c';
+                default: return '#95a5a6';
+            }
+        }
+
+        function showNoOrders() {
+            document.getElementById('ordersContent').innerHTML = `
+                <div class="no-orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h2>No Orders Yet</h2>
+                    <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>
+                    <a href="/products" style="display: inline-block; background: #3498db; color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; margin-top: 1rem;">
+                        <i class="fas fa-shopping-bag"></i> Start Shopping
+                    </a>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            document.getElementById('ordersContent').innerHTML = `
+                <div class="no-orders">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Error Loading Orders</h2>
+                    <p>${message}</p>
+                    <button onclick="loadOrders()" style="background: #e74c3c; color: white; border: none; padding: 1rem 2rem; border-radius: 8px; margin-top: 1rem; cursor: pointer;">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

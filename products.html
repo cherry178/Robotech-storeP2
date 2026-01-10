@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script src="./static/js/main.js"></script>
+    <style>
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">
+        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Home</a> |
+        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
+        <button id="debugBtn" style="margin-left: 5px; padding: 5px 10px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔍 Debug</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="margin-top: 40px;">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="static_index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link active">Products</a>
+                    <a href="static_index.html#categories" class="nav-link">Categories</a>
+                    <a href="static_index.html#about" class="nav-link">About</a>
+                    <a href="static_index.html#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn" onclick="performSearch()"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">Login</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="login-dropdown-content" id="loginDropdown">
+                                <div class="login-header">
+                                    <h4>Customer Login</h4>
+                                    <p>If you are already registered, please log in.</p>
+                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
+                                    </div>
+                                </div>
+
+                                <div class="login-tabs">
+                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
+                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
+                                </div>
+
+                                <div id="phoneLoginTab" class="login-tab-content active">
+                                    <div class="login-form">
+                                        <div class="form-group">
+                                            <label for="headerLoginPhone">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-prefix">+91</span>
+                                                <input
+                                                    type="tel"
+                                                    id="headerLoginPhone"
+                                                    placeholder="Enter phone number"
+                                                    maxlength="10"
+                                                    pattern="[0-9]{10}"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
+                                            <label for="headerLoginOtp">Enter OTP</label>
+                                            <div class="otp-input-container">
+                                                <input
+                                                    type="text"
+                                                    id="headerLoginOtp"
+                                                    placeholder="Enter 6-digit OTP"
+                                                    maxlength="6"
+                                                    pattern="[0-9]{6}"
+                                                >
+                                            </div>
+                                            <div class="otp-timer">
+                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
+                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
+                                            <i class="fas fa-paper-plane"></i> Send OTP
+                                        </button>
+
+                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
+                                            <i class="fas fa-check"></i> Verify & Login
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="gmailLoginTab" class="login-tab-content">
+                                    <div class="gmail-login-container">
+                                        <p class="gmail-login-text">Continue with Google account</p>
+                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
+                                            <i class="fab fa-google"></i>
+                                            Continue with Google
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-icon cart-btn" onclick="alert('Demo: View cart functionality')">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>All Products</h2>
+                <p>Browse our complete collection of electronics components</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="filters">
+                    <select id="categoryFilter" onchange="filterProducts()">
+                        <option value="">All Categories</option>
+                        <option value="Microcontrollers">Microcontrollers</option>
+                        <option value="Sensors">Sensors</option>
+                        <option value="Actuators">Actuators</option>
+                        <option value="Displays">Displays</option>
+                        <option value="Power Supply">Power Supply</option>
+                        <option value="Tools & Accessories">Tools & Accessories</option>
+                        <option value="Audio Components">Audio Components</option>
+                        <option value="Communication">Communication</option>
+                        <option value="Robotics">Robotics</option>
+                    </select>
+                    <select id="sortFilter" onchange="sortProducts()">
+                        <option value="name">Sort by Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Embedded Scripts -->
+    <script>
+        // Demo variables
+        let currentUser = null;
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const productsPerPage = 12;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Products page DOM loaded, initializing...');
+            // Immediate check for corrupted data
+            const storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (storedUserId && (storedUserId === 'NaN' || isNaN(parseInt(storedUserId)) || storedUserId.includes('demo_'))) {
+                console.log('Found corrupted data on products page load, clearing...');
+                forceLogout();
+            }
+            initializeProductsPage();
+        });
+
+        function initializeProductsPage() {
+            console.log('Initializing products page...');
+
+            // Setup buttons
+            const clearBtn = document.getElementById('clearDataBtn');
+            if (clearBtn) {
+                clearBtn.onclick = forceLogout;
+                console.log('Clear data button attached');
+            } else {
+                console.error('Clear data button not found');
+            }
+
+            const debugBtn = document.getElementById('debugBtn');
+            if (debugBtn) {
+                debugBtn.onclick = showDebugInfo;
+                console.log('Debug button attached');
+            } else {
+                console.error('Debug button not found');
+            }
+
+            checkUserLoginStatus();
+            loadAllProducts();
+            setupSearch();
+        }
+
+        function checkUserLoginStatus() {
+            console.log('Checking user login status on products page');
+            try {
+                let storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                let storedPhone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+                let storedLoggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+                console.log('Raw stored values on products page:', {
+                    storedUserId: `"${storedUserId}"`,
+                    storedPhone: `"${storedPhone}"`,
+                    storedLoggedIn: `"${storedLoggedIn}"`,
+                    storedUserIdType: typeof storedUserId,
+                    sessionUserId: `"${sessionStorage.getItem('user_id')}"`,
+                    localUserId: `"${localStorage.getItem('user_id')}"`
+                });
+
+                // Clear any corrupted data immediately
+                if (storedUserId === 'NaN' || storedUserId === null || storedUserId === undefined ||
+                    storedUserId === 'null' || storedUserId === 'undefined' ||
+                    String(storedUserId).toLowerCase() === 'nan' ||
+                    (storedUserId && isNaN(parseInt(storedUserId)))) {
+                    console.log('Found corrupted user ID, clearing storage immediately');
+                    clearUserData();
+                    storedUserId = null;
+                    storedLoggedIn = null;
+                    alert('Corrupted login data detected and cleared. Please login again.');
+                }
+
+                if (storedLoggedIn === 'true' && storedUserId && storedPhone) {
+                    const parsedUserId = parseInt(storedUserId);
+                    if (!isNaN(parsedUserId) && parsedUserId > 0) {
+                        currentUser = {
+                            user_id: parsedUserId,
+                            phone: storedPhone
+                        };
+                        console.log('User restored on products page:', currentUser);
+                        updateCartCount();
+                    } else {
+                        console.log('Invalid user ID after parsing, clearing storage');
+                        clearUserData();
+                        currentUser = null;
+                    }
+                } else {
+                    console.log('No valid user found on products page');
+                    currentUser = null;
+                }
+            } catch (error) {
+                console.error('Error checking login on products page:', error);
+                clearUserData();
+                currentUser = null;
+            }
+            updateLoginStatus();
+        }
+
+        function clearUserData() {
+            console.log('Clearing all user data from storage');
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('logged_in');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+
+            // Also clear any demo carts
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('demo_cart_')) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
+
+        function forceLogout() {
+            console.log('Force logout triggered');
+            clearUserData();
+            currentUser = null;
+            updateLoginStatus();
+            updateCartCount();
+            alert('Logged out and data cleared. Please refresh the page.');
+        }
+
+        function showDebugInfo() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            alert(`🔍 DEBUG INFO:
+SessionStorage:
+- user_id: "${sessionStorage.getItem('user_id')}"
+- phone: "${sessionStorage.getItem('phone')}"
+- logged_in: "${sessionStorage.getItem('logged_in')}"
+
+LocalStorage:
+- user_id: "${localStorage.getItem('user_id')}"
+- phone: "${localStorage.getItem('phone')}"
+- logged_in: "${localStorage.getItem('logged_in')}"
+
+Current User: ${currentUser ? JSON.stringify(currentUser) : 'null'}
+
+Parsed user_id: ${userId ? parseInt(userId) : 'N/A'}
+Is NaN: ${isNaN(parseInt(userId))}`);
+        }
+
+        function updateLoginStatus() {
+            console.log('updateLoginStatus called on products page, currentUser:', currentUser);
+            const loginText = document.getElementById('loginText');
+            const loginTrigger = document.querySelector('.login-trigger');
+
+            if (loginText && currentUser && currentUser.user_id && !isNaN(currentUser.user_id) && currentUser.user_id > 0) {
+                const displayId = Math.abs(Math.floor(currentUser.user_id)); // Ensure positive integer
+                loginText.textContent = `User ${displayId}`;
+                loginTrigger.onclick = () => toggleAccountMenu();
+                console.log('Updated UI for logged in user on products page:', displayId);
+            } else {
+                // Invalid user data - reset to login state
+                if (loginText) {
+                    loginText.textContent = 'Login';
+                    loginTrigger.onclick = () => toggleLoginDropdown();
+                    console.log('Invalid user data - reset to login state on products page');
+                }
+                // Clear corrupted data
+                if (currentUser && (isNaN(currentUser.user_id) || currentUser.user_id <= 0)) {
+                    console.log('Clearing corrupted currentUser data on products page');
+                    currentUser = null;
+                    clearUserData();
+                }
+                // Show helpful message
+                console.log('LOGIN STATUS: Not logged in or invalid data');
+            }
+        }
+
+        function toggleLoginDropdown() {
+            const dropdown = document.getElementById('loginDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
+
+        function toggleAccountMenu() {
+            alert('Logged in as User ' + currentUser.user_id + ' - Click to logout');
+            forceLogout();
+        }
+
+        function sendHeaderLoginOTP() {
+            const phoneInput = document.getElementById('headerLoginPhone');
+            let phone = phoneInput.value.trim().replace(/\D/g, '').slice(-10);
+
+            if (!phone || phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+
+            // DEMO MODE: Generate OTP locally
+            console.log('Using demo mode for OTP generation');
+            setTimeout(() => {
+                const otp = '123456'; // Demo OTP
+                console.log(`Demo OTP generated: ${otp} for phone: ${phone}`);
+
+                // Show OTP input field
+                document.getElementById('headerLoginOtpGroup').style.display = 'block';
+                document.getElementById('headerSendLoginOtpBtn').style.display = 'none';
+                document.getElementById('headerVerifyLoginOtpBtn').style.display = 'block';
+
+                // Start OTP timer
+                startDemoTimer();
+
+                // Reset button
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+
+                // Focus on OTP input
+                document.getElementById('headerLoginOtp').focus();
+
+                // Show demo OTP notification
+                showDemoOTPNotification(otp);
+
+                console.log(`📱 DEMO OTP: ${otp}`);
+                alert(`Demo OTP: ${otp}\n\nEnter this code to login.`);
+            }, 1000);
+        }
+
+        function verifyHeaderLoginOTP() {
+            const otpInput = document.getElementById('headerLoginOtp');
+            const otp = otpInput.value.trim();
+
+            if (otp !== '123456') {
+                alert('Invalid OTP. Use 123456 for demo.');
+                return;
+            }
+
+            // Clear any corrupted data first
+            clearUserData();
+
+            // Generate a valid user ID (between 1000-9999)
+            let userId;
+            do {
+                userId = Math.floor(Math.random() * 9000) + 1000;
+            } while (isNaN(userId) || userId < 1000 || userId > 9999);
+
+            const phone = document.getElementById('headerLoginPhone').value.trim();
+            const mockUser = {
+                user_id: userId,
+                phone: phone
+            };
+
+            console.log('Generated valid user ID:', userId, 'for user:', mockUser);
+
+            // Store in both storages
+            sessionStorage.setItem('user_id', mockUser.user_id.toString());
+            sessionStorage.setItem('phone', mockUser.phone);
+            sessionStorage.setItem('logged_in', 'true');
+
+            localStorage.setItem('user_id', mockUser.user_id.toString());
+            localStorage.setItem('phone', mockUser.phone);
+            localStorage.setItem('logged_in', 'true');
+
+            // Update current user
+            currentUser = mockUser;
+
+            // Update login button in header
+            updateLoginStatus();
+
+            // Reset form
+            document.getElementById('headerLoginOtp').value = '';
+            document.getElementById('headerLoginOtpGroup').style.display = 'none';
+            document.getElementById('headerSendLoginOtpBtn').style.display = 'block';
+            document.getElementById('headerVerifyLoginOtpBtn').style.display = 'none';
+
+            // Close dropdown
+            const dropdown = document.getElementById('loginDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
+
+            alert(`Login successful! Welcome User ${mockUser.user_id}`);
+        }
+
+        function startDemoTimer() {
+            let timeLeft = 30;
+            const timerElement = document.getElementById('headerLoginOtpTimer');
+
+            const timer = setInterval(() => {
+                if (timerElement) {
+                    timerElement.textContent = `Resend OTP in ${timeLeft}s`;
+                }
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    if (timerElement) {
+                        timerElement.textContent = 'OTP expired';
+                    }
+                }
+            }, 1000);
+        }
+
+        function showDemoOTPNotification(otp) {
+            // Create a temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #28a745;
+                color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 10001;
+                font-size: 16px;
+                text-align: center;
+            `;
+            notification.innerHTML = `
+                <strong>Demo OTP Generated!</strong><br>
+                Use this code: <strong style="font-size: 20px;">${otp}</strong><br>
+                <small>Click anywhere to close</small>
+            `;
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+
+            // Click to close
+            notification.onclick = () => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            };
+        }
+
+        function addToCart(productId) {
+            if (!currentUser) {
+                alert('Please login to add items to cart');
+                toggleLoginDropdown();
+                return;
+            }
+
+            try {
+                const cartKey = 'demo_cart_' + currentUser.user_id;
+                let cart = [];
+                const cartData = localStorage.getItem(cartKey);
+                if (cartData) {
+                    cart = JSON.parse(cartData);
+                }
+
+                const existingItem = cart.find(item => item.product_id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ product_id: productId, quantity: 1 });
+                }
+
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                currentCart = cart;
+                updateCartCount();
+                alert('Item added to cart!');
+            } catch (error) {
+                console.error('Error adding to demo cart:', error);
+                alert('Error adding to cart');
+            }
+        }
+
+        function updateCartCount() {
+            if (!currentUser) {
+                updateCartCountDisplay(0);
+                return;
+            }
+
+            try {
+                const cartKey = 'demo_cart_' + currentUser.user_id;
+                const cartData = localStorage.getItem(cartKey);
+                const cart = cartData ? JSON.parse(cartData) : [];
+                const count = cart.reduce((total, item) => total + item.quantity, 0);
+                updateCartCountDisplay(count);
+            } catch (error) {
+                console.error('Error updating demo cart count:', error);
+                updateCartCountDisplay(0);
+            }
+        }
+
+        function updateCartCountDisplay(count) {
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+                cartCountElement.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+        function loadAllProducts() {
+            // Fetch products from backend API to ensure IDs match
+            console.log('🔄 Loading products from backend API...');
+            fetch('http://127.0.0.1:8888/api/products?limit=100')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.products) {
+                        console.log('✅ Loaded', data.products.length, 'products from API');
+                        console.log('🔍 First product from API:', data.products[0]);
+                        console.log('🔍 All product IDs:', data.products.map(p => ({id: p.id, name: p.name})));
+                        
+                        // Map API response to match expected format
+                        allProducts = data.products.map(product => ({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            category: product.category,
+                            description: product.description || 'High-quality electronics component',
+                            image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
+                        }));
+                        
+                        filteredProducts = [...allProducts];
+                        displayProducts();
+                        updatePagination();
+                    } else {
+                        console.error('❌ Failed to load products from API:', data.error);
+                        // Fallback to empty array
+                        allProducts = [];
+                        filteredProducts = [];
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error fetching products:', error);
+                    // Fallback to empty array
+                    allProducts = [];
+                    filteredProducts = [];
+                });
+            return;
+            
+            // OLD HARDCODED ARRAY (DISABLED - NOW USING API)
+            /*
+            allProducts = [
+                {
+                    id: 1,
+                    name: 'Arduino Uno R3',
+                    price: 450,
+                    category: 'Microcontrollers',
+                    description: 'ATmega328P microcontroller board with USB interface',
+                    image: 'https://m.media-amazon.com/images/I/51+N-57gSiL.jpg'
+                },
+                {
+                    id: 2,
+                    name: 'ESP32 Development Board',
+                    price: 350,
+                    category: 'Microcontrollers',
+                    description: 'WiFi & Bluetooth enabled microcontroller',
+                    image: 'https://i.pinimg.com/736x/d1/66/1b/d1661bdecf277684181694a4fedbf9bf.jpg'
+                },
+                {
+                    id: 3,
+                    name: 'DHT11 Temperature & Humidity Sensor',
+                    price: 45,
+                    category: 'Sensors',
+                    description: 'Digital temperature and humidity sensor with 1-wire interface',
+                    image: 'https://i.pinimg.com/1200x/a1/50/a6/a150a6b5db3d525533522fbba78d999b.jpg'
+                },
+                {
+                    id: 4,
+                    name: 'HC-SR04 Ultrasonic Sensor',
+                    price: 85,
+                    category: 'Sensors',
+                    description: 'Ultrasonic ranging sensor for distance measurement',
+                    image: 'https://i.pinimg.com/1200x/5b/09/06/5b09066c572846471a3df3242abd4375.jpg'
+                },
+                {
+                    id: 5,
+                    name: 'SG90 Servo Motor',
+                    price: 95,
+                    category: 'Actuators',
+                    description: '9g micro servo motor for robotics',
+                    image: 'https://i.pinimg.com/1200x/c6/da/02/c6da024f4702e68756c6d466894a027c.jpg'
+                },
+                {
+                    id: 6,
+                    name: 'DC Motor',
+                    price: 150,
+                    category: 'Actuators',
+                    description: '12V DC geared motor for robotics and automation projects',
+                    image: 'https://m.media-amazon.com/images/I/21xfvGFiirL.jpg'
+                },
+                {
+                    id: 7,
+                    name: 'Stepper Motor',
+                    price: 450,
+                    category: 'Actuators',
+                    description: 'NEMA 17 stepper motor with 1.8° step angle for precision control',
+                    image: 'https://m.media-amazon.com/images/I/41cBDjOi6eL.jpg'
+                },
+                {
+                    id: 8,
+                    name: 'LCD Crystal Display',
+                    price: 120,
+                    category: 'Displays',
+                    description: '16x2 character LCD display module with backlight',
+                    image: 'https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg'
+                },
+                {
+                    id: 9,
+                    name: 'OLED Display',
+                    price: 150,
+                    category: 'Displays',
+                    description: '0.96 inch I2C OLED display module with 128x64 resolution',
+                    image: 'https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg'
+                },
+                {
+                    id: 10,
+                    name: 'TFT Screen',
+                    price: 850,
+                    category: 'Displays',
+                    description: '2.8 inch TFT LCD color touch screen display',
+                    image: 'https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg'
+                },
+                {
+                    id: 11,
+                    name: '7-Segment Display',
+                    price: 65,
+                    category: 'Displays',
+                    description: '4-digit 7-segment display with decimal points',
+                    image: 'https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg'
+                },
+                {
+                    id: 12,
+                    name: 'E-paper Display',
+                    price: 650,
+                    category: 'Displays',
+                    description: '1.54 inch e-paper display for low power applications',
+                    image: 'https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg'
+                },
+                {
+                    id: 13,
+                    name: 'LED Matrix Display',
+                    price: 95,
+                    category: 'Displays',
+                    description: '8x8 LED matrix display with MAX7219 driver',
+                    image: 'https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg'
+                },
+                {
+                    id: 14,
+                    name: 'LCD Touchscreen Module',
+                    price: 1200,
+                    category: 'Displays',
+                    description: '2.4 inch LCD touchscreen module for user interfaces',
+                    image: 'https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg'
+                },
+                {
+                    id: 15,
+                    name: '2 Battery Holders',
+                    price: 25,
+                    category: 'Power Supply',
+                    description: 'AA battery holder for 2 batteries in series',
+                    image: 'https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg'
+                },
+                {
+                    id: 16,
+                    name: '3 Battery Holders',
+                    price: 35,
+                    category: 'Power Supply',
+                    description: 'AA battery holder for 3 batteries in series',
+                    image: 'https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg'
+                },
+                {
+                    id: 17,
+                    name: 'DC-DC Converter',
+                    price: 85,
+                    category: 'Power Supply',
+                    description: 'Adjustable DC-DC buck converter module 5V-35V',
+                    image: 'https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg'
+                },
+                {
+                    id: 18,
+                    name: 'Power Bank Module',
+                    price: 180,
+                    category: 'Power Supply',
+                    description: '18650 lithium battery power bank module',
+                    image: 'https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg'
+                },
+                {
+                    id: 19,
+                    name: 'Breadboard',
+                    price: 85,
+                    category: 'Tools & Accessories',
+                    description: '830 tie-point solderless breadboard for prototyping',
+                    image: 'https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg'
+                },
+                {
+                    id: 20,
+                    name: 'Male-Male Jumper Wires',
+                    price: 45,
+                    category: 'Tools & Accessories',
+                    description: '40-piece male-to-male jumper wire set',
+                    image: 'https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg'
+                },
+                {
+                    id: 21,
+                    name: 'Male-Female Jumper Wires',
+                    price: 50,
+                    category: 'Tools & Accessories',
+                    description: '40-piece male-to-female jumper wire set',
+                    image: 'https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg'
+                },
+                {
+                    id: 22,
+                    name: 'Lithium Polymer Battery',
+                    price: 250,
+                    category: 'Power Supply',
+                    description: '3.7V 1000mAh LiPo battery with JST connector',
+                    image: 'https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg'
+                },
+                {
+                    id: 23,
+                    name: 'PCB Prototyping Board',
+                    price: 120,
+                    category: 'Tools & Accessories',
+                    description: 'Double-sided PCB prototyping board with copper pads',
+                    image: 'https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg'
+                },
+                {
+                    id: 24,
+                    name: 'Nuts & Bolts Kit',
+                    price: 65,
+                    category: 'Tools & Accessories',
+                    description: 'Assorted nuts and bolts set for electronics projects',
+                    image: 'https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg'
+                },
+                {
+                    id: 25,
+                    name: 'Cooling Fan 5V',
+                    price: 45,
+                    category: 'Robotics',
+                    description: '5V computer cooling fan for electronics projects',
+                    image: 'https://i.pinimg.com/1200x/22/e1/12/22e1128c1ffb2110402cfa8c977b5f86.jpg'
+                },
+                {
+                    id: 26,
+                    name: 'Tires',
+                    price: 30,
+                    category: 'Robotics',
+                    description: 'Rubber tires for robotics projects',
+                    image: 'https://i.pinimg.com/1200x/06/56/d3/0656d3389dc7698d1225cd85dfa5c1e4.jpg'
+                },
+                {
+                    id: 27,
+                    name: 'Wheels',
+                    price: 25,
+                    category: 'Robotics',
+                    description: 'Plastic wheels for robotics and automation',
+                    image: 'https://i.pinimg.com/1200x/f5/ea/8a/f5ea8a6ffb2e2937f01395b7dadb5394.jpg'
+                },
+                {
+                    id: 28,
+                    name: 'Linear Voltage Regulator',
+                    price: 15,
+                    category: 'Power Supply',
+                    description: 'LM7805 5V linear voltage regulator IC',
+                    image: 'https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg'
+                },
+                {
+                    id: 29,
+                    name: 'Audio Adapter Board',
+                    price: 120,
+                    category: 'Audio Components',
+                    description: 'Audio amplifier board with speaker connector',
+                    image: 'https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg'
+                },
+                {
+                    id: 30,
+                    name: 'USB Cable',
+                    price: 35,
+                    category: 'Tools & Accessories',
+                    description: 'USB 2.0 A to B cable for programming and data transfer',
+                    image: 'https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg'
+                },
+                {
+                    id: 31,
+                    name: 'Brushless DC Motor',
+                    price: 850,
+                    category: 'Actuators',
+                    description: 'High-speed brushless DC motor for robotics and drones',
+                    image: 'https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg'
+                },
+                {
+                    id: 32,
+                    name: 'Bluetooth Controlled Linear Actuator',
+                    price: 2500,
+                    category: 'Actuators',
+                    description: 'Linear actuator with Bluetooth control for automation projects',
+                    image: 'https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg'
+                },
+                {
+                    id: 33,
+                    name: 'Continuous Rotation Robot Servo',
+                    price: 180,
+                    category: 'Actuators',
+                    description: '360-degree continuous rotation servo motor for robots',
+                    image: 'https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg'
+                },
+                {
+                    id: 34,
+                    name: 'Motor Driver Shield',
+                    price: 350,
+                    category: 'Actuators',
+                    description: 'Arduino motor driver shield for controlling DC motors',
+                    image: 'https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg'
+                },
+                {
+                    id: 35,
+                    name: 'H-Bridge DC Stepper Motor Control Module',
+                    price: 120,
+                    category: 'Actuators',
+                    description: 'Dual H-bridge module for controlling DC and stepper motors',
+                    image: 'https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg'
+                },
+                {
+                    id: 36,
+                    name: 'Raspberry Pi Zero W',
+                    price: 1200,
+                    category: 'Microcontrollers',
+                    description: 'Compact Raspberry Pi with WiFi and Bluetooth',
+                    image: 'https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg'
+                },
+                {
+                    id: 37,
+                    name: 'Arduino Mega',
+                    price: 1800,
+                    category: 'Microcontrollers',
+                    description: 'Arduino Mega 2560 with 54 digital I/O pins',
+                    image: 'https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg'
+                },
+                {
+                    id: 38,
+                    name: 'Arduino Nano',
+                    price: 250,
+                    category: 'Microcontrollers',
+                    description: 'Compact Arduino Nano microcontroller board',
+                    image: 'https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg'
+                },
+                {
+                    id: 39,
+                    name: 'Arduino Due',
+                    price: 2200,
+                    category: 'Microcontrollers',
+                    description: 'Arduino Due with ARM Cortex-M3 processor',
+                    image: 'https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg'
+                },
+                {
+                    id: 40,
+                    name: 'ESP8266',
+                    price: 150,
+                    category: 'Microcontrollers',
+                    description: 'WiFi microcontroller module with TCP/IP stack',
+                    image: 'https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg'
+                },
+                {
+                    id: 41,
+                    name: 'Adafruit Feather M0',
+                    price: 650,
+                    category: 'Microcontrollers',
+                    description: 'Adafruit Feather M0 with ATSAMD21 microcontroller',
+                    image: 'https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg'
+                },
+                {
+                    id: 42,
+                    name: 'Teensy 4.1',
+                    price: 850,
+                    category: 'Microcontrollers',
+                    description: 'Teensy 4.1 development board with high performance',
+                    image: 'https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg'
+                },
+                {
+                    id: 43,
+                    name: 'Banana Pi',
+                    price: 2500,
+                    category: 'Microcontrollers',
+                    description: 'Banana Pi single board computer with ARM processor',
+                    image: 'https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg'
+                },
+                {
+                    id: 44,
+                    name: 'Orange Pi',
+                    price: 1800,
+                    category: 'Microcontrollers',
+                    description: 'Orange Pi development board with Linux support',
+                    image: 'https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg'
+                },
+                {
+                    id: 45,
+                    name: 'Rain Sensor',
+                    price: 75,
+                    category: 'Sensors',
+                    description: 'Rain detection sensor module for weather monitoring',
+                    image: 'https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg'
+                },
+                {
+                    id: 46,
+                    name: 'Sound Vibration Sensor',
+                    price: 55,
+                    category: 'Sensors',
+                    description: 'Vibration and sound detection sensor module',
+                    image: 'https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg'
+                },
+                {
+                    id: 47,
+                    name: 'Color Sensor (TCS34725)',
+                    price: 180,
+                    category: 'Sensors',
+                    description: 'RGB color sensor with I2C interface',
+                    image: 'https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg'
+                },
+                {
+                    id: 48,
+                    name: 'Sound Sensor',
+                    price: 45,
+                    category: 'Sensors',
+                    description: 'Analog sound detection sensor module',
+                    image: 'https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg'
+                },
+                {
+                    id: 49,
+                    name: 'Water Level Sensor',
+                    price: 65,
+                    category: 'Sensors',
+                    description: 'Water level detection sensor for liquid monitoring',
+                    image: 'https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg'
+                },
+                {
+                    id: 50,
+                    name: '5V Relay Module',
+                    price: 35,
+                    category: 'Actuators',
+                    description: 'Single channel 5V relay module for switching applications',
+                    image: 'https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg'
+                },
+                {
+                    id: 51,
+                    name: 'Electret Microphone Module',
+                    price: 40,
+                    category: 'Audio Components',
+                    description: 'Electret microphone amplifier module for audio input',
+                    image: 'https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg'
+                },
+                {
+                    id: 52,
+                    name: 'Voice Recognition Microphone Board',
+                    price: 350,
+                    category: 'Audio Components',
+                    description: 'Voice recognition module with microphone',
+                    image: 'https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg'
+                },
+                {
+                    id: 53,
+                    name: 'Robocraze Speech Recognition Module',
+                    price: 450,
+                    category: 'Audio Components',
+                    description: 'Speech recognition module with built-in microphone',
+                    image: 'https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg'
+                },
+                {
+                    id: 54,
+                    name: 'Active Buzzer Module',
+                    price: 25,
+                    category: 'Audio Components',
+                    description: 'Active buzzer module for sound generation',
+                    image: 'https://i.pinimg.com/1200x/43/10/87/431087ed78d6e014a611787cb4ac6963.jpg'
+                },
+                {
+                    id: 55,
+                    name: 'Passive Buzzer',
+                    price: 20,
+                    category: 'Audio Components',
+                    description: 'Passive buzzer for tone generation',
+                    image: 'https://i.pinimg.com/736x/7d/58/ed/7d58ed71e86237abc1f31b67d8f08639.jpg'
+                },
+                {
+                    id: 56,
+                    name: 'Bluetooth Audio Module',
+                    price: 120,
+                    category: 'Communication',
+                    description: 'Bluetooth audio module for wireless sound streaming',
+                    image: 'https://m.media-amazon.com/images/I/51VBvBJE6oL.jpg'
+                },
+                {
+                    id: 57,
+                    name: 'HC-05 Bluetooth Module',
+                    price: 180,
+                    category: 'Communication',
+                    description: 'Serial Bluetooth module for wireless communication',
+                    image: 'https://i.pinimg.com/736x/f8/05/35/f805354260631494e2c63d66c17e79ed.jpg'
+                },
+                {
+                    id: 58,
+                    name: 'Infrared Obstacle Sensor',
+                    price: 35,
+                    category: 'Sensors',
+                    description: 'IR obstacle avoidance sensor module',
+                    image: 'https://i.pinimg.com/736x/15/fe/19/15fe193153c29952640b42ea92b8ba12.jpg'
+                },
+                {
+                    id: 59,
+                    name: 'PIR Motion Sensor',
+                    price: 75,
+                    category: 'Sensors',
+                    description: 'Passive infrared motion detector for security systems',
+                    image: 'https://i.pinimg.com/736x/fb/3e/6d/fb3e6d329d4c2356c76c84246ceb1dca.jpg'
+                },
+                {
+                    id: 60,
+                    name: 'Temperature Sensor (DS18B20)',
+                    price: 55,
+                    category: 'Sensors',
+                    description: 'Digital temperature sensor with 1-wire interface',
+                    image: 'https://i.pinimg.com/736x/78/8b/ea/788beaacc3994d3b7a80b04aeb6b08ed.jpg'
+                },
+                {
+                    id: 61,
+                    name: 'Pressure Sensor (BMP280)',
+                    price: 120,
+                    category: 'Sensors',
+                    description: 'Barometric pressure and temperature sensor',
+                    image: 'https://i.pinimg.com/736x/2c/f3/25/2cf3253970912c9d71827c0754d24b52.jpg'
+                },
+                {
+                    id: 62,
+                    name: 'Gas Sensor (MQ-2)',
+                    price: 85,
+                    category: 'Sensors',
+                    description: 'Combustible gas and smoke detector sensor',
+                    image: 'https://i.pinimg.com/736x/25/45/c7/2545c7432cd113a3d69dab5e25aefe65.jpg'
+                },
+                {
+                    id: 63,
+                    name: 'Gas Sensor (MQ-135)',
+                    price: 90,
+                    category: 'Sensors',
+                    description: 'Air quality sensor for detecting harmful gases',
+                    image: 'https://i.pinimg.com/736x/35/3c/cb/353ccbf6dac0d3e6e924149b04651dd1.jpg'
+                },
+                {
+                    id: 64,
+                    name: 'Light Sensor (LDR)',
+                    price: 15,
+                    category: 'Sensors',
+                    description: 'Light dependent resistor for light intensity detection',
+                    image: 'https://i.pinimg.com/736x/2a/29/86/2a29868718c02a045dee1db8eb5d1b03.jpg'
+                },
+                {
+                    id: 65,
+                    name: 'Touch Sensor',
+                    price: 30,
+                    category: 'Sensors',
+                    description: 'Capacitive touch sensor module',
+                    image: 'https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg'
+                },
+                {
+                    id: 66,
+                    name: 'TFT Screen',
+                    price: 850,
+                    category: 'Displays',
+                    description: '2.8 inch TFT LCD color touch screen display with SD card slot',
+                    image: 'https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg'
+                }
+            ];
+            */
+        }
+
+        function displayProducts() {
+            const grid = document.getElementById('productsGrid');
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+            console.log('🎴 displayProducts: Creating', productsToShow.length, 'product cards');
+            productsToShow.forEach((product, index) => {
+                console.log(`🎴 Card ${index + 1}: ID=${product.id}, Name="${product.name}"`);
+            });
+
+            grid.innerHTML = productsToShow.map(product => {
+                // Store product ID in data attribute for debugging
+                const productId = product.id;
+                const productName = product.name.replace(/'/g, "\\'");
+                console.log(`🎴 Generating HTML for: ID=${productId}, Name="${productName}"`);
+                
+                return `
+                <div class="product-card">
+                    <div style="background: red; color: white; padding: 2px 5px; font-size: 10px; display: inline-block; margin-bottom: 5px;">ID: ${productId}</div>
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/250x200?text=${product.name}'">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div class="price">₹${product.price}</div>
+                    <button data-product-id="${productId}" data-product-name="${productName}" onclick="var btn = this; var pid = parseInt(btn.getAttribute('data-product-id')); var pname = btn.getAttribute('data-product-name'); console.log('🛒 BUTTON CLICKED: ID=' + pid + ', Name=' + pname); alert('Adding to cart: ID ' + pid + ' - ' + pname); addToCart(pid)">Add to Cart</button>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            const pagination = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '<div class="pagination-controls">';
+
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `<button onclick="changePage(${currentPage - 1})">Previous</button>`;
+            }
+
+            // Page numbers
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `<button onclick="changePage(${currentPage + 1})">Next</button>`;
+            }
+
+            paginationHTML += '</div>';
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayProducts();
+            updatePagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterProducts() {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            filteredProducts = categoryFilter
+                ? allProducts.filter(product => product.category === categoryFilter)
+                : [...allProducts];
+            currentPage = 1;
+            displayProducts();
+            updatePagination();
+        }
+
+        function sortProducts() {
+            const sortFilter = document.getElementById('sortFilter').value;
+            filteredProducts.sort((a, b) => {
+                if (sortFilter === 'price-low') return a.price - b.price;
+                if (sortFilter === 'price-high') return b.price - a.price;
+                return a.name.localeCompare(b.name);
+            });
+            currentPage = 1;
+            displayProducts();
+            updatePagination();
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                filteredProducts = allProducts.filter(product =>
+                    product.name.toLowerCase().includes(query) ||
+                    product.description.toLowerCase().includes(query) ||
+                    product.category.toLowerCase().includes(query)
+                );
+                currentPage = 1;
+                displayProducts();
+                updatePagination();
+            });
+        }
+
+        function performSearch() {
+            // Search is handled by the input event listener
+            alert('Search functionality is active - start typing in the search box!');
+        }
+
+        // Auto-fix any "User NaN" that appears (checks every second)
+        setInterval(() => {
+            const loginText = document.getElementById('loginText');
+            if (loginText && (loginText.textContent === 'User NaN' || loginText.textContent.includes('NaN'))) {
+                console.error('AUTO-FIX: Detected User NaN on products page, fixing automatically');
+                loginText.textContent = 'Login';
+                document.querySelector('.login-trigger').onclick = () => toggleLoginDropdown();
+                currentUser = null;
+                clearUserData();
+            }
+        }, 1000);
+
+        function showLoginTab(tabType) {
+            document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.login-tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabType + 'LoginTab').classList.add('active');
+        }
+
+        function loginWithGmail() {
+            alert('Demo: Gmail login not implemented');
+        }
+    </script>
+</body>
+</html>

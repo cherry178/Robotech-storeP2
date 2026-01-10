@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="nav" id="mainNav">
+                    <a href="/" class="nav-link">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="/products" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="/products?category=Resistors">Resistors</a>
+                                <a href="/products?category=Capacitors">Capacitors</a>
+                                <a href="/products?category=LEDs">LEDs</a>
+                                <a href="/products?category=Diodes">Diodes</a>
+                                <a href="/products?category=Transistors">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="/products?category=Microcontrollers">Microcontrollers</a>
+                                <a href="/products?category=Arduino">Arduino</a>
+                                <a href="/products?category=Raspberry%20Pi">Raspberry Pi</a>
+                                <a href="/products?category=ESP">ESP Boards</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Sensors</h4>
+                                <a href="/products?category=Sensors">All Sensors</a>
+                                <a href="/products?category=Temperature%20Sensors">Temperature</a>
+                                <a href="/products?category=Motion%20Sensors">Motion</a>
+                                <a href="/products?category=Distance%20Sensors">Distance</a>
+                                <a href="/products?category=Light%20Sensors">Light</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#categories" class="nav-link">Categories</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input" value="{{ request.args.get('search', '') }}">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">My User ID: Loading...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item" onclick="window.location.href = 'http://127.0.0.1:8888/orders'">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/cart'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <span>Products</span>
+                {% if request.args.get('category') %}
+                    / <span>{{ request.args.get('category') }}</span>
+                {% endif %}
+                {% if request.args.get('search') %}
+                    / <span>Search: "{{ request.args.get('search') }}"</span>
+                {% endif %}
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    {% if request.args.get('search') %}
+                        Search Results for "{{ request.args.get('search') }}"
+                    {% elif request.args.get('category') %}
+                        {{ request.args.get('category') }}
+                    {% else %}
+                        All Products
+                    {% endif %}
+                </h1>
+                <p class="page-subtitle">
+                    {% if request.args.get('search') %}
+                        Found <span id="resultsCount">0</span> products matching your search
+                    {% elif request.args.get('category') %}
+                        Browse our {{ request.args.get('category').lower() }} collection
+                    {% else %}
+                        Discover our complete range of IoT and electronics components
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Filters and Sorting -->
+            <div class="products-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('')">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('Microcontrollers')">Microcontrollers</button>
+                    <button class="filter-btn" onclick="filterByCategory('Actuators')">Actuators</button>
+                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
+                    <button class="filter-btn" onclick="filterByCategory('Displays')">Displays</button>
+                    <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
+                    <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
+                    <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
+                    <select id="sortSelect" class="sort-select" onchange="loadProducts()">
+                        <option value="name">Sort by Name</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded dynamically -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No products found</h3>
+                <p>Try adjusting your search or browse our categories</p>
+                <button class="btn btn-primary" onclick="window.location.href='/products'">View All Products</button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="page-btn" id="prevBtn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <div class="page-numbers" id="pageNumbers"></div>
+                <button class="page-btn" id="nextBtn"><i class="fas fa-chevron-right"></i> Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>Robotech Store</span>
+                    </div>
+                    <p>Your trusted partner for IoT and electronics components. Quality products, fast delivery, and excellent support.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>POLICIES</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li>Robotech Store, Plot No. 39, 200 Feet SEZ Road</li>
+                        <li>Near Malot Hospital, Mahapura, Jaipur - 302026</li>
+                        <li><i class="fas fa-phone"></i> Phone: 0141-4946677</li>
+                        <li><i class="fas fa-envelope"></i> Email: support@robotechstore.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>© 2024 Robotech Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Setup mobile menu for products page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof setupMobileMenu === 'function') {
+                setupMobileMenu();
+            }
+        });
+    </script>
+    <script>
+        // Simple inline products loader
+        console.log('Inline script loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired');
+
+            // Check URL parameters for initial filtering
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            const sortParam = urlParams.get('sort');
+            const searchParam = urlParams.get('search');
+
+            if (categoryParam) {
+                currentCategory = decodeURIComponent(categoryParam);
+                console.log('Setting initial category from URL:', currentCategory);
+
+                // Update active button
+                const buttons = document.querySelectorAll('.filter-btn');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    // Check if button text matches category
+                    const buttonText = btn.textContent.trim();
+                    console.log('Comparing button text:', buttonText, 'with currentCategory:', currentCategory);
+                    if (buttonText === currentCategory || (buttonText === 'All' && currentCategory === '')) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            if (sortParam) {
+                currentSort = sortParam;
+                const sortSelect = document.getElementById('sortSelect');
+                if (sortSelect) {
+                    sortSelect.value = sortParam;
+                }
+            }
+
+            if (searchParam) {
+                currentSearch = decodeURIComponent(searchParam);
+                console.log('Setting initial search from URL:', currentSearch);
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.value = currentSearch;
+                }
+            }
+
+            loadProducts();
+            setupSearchEventListeners();
+        });
+
+        function setupSearchEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.querySelector('.search-btn');
+
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch(this.value);
+                    }
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => performSearch(searchInput.value));
+            }
+        }
+
+        function performSearch(query) {
+            if (!query.trim()) return;
+
+            currentSearch = query.trim();
+            currentCategory = '';
+            currentPage = 1;
+
+            const url = new URL(window.location);
+            url.searchParams.set('search', currentSearch);
+            url.searchParams.delete('category');
+            window.history.pushState({}, '', url);
+
+            loadProducts();
+        }
+
+        function testAddToCart(productId, productName) {
+            console.log('🧪 Testing add to cart for:', productId, productName);
+            alert('Testing add to cart for: ' + productName + ' (ID: ' + productId + ')');
+            addToCart(productId);
+        }
+
+
+        function loadProducts(page = 1) {
+            console.log('loadProducts called for page:', page);
+            fetch(`/api/products?limit=6&page=${page}&category=${encodeURIComponent(currentCategory)}&sort=${currentSort}&search=${encodeURIComponent(currentSearch || '')}`)
+                .then(response => {
+                    console.log('API response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API data received:', data);
+                    console.log('Full data keys:', Object.keys(data));
+                    console.log('data.total:', data.total);
+                    console.log('data.total_pages:', data.total_pages);
+                    if (data.pagination) {
+                        console.log('data.pagination:', data.pagination);
+                        console.log('data.pagination.total:', data.pagination.total);
+                        console.log('data.pagination.total_pages:', data.pagination.total_pages);
+                    }
+
+                    if (data.success && data.products) {
+                        console.log('Displaying', data.products.length, 'products');
+                        currentPage = page;
+                        // Check for pagination object first, then direct fields
+                        if (data.pagination && data.pagination.total_pages) {
+                            totalPages = data.pagination.total_pages;
+                            console.log('Using pagination.total_pages:', totalPages);
+                        } else if (data.total_pages) {
+                            totalPages = data.total_pages;
+                            console.log('Using data.total_pages:', totalPages);
+                        } else {
+                            // Calculate from total or fallback to products.length
+                            const totalCount = (data.pagination && data.pagination.total) || data.total || data.products.length;
+                            totalPages = Math.ceil(totalCount / 6);
+                            console.log('Calculated totalPages:', totalPages, 'from totalCount:', totalCount);
+                        }
+
+                        displayProducts(data.products);
+                        updatePagination();
+                    } else {
+                        console.log('No products to display');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading products:', error);
+                });
+        }
+
+        function displayProducts(products) {
+            console.log('displayProducts called with', products.length, 'products');
+            const grid = document.getElementById('productsGrid');
+            console.log('productsGrid element:', grid);
+            if (!grid) {
+                console.error('productsGrid element not found!');
+                return;
+            }
+
+            // DEBUG: Check parent containers and force them visible too
+            const productsSection = document.querySelector('.products-page');
+            console.log('Products section:', productsSection);
+            if (productsSection) {
+                console.log('Products section computed style:', {
+                    display: window.getComputedStyle(productsSection).display,
+                    visibility: window.getComputedStyle(productsSection).visibility,
+                    position: window.getComputedStyle(productsSection).position,
+                    overflow: window.getComputedStyle(productsSection).overflow
+                });
+
+                // FORCE PARENT CONTAINER VISIBLE
+                productsSection.style.setProperty('display', 'block', 'important');
+                productsSection.style.setProperty('visibility', 'visible', 'important');
+                productsSection.style.setProperty('overflow', 'visible', 'important');
+                console.log('Forced parent container to be visible');
+            }
+
+            // DEBUG: Log grid position and visibility
+            const rect = grid.getBoundingClientRect();
+            console.log('Grid bounding rect:', { top: rect.top, left: rect.left, width: rect.width, height: rect.height });
+            console.log('Grid computed style key properties:', {
+                display: window.getComputedStyle(grid).display,
+                visibility: window.getComputedStyle(grid).visibility,
+                opacity: window.getComputedStyle(grid).opacity,
+                position: window.getComputedStyle(grid).position
+            });
+
+            grid.innerHTML = '';
+
+            products.forEach((product, index) => {
+                console.log('Creating card', index + 1, 'for product:', product.name);
+                const card = document.createElement('div');
+                card.className = 'product-card fade-in';
+                // Ensure card visibility
+                card.style.display = 'flex';
+                card.style.flexDirection = 'column';
+                card.style.visibility = 'visible';
+                card.style.opacity = '1';
+
+                const colors = ['#ff6b35', '#f7931e', '#ff4757', '#ffa502'];
+                const colorIndex = product.category ? product.category.length % colors.length : 0;
+                const bgColor = colors[colorIndex];
+
+                const hasSale = product.original_price && product.original_price > product.price;
+
+                let html = '<div class="product-image" style="background: linear-gradient(135deg, ' + bgColor + ' 0%, ' + adjustColor(bgColor, -20) + ' 100%)">';
+
+                if (product.image_url) {
+                    html += '<img src="' + product.image_url + '" alt="' + product.name + '" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display=\'none\';" onerror="this.style.opacity=\'0.3\';" data-has-image="true">';
+                }
+
+                html += '<i class="fas fa-' + getCategoryIcon(product.category) + '" style="color: white; font-size: 3rem; opacity: 0.8;"></i>';
+
+                if (product.is_featured) {
+                    html += '<div class="product-badge">Sale</div>';
+                }
+                html += '</div>';
+
+                html += '<div class="product-content">';
+                html += '<h3 class="product-title">' + product.name + '</h3>';
+                html += '<p class="product-description">' + (product.description || 'High-quality electronics component') + '</p>';
+
+                if (hasSale) {
+                    html += '<div class="product-price">';
+                    html += '<span class="original-price">Rs ' + product.original_price + '</span>';
+                    html += 'Rs ' + product.price;
+                    html += '<span class="gst-note">(Exc. GST)</span>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="product-price">Rs ' + product.price + '<span class="gst-note">(Exc. GST)</span></div>';
+                }
+
+                html += '<div class="product-actions">';
+                html += '<button class="btn btn-primary btn-small" onclick="addToCart(' + product.id + ')">';
+                html += '<i class="fas fa-cart-plus"></i> Add to cart';
+                html += '</button>';
+                html += '</div>';
+                html += '</div>';
+
+                card.innerHTML = html;
+                grid.appendChild(card);
+                console.log('Card appended to grid');
+            });
+
+            console.log('Total cards in grid:', grid.children.length);
+
+            // Ensure grid visibility
+            grid.style.display = 'grid';
+            grid.style.visibility = 'visible';
+            grid.style.opacity = '1';
+            grid.style.minHeight = '400px';
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'Sensors': 'eye',
+                'Microcontrollers': 'microchip',
+                'Actuators': 'cogs',
+                'Communication': 'wifi',
+                'Power Supply': 'bolt',
+                'Displays': 'tv',
+                'Tools & Accessories': 'tools'
+            };
+            return icons[category] || 'cube';
+        }
+
+        function adjustColor(color, amount) {
+            const usePound = color[0] === '#';
+            const col = usePound ? color.slice(1) : color;
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = (num >> 8 & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = r > 255 ? 255 : r < 0 ? 0 : r;
+            g = g > 255 ? 255 : g < 0 ? 0 : g;
+            b = b > 255 ? 255 : g < 0 ? 0 : b;
+            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16);
+        }
+
+        // Global variables for filtering and sorting
+        let currentCategory = '';
+        let currentSort = 'name';
+        let currentSearch = '';
+        let allProducts = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        function filterByCategory(category) {
+            console.log('Filtering by category:', category);
+            currentCategory = category;
+
+            // Update active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Find and activate the clicked button
+            const clickedBtn = event.target;
+            clickedBtn.classList.add('active');
+
+            // Apply filter and sort
+            currentPage = 1;
+            applyFiltersAndSort();
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('sortSelect');
+            currentSort = sortSelect.value;
+            console.log('Sorting by:', currentSort);
+            currentPage = 1;
+            applyFiltersAndSort();
+        }
+
+        function applyFiltersAndSort() {
+            let filteredProducts = [...allProducts];
+
+            // Apply category filter
+            if (currentCategory && currentCategory !== '') {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.category === currentCategory
+                );
+            }
+
+            // Apply sorting
+            switch (currentSort) {
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'newest':
+                    // Assuming products have an id that increases with time
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+            }
+
+            // Reload products with current filters and sorting
+            loadProducts(1);
+        }
+
+        function updatePagination() {
+            console.log('updatePagination called with totalPages:', totalPages, 'currentPage:', currentPage);
+            const pagination = document.getElementById('pagination');
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            // Always show pagination if we have multiple pages
+            if (totalPages > 1) {
+                if (pagination) {
+            pagination.style.display = 'flex';
+                    pagination.style.visibility = 'visible';
+                    pagination.style.opacity = '1';
+                    console.log('Pagination made visible');
+                }
+
+                if (prevBtn) {
+                    prevBtn.disabled = currentPage <= 1;
+            prevBtn.onclick = () => goToPage(currentPage - 1);
+                }
+
+                if (nextBtn) {
+                    nextBtn.disabled = currentPage >= totalPages;
+            nextBtn.onclick = () => goToPage(currentPage + 1);
+                }
+
+                if (pageNumbers) {
+            pageNumbers.innerHTML = '';
+
+                    // Show up to 5 pages around current page
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(totalPages, currentPage + 2);
+
+                    // Add first page if not in range
+                    if (startPage > 1) {
+                        const firstBtn = document.createElement('button');
+                        firstBtn.className = 'page-btn';
+                        firstBtn.textContent = '1';
+                        firstBtn.onclick = () => goToPage(1);
+                        pageNumbers.appendChild(firstBtn);
+
+                        if (startPage > 2) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
+                    }
+
+                    // Add pages around current page
+                    for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => goToPage(i);
+                pageNumbers.appendChild(pageBtn);
+            }
+
+                    // Add last page if not in range
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'page-ellipsis';
+                    pageNumbers.appendChild(ellipsis);
+                }
+
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.onclick = () => goToPage(totalPages);
+                        pageNumbers.appendChild(lastBtn);
+                    }
+
+                    console.log('Created page buttons from', startPage, 'to', endPage);
+            }
+            } else {
+                // Hide pagination if only one page
+                if (pagination) {
+                    pagination.style.display = 'none';
+                }
+            }
+
+        }
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                loadProducts(page);
+            }
+        }
+    </script>
+</body>
+</html>

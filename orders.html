@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script src="./static/js/main.js"></script>
+    <style>
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .orders-container { margin-top: 60px; padding: 2rem 1rem; max-width: 1000px; margin: 80px auto 0; }
+        .orders-header { text-align: center; margin-bottom: 2rem; }
+        .order-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; }
+        .order-id { font-weight: bold; color: #2d3748; }
+        .order-status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; font-weight: 500; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-processing { background: #fff3cd; color: #856404; }
+        .status-shipped { background: #d1ecf1; color: #0c5460; }
+        .order-date { color: #718096; font-size: 0.875rem; }
+        .order-items { margin-bottom: 1rem; }
+        .order-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f7fafc; }
+        .item-info { display: flex; align-items: center; }
+        .item-image { width: 50px; height: 50px; background: #f7fafc; border-radius: 4px; margin-right: 1rem; display: flex; align-items: center; justify-content: center; }
+        .item-details h4 { margin: 0; font-size: 1rem; }
+        .item-quantity { color: #718096; }
+        .item-price { font-weight: 500; }
+        .order-total { text-align: right; font-weight: bold; font-size: 1.1rem; color: #2d3748; margin-top: 1rem; }
+        .no-orders { text-align: center; padding: 3rem; }
+        .no-orders i { font-size: 4rem; color: #cbd5e0; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">
+        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Store</a> |
+        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="static_index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Products</a>
+                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="payment.html" class="nav-link">Payment</a>
+                    <a href="orders.html" class="nav-link active">Orders</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">Login</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="login-dropdown-content" id="loginDropdown">
+                                <div class="login-header">
+                                    <h4>Customer Login</h4>
+                                    <p>If you are already registered, please log in.</p>
+                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
+                                    </div>
+                                </div>
+
+                                <div class="login-tabs">
+                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
+                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
+                                </div>
+
+                                <div id="phoneLoginTab" class="login-tab-content active">
+                                    <div class="login-form">
+                                        <div class="form-group">
+                                            <label for="headerLoginPhone">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-prefix">+91</span>
+                                                <input
+                                                    type="tel"
+                                                    id="headerLoginPhone"
+                                                    placeholder="Enter phone number"
+                                                    maxlength="10"
+                                                    pattern="[0-9]{10}"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
+                                            <label for="headerLoginOtp">Enter OTP</label>
+                                            <div class="otp-input-container">
+                                                <input
+                                                    type="text"
+                                                    id="headerLoginOtp"
+                                                    placeholder="Enter 6-digit OTP"
+                                                    maxlength="6"
+                                                    pattern="[0-9]{6}"
+                                                >
+                                            </div>
+                                            <div class="otp-timer">
+                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
+                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
+                                            <i class="fas fa-paper-plane"></i> Send OTP
+                                        </button>
+
+                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
+                                            <i class="fas fa-check"></i> Verify & Login
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="gmailLoginTab" class="login-tab-content">
+                                    <div class="gmail-login-container">
+                                        <p class="gmail-login-text">Continue with Google account</p>
+                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
+                                            <i class="fab fa-google"></i>
+                                            Continue with Google
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Orders Content -->
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1><i class="fas fa-shopping-bag"></i> My Orders</h1>
+            <p>Track your order history and status</p>
+        </div>
+
+        <div id="ordersContent">
+            <!-- Orders will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Embedded Scripts -->
+    <script>
+        // Demo variables
+        let currentUser = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Orders page initializing...');
+
+            // Setup clear data button
+            const clearBtn = document.getElementById('clearDataBtn');
+            if (clearBtn) {
+                clearBtn.onclick = forceLogout;
+            }
+
+            // Wait for main.js to load, then check login and load orders
+            setTimeout(function() {
+                if (typeof currentUser !== 'undefined' && currentUser) {
+                    loadOrders();
+                } else {
+                    showLoginRequired();
+                }
+            }, 1000);
+        });
+
+        function showLoginRequired() {
+            const ordersContent = document.getElementById('ordersContent');
+            ordersContent.innerHTML = `
+                <div class="login-required" style="text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px;">
+                    <h3><i class="fas fa-lock"></i> Login Required</h3>
+                    <p>Please login to view your orders.</p>
+                    <button class="btn" onclick="toggleLoginDropdown()">Login Now</button>
+                    <br>
+                    <a href="static_index.html" style="margin-top: 1rem; display: inline-block;">Back to Store</a>
+                </div>
+            `;
+        }
+
+        function loadOrders() {
+            const ordersContent = document.getElementById('ordersContent');
+
+            // Demo orders data
+            const demoOrders = [
+                {
+                    id: 'ORD001',
+                    date: '2024-01-15',
+                    status: 'delivered',
+                    items: [
+                        { name: 'Arduino Uno R3', quantity: 1, price: 450 },
+                        { name: 'DHT11 Sensor', quantity: 2, price: 45 }
+                    ],
+                    total: 540
+                },
+                {
+                    id: 'ORD002',
+                    date: '2024-01-10',
+                    status: 'shipped',
+                    items: [
+                        { name: 'ESP32 Board', quantity: 1, price: 350 },
+                        { name: 'LED Matrix', quantity: 1, price: 95 }
+                    ],
+                    total: 445
+                },
+                {
+                    id: 'ORD003',
+                    date: '2024-01-05',
+                    status: 'processing',
+                    items: [
+                        { name: 'Servo Motor', quantity: 3, price: 95 }
+                    ],
+                    total: 285
+                }
+            ];
+
+            if (demoOrders.length === 0) {
+                ordersContent.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders yet.</p>
+                        <a href="products.html" class="btn" style="margin-top: 1rem;">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersContent.innerHTML = demoOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #${order.id}</div>
+                            <div class="order-date">${new Date(order.date).toLocaleDateString()}</div>
+                        </div>
+                        <div class="order-status status-${order.status}">
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </div>
+                    </div>
+
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <div class="item-image">
+                                        <i class="fas fa-cube"></i>
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <div class="item-quantity">Quantity: ${item.quantity}</div>
+                                    </div>
+                                </div>
+                                <div class="item-price">₹${item.price * item.quantity}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="order-total">
+                        Total: ₹${order.total}
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

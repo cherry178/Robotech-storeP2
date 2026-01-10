@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Robotech Store App Launcher
+# This script is executed when the macOS app is opened
+
+# Get the directory where the app bundle is located
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+
+# Navigate to the project directory (parent of the app bundle)
+PROJECT_DIR="$APP_DIR"
+
+cd "$PROJECT_DIR"
+
+# Check if the startup script exists
+if [ -f "start_project.sh" ]; then
+    # Make sure it's executable
+    chmod +x start_project.sh
+
+    # Run the startup script
+    ./start_project.sh
+else
+    # Fallback: try to start backend directly
+    echo "Starting Robotech Store..."
+    cd backend
+    python3 app.py
+fi

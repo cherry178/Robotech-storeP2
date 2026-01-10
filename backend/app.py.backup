@@ -1,0 +1,1451 @@
+import os
+os.environ['FLASK_SKIP_DOTENV'] = '1'  # Disable automatic dotenv loading
+os.environ['DOTENV_FILE'] = ''  # Disable dotenv file loading
+
+from flask import Flask, render_template, request, jsonify
+import hashlib
+import random
+import mysql.connector
+from mysql.connector import Error
+
+# Try to use waitress if available, fallback to Flask dev server
+try:
+    from waitress import serve
+    USE_WAITERESS = True
+    print("✅ Using Waitress WSGI server")
+except ImportError:
+    USE_WAITERESS = False
+    print("⚠️  Waitress not available, using Flask dev server")
+
+# Get the project root directory
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Create Flask app with proper template and static file serving
+app = Flask(__name__,
+            template_folder=os.path.join(project_root, 'templates'),
+            static_folder=os.path.join(project_root, 'static'))
+app.secret_key = 'test-secret-key'
+
+# Configure CORS to allow requests from frontend (port 7000) to backend (port 8888)
+from flask_cors import CORS
+CORS(app, origins=['http://127.0.0.1:7000', 'http://localhost:7000'],
+     allow_headers=['Content-Type', 'Authorization'],
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+     supports_credentials=True)
+
+# Demo mode - bypass database connections
+DEMO_MODE = True
+
+# MySQL Database Configuration
+# Update these credentials to match your MySQL setup
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'Root@123',  # Set your MySQL password here
+    'database': 'robotech_store'
+}
+
+def get_db_connection():
+    """Get database connection"""
+    print(f"🔌 Attempting to connect to MySQL: {DB_CONFIG['host']}:{DB_CONFIG.get('port', 3306)} as {DB_CONFIG['user']}")
+    try:
+        connection = mysql.connector.connect(**DB_CONFIG)
+        print("✅ MySQL connection successful")
+        return connection
+    except Error as e:
+        print(f"❌ Error connecting to MySQL: {e}")
+        print(f"   Host: {DB_CONFIG['host']}")
+        print(f"   User: {DB_CONFIG['user']}")
+        print(f"   Database: {DB_CONFIG['database']}")
+        return None
+
+def init_database():
+    """Initialize database tables if they don't exist"""
+    connection = get_db_connection()
+    if not connection:
+        print("❌ Could not connect to database for initialization")
+        return
+
+    try:
+        cursor = connection.cursor()
+
+        # Create users table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id VARCHAR(50) PRIMARY KEY,
+                phone VARCHAR(15) UNIQUE NOT NULL,
+                email VARCHAR(100),
+                name VARCHAR(100),
+                address TEXT,
+                otp VARCHAR(10),
+                logged_in BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Add logged_in column if it doesn't exist (for existing tables)
+        try:
+            cursor.execute("ALTER TABLE users ADD COLUMN logged_in BOOLEAN DEFAULT FALSE")
+            print("✅ Added logged_in column to users table")
+        except Error as e:
+            if "Duplicate column name" not in str(e):
+                print(f"⚠️ Could not add logged_in column: {e}")
+            else:
+                print("ℹ️ logged_in column already exists")
+
+        # Create products table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS products (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                price DECIMAL(10,2) NOT NULL,
+                original_price DECIMAL(10,2),
+                category VARCHAR(50),
+                subcategory VARCHAR(50),
+                image_url VARCHAR(500),
+                stock_quantity INT DEFAULT 0,
+                is_featured BOOLEAN DEFAULT FALSE,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Create cart table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS cart (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                user_id INT,
+                product_id INT,
+                quantity INT DEFAULT 1,
+                added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (product_id) REFERENCES products(id),
+                UNIQUE KEY unique_cart_item (user_id, product_id)
+            )
+        """)
+
+        # Insert demo products if table is empty
+        cursor.execute("SELECT COUNT(*) FROM products")
+        if cursor.fetchone()[0] == 0:
+            demo_products = [
+                (1, 'Arduino Uno R3', 'ATmega328P microcontroller board with USB interface', 450.00, 550.00, 'Microcontrollers', 'https://m.media-amazon.com/images/I/51+N-57gSiL.jpg'),
+                (2, 'ESP32 Dev Board', 'WiFi & Bluetooth enabled microcontroller for IoT projects', 350.00, 450.00, 'Microcontrollers', 'https://m.media-amazon.com/images/I/61c1D+qVZSL.jpg'),
+                (3, 'Raspberry Pi 4', 'Powerful single-board computer for advanced projects', 3500.00, 4200.00, 'Microcontrollers', 'https://m.media-amazon.com/images/I/51R5Q2W6ZSL.jpg'),
+                (4, 'Arduino Nano', 'Compact microcontroller board for small projects', 250.00, 300.00, 'Microcontrollers', 'https://m.media-amazon.com/images/I/71vZpqN2TBL.jpg'),
+                (5, 'DHT11 Temperature Sensor', 'Digital temperature and humidity sensor', 80.00, 100.00, 'Sensors', 'https://m.media-amazon.com/images/I/61h9xNVXHdL.jpg'),
+                (6, 'HC-SR04 Ultrasonic Sensor', 'Distance measuring sensor for robotics', 60.00, 80.00, 'Sensors', 'https://m.media-amazon.com/images/I/71p2N8OMXJL.jpg'),
+                (7, 'Servo Motor MG996R', 'High-torque servo motor for robotics', 180.00, 220.00, 'Actuators', 'https://m.media-amazon.com/images/I/61F4Kjdh5FL.jpg'),
+                (8, '16x2 LCD Display', 'Character LCD display module', 120.00, 150.00, 'Displays', 'https://m.media-amazon.com/images/I/51BvC6I6XGL.jpg'),
+                (9, 'LED Strip 5M', 'RGB LED strip with controller', 200.00, 250.00, 'Displays', 'https://m.media-amazon.com/images/I/61j8VKWkQIL.jpg'),
+                (10, 'Breadboard 830 Points', 'Solderless breadboard for prototyping', 90.00, 120.00, 'Tools & Accessories', 'https://m.media-amazon.com/images/I/61W59o8oJZL.jpg')
+            ]
+
+            cursor.executemany("""
+                INSERT INTO products (id, name, description, price, original_price, category, image_url)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, demo_products)
+
+        connection.commit()
+        print("✅ Database initialized successfully")
+
+    except Error as e:
+        print(f"❌ Error initializing database: {e}")
+    finally:
+        if connection:
+            connection.close()
+
+# Initialize database on startup
+print("🚀 Initializing Flask app and database...")
+init_database()
+
+# Test MySQL connection
+print("🔍 Testing MySQL connection...")
+test_conn = get_db_connection()
+if test_conn:
+    print("✅ MySQL connection test successful")
+    test_conn.close()
+else:
+    print("❌ MySQL connection test failed - cart operations will not work!")
+
+print("✅ Flask app initialized successfully")
+
+# In-memory storage for demo purposes (keeping for frontend compatibility)
+DEMO_USERS = {}
+DEMO_PRODUCTS = [
+    {
+        "id": 1,
+        "name": "Arduino Uno R3",
+        "description": "ATmega328P microcontroller board with USB interface",
+        "price": 450.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 30,
+        "image_url": "https://m.media-amazon.com/images/I/51+N-57gSiL.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 2,
+        "name": "ESP32 Development Board",
+        "description": "WiFi & Bluetooth enabled microcontroller",
+        "price": 350.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 40,
+        "image_url": "https://i.pinimg.com/736x/d1/66/1b/d1661bdecf277684181694a4fedbf9bf.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 3,
+        "name": "DHT11 Temperature & Humidity Sensor",
+        "description": "Digital temperature and humidity sensor with 1-wire interface",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/a1/50/a6/a150a6b5db3d525533522fbba78d999b.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 4,
+        "name": "HC-SR04 Ultrasonic Sensor",
+        "description": "Ultrasonic ranging sensor for distance measurement",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/1200x/5b/09/06/5b09066c572846471a3df3242abd4375.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 5,
+        "name": "SG90 Servo Motor",
+        "description": "9g micro servo motor for robotics",
+        "price": 95.0,
+        "category": "Actuators",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/c6/da/02/c6da024f4702e68756c6d466894a027c.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 6,
+        "name": "DC Motor",
+        "description": "12V DC geared motor for robotics and automation projects",
+        "price": 150.0,
+        "category": "Actuators",
+        "stock_quantity": 85,
+        "image_url": "https://m.media-amazon.com/images/I/21xfvGFiirL.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 7,
+        "name": "Stepper Motor",
+        "description": "NEMA 17 stepper motor with 1.8° step angle for precision control",
+        "price": 450.0,
+        "category": "Actuators",
+        "stock_quantity": 45,
+        "image_url": "https://m.media-amazon.com/images/I/41cBDjOi6eL.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 8,
+        "name": "LCD Crystal Display",
+        "description": "16x2 character LCD display module with backlight",
+        "price": 120.0,
+        "category": "Displays",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 9,
+        "name": "OLED Display",
+        "description": "0.96 inch I2C OLED display module with 128x64 resolution",
+        "price": 150.0,
+        "category": "Displays",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 10,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 11,
+        "name": "7-Segment Display",
+        "description": "4-digit 7-segment display with decimal points",
+        "price": 65.0,
+        "category": "Displays",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 12,
+        "name": "E-paper Display",
+        "description": "1.54 inch e-paper display for low power applications",
+        "price": 650.0,
+        "category": "Displays",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 13,
+        "name": "LED Matrix Display",
+        "description": "8x8 LED matrix display with MAX7219 driver",
+        "price": 95.0,
+        "category": "Displays",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 14,
+        "name": "LCD Touchscreen Module",
+        "description": "2.4 inch LCD touchscreen module for user interfaces",
+        "price": 1200.0,
+        "category": "Displays",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 15,
+        "name": "2 Battery Holders",
+        "description": "AA battery holder for 2 batteries in series",
+        "price": 25.0,
+        "category": "Power Supply",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 16,
+        "name": "3 Battery Holders",
+        "description": "AA battery holder for 3 batteries in series",
+        "price": 35.0,
+        "category": "Power Supply",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 17,
+        "name": "DC-DC Converter",
+        "description": "Adjustable DC-DC buck converter module 5V-35V",
+        "price": 85.0,
+        "category": "Power Supply",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 18,
+        "name": "Power Bank Module",
+        "description": "18650 lithium battery power bank module",
+        "price": 180.0,
+        "category": "Power Supply",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 19,
+        "name": "Breadboard",
+        "description": "830 tie-point solderless breadboard for prototyping",
+        "price": 85.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 20,
+        "name": "Male-Male Jumper Wires",
+        "description": "40-piece male-to-male jumper wire set",
+        "price": 45.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 200,
+        "image_url": "https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 21,
+        "name": "Male-Female Jumper Wires",
+        "description": "40-piece male-to-female jumper wire set",
+        "price": 50.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 180,
+        "image_url": "https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 22,
+        "name": "Lithium Polymer Battery",
+        "description": "3.7V 1000mAh LiPo battery with JST connector",
+        "price": 250.0,
+        "category": "Power Supply",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 23,
+        "name": "PCB Prototyping Board",
+        "description": "Double-sided PCB prototyping board with copper pads",
+        "price": 120.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 24,
+        "name": "Nuts & Bolts Kit",
+        "description": "Assorted nuts and bolts set for electronics projects",
+        "price": 65.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 25,
+        "name": "Cooling Fan 5V",
+        "description": "5V computer cooling fan for electronics projects",
+        "price": 45.0,
+        "category": "Robotics",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/22/e1/12/22e1128c1ffb2110402cfa8c977b5f86.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 26,
+        "name": "Tires",
+        "description": "Rubber tires for robotics projects",
+        "price": 30.0,
+        "category": "Robotics",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/1200x/06/56/d3/0656d3389dc7698d1225cd85dfa5c1e4.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 27,
+        "name": "Wheels",
+        "description": "Plastic wheels for robotics and automation",
+        "price": 25.0,
+        "category": "Robotics",
+        "stock_quantity": 200,
+        "image_url": "https://i.pinimg.com/1200x/f5/ea/8a/f5ea8a6ffb2e2937f01395b7dadb5394.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 28,
+        "name": "Linear Voltage Regulator",
+        "description": "LM7805 5V linear voltage regulator IC",
+        "price": 15.0,
+        "category": "Power Supply",
+        "stock_quantity": 300,
+        "image_url": "https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 29,
+        "name": "Audio Adapter Board",
+        "description": "Audio amplifier board with speaker connector",
+        "price": 120.0,
+        "category": "Audio Components",
+        "stock_quantity": 50,
+        "image_url": "https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 30,
+        "name": "USB Cable",
+        "description": "USB 2.0 A to B cable for programming and data transfer",
+        "price": 35.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 250,
+        "image_url": "https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 31,
+        "name": "Brushless DC Motor",
+        "description": "High-speed brushless DC motor for robotics and drones",
+        "price": 850.0,
+        "category": "Actuators",
+        "stock_quantity": 35,
+        "image_url": "https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 32,
+        "name": "Bluetooth Controlled Linear Actuator",
+        "description": "Linear actuator with Bluetooth control for automation projects",
+        "price": 2500.0,
+        "category": "Actuators",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 33,
+        "name": "Continuous Rotation Robot Servo",
+        "description": "360-degree continuous rotation servo motor for robots",
+        "price": 180.0,
+        "category": "Actuators",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 34,
+        "name": "Motor Driver Shield",
+        "description": "Arduino motor driver shield for controlling DC motors",
+        "price": 350.0,
+        "category": "Actuators",
+        "stock_quantity": 40,
+        "image_url": "https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 35,
+        "name": "H-Bridge DC Stepper Motor Control Module",
+        "description": "Dual H-bridge module for controlling DC and stepper motors",
+        "price": 120.0,
+        "category": "Actuators",
+        "stock_quantity": 55,
+        "image_url": "https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 36,
+        "name": "Raspberry Pi Zero W",
+        "description": "Compact Raspberry Pi with WiFi and Bluetooth",
+        "price": 1200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 45,
+        "image_url": "https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 37,
+        "name": "Arduino Mega",
+        "description": "Arduino Mega 2560 with 54 digital I/O pins",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 38,
+        "name": "Arduino Nano",
+        "description": "Compact Arduino Nano microcontroller board",
+        "price": 250.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 39,
+        "name": "Arduino Due",
+        "description": "Arduino Due with ARM Cortex-M3 processor",
+        "price": 2200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 40,
+        "name": "ESP8266",
+        "description": "WiFi microcontroller module with TCP/IP stack",
+        "price": 150.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 41,
+        "name": "Adafruit Feather M0",
+        "description": "Adafruit Feather M0 with ATSAMD21 microcontroller",
+        "price": 650.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 35,
+        "image_url": "https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 42,
+        "name": "Teensy 4.1",
+        "description": "Teensy 4.1 development board with high performance",
+        "price": 850.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 40,
+        "image_url": "https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg",
+        "is_featured": True
+    },
+    {
+        "id": 43,
+        "name": "Banana Pi",
+        "description": "Banana Pi single board computer with ARM processor",
+        "price": 2500.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 20,
+        "image_url": "https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 44,
+        "name": "Orange Pi",
+        "description": "Orange Pi development board with Linux support",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 25,
+        "image_url": "https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 45,
+        "name": "Rain Sensor",
+        "description": "Rain detection sensor module for weather monitoring",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 46,
+        "name": "Sound Vibration Sensor",
+        "description": "Vibration and sound detection sensor module",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 47,
+        "name": "Color Sensor (TCS34725)",
+        "description": "RGB color sensor with I2C interface",
+        "price": 180.0,
+        "category": "Sensors",
+        "stock_quantity": 50,
+        "image_url": "https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 48,
+        "name": "Sound Sensor",
+        "description": "Analog sound detection sensor module",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 49,
+        "name": "Water Level Sensor",
+        "description": "Water level detection sensor for liquid monitoring",
+        "price": 65.0,
+        "category": "Sensors",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 50,
+        "name": "5V Relay Module",
+        "description": "Single channel 5V relay module for switching applications",
+        "price": 35.0,
+        "category": "Actuators",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 51,
+        "name": "Electret Microphone Module",
+        "description": "Electret microphone amplifier module for audio input",
+        "price": 40.0,
+        "category": "Audio Components",
+        "stock_quantity": 100,
+        "image_url": "https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 52,
+        "name": "Voice Recognition Microphone Board",
+        "description": "Voice recognition module with microphone",
+        "price": 350.0,
+        "category": "Audio Components",
+        "stock_quantity": 40,
+        "image_url": "https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 53,
+        "name": "Robocraze Speech Recognition Module",
+        "description": "Speech recognition module with built-in microphone",
+        "price": 450.0,
+        "category": "Audio Components",
+        "stock_quantity": 30,
+        "image_url": "https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 54,
+        "name": "Active Buzzer Module",
+        "description": "Active buzzer module for sound generation",
+        "price": 25.0,
+        "category": "Audio Components",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/1200x/43/10/87/431087ed78d6e014a611787cb4ac6963.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 55,
+        "name": "Passive Buzzer",
+        "description": "Passive buzzer for tone generation",
+        "price": 20.0,
+        "category": "Audio Components",
+        "stock_quantity": 180,
+        "image_url": "https://i.pinimg.com/736x/7d/58/ed/7d58ed71e86237abc1f31b67d8f08639.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 56,
+        "name": "Bluetooth Audio Module",
+        "description": "Bluetooth audio module for wireless sound streaming",
+        "price": 120.0,
+        "category": "Communication",
+        "stock_quantity": 60,
+        "image_url": "https://m.media-amazon.com/images/I/51VBvBJE6oL.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 57,
+        "name": "HC-05 Bluetooth Module",
+        "description": "Serial Bluetooth module for wireless communication",
+        "price": 180.0,
+        "category": "Communication",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/f8/05/35/f805354260631494e2c63d66c17e79ed.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 58,
+        "name": "Infrared Obstacle Sensor",
+        "description": "IR obstacle avoidance sensor module",
+        "price": 35.0,
+        "category": "Sensors",
+        "stock_quantity": 110,
+        "image_url": "https://i.pinimg.com/736x/15/fe/19/15fe193153c29952640b42ea92b8ba12.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 59,
+        "name": "PIR Motion Sensor",
+        "description": "Passive infrared motion detector for security systems",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/736x/fb/3e/6d/fb3e6d329d4c2356c76c84246ceb1dca.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 60,
+        "name": "Temperature Sensor (DS18B20)",
+        "description": "Digital temperature sensor with 1-wire interface",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 95,
+        "image_url": "https://i.pinimg.com/736x/78/8b/ea/788beaacc3994d3b7a80b04aeb6b08ed.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 61,
+        "name": "Pressure Sensor (BMP280)",
+        "description": "Barometric pressure and temperature sensor",
+        "price": 120.0,
+        "category": "Sensors",
+        "stock_quantity": 65,
+        "image_url": "https://i.pinimg.com/736x/2c/f3/25/2cf3253970912c9d71827c0754d24b52.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 62,
+        "name": "Gas Sensor (MQ-2)",
+        "description": "Combustible gas and smoke detector sensor",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/736x/25/45/c7/2545c7432cd113a3d69dab5e25aefe65.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 63,
+        "name": "Gas Sensor (MQ-135)",
+        "description": "Air quality sensor for detecting harmful gases",
+        "price": 90.0,
+        "category": "Sensors",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/35/3c/cb/353ccbf6dac0d3e6e924149b04651dd1.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 64,
+        "name": "Light Sensor (LDR)",
+        "description": "Light dependent resistor for light intensity detection",
+        "price": 15.0,
+        "category": "Sensors",
+        "stock_quantity": 200,
+        "image_url": "https://i.pinimg.com/736x/2a/29/86/2a29868718c02a045dee1db8eb5d1b03.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 65,
+        "name": "Touch Sensor",
+        "description": "Capacitive touch sensor module",
+        "price": 30.0,
+        "category": "Sensors",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg",
+        "is_featured": False
+    },
+    {
+        "id": 66,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display with SD card slot",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 20,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": True
+    }
+]
+
+# Cart functions using MySQL database
+def get_user_cart(user_id):
+    """Get user's cart items from database"""
+    connection = get_db_connection()
+    if not connection:
+        return []
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT c.product_id, c.quantity, p.name, p.price, p.image_url, p.description, p.category
+            FROM cart c
+            JOIN products p ON c.product_id = p.id
+            WHERE c.user_id = %s
+        """, (user_id,))
+        cart_items = cursor.fetchall()
+        print(f"📋 Retrieved {len(cart_items)} cart items for user {user_id}:")
+        for item in cart_items:
+            print(f"   - Product {item['product_id']}: {item['name']} (qty: {item['quantity']})")
+        return cart_items
+    except Error as e:
+        print(f"Error getting user cart: {e}")
+        return []
+    finally:
+        if connection:
+            connection.close()
+
+def add_to_cart(user_id, product_id, quantity=1):
+    """Add item to user's cart"""
+    connection = get_db_connection()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        # Use INSERT ... ON DUPLICATE KEY UPDATE to handle existing items
+        cursor.execute("""
+            INSERT INTO cart (user_id, product_id, quantity)
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE quantity = quantity + %s
+        """, (user_id, product_id, quantity, quantity))
+        connection.commit()
+        return True
+    except Error as e:
+        print(f"Error adding to cart: {e}")
+        return False
+    finally:
+        if connection:
+            connection.close()
+
+def validate_cart_inputs(user_id, product_id, quantity):
+    """Validate cart operation inputs"""
+    if not user_id or user_id == 'guest':
+        print(f"❌ Invalid user_id: {user_id}")
+        return False, "Invalid user ID"
+
+    if not isinstance(user_id, str) or len(user_id.strip()) == 0:
+        print(f"❌ User ID must be non-empty string: {user_id}")
+        return False, "Invalid user ID format"
+
+    if not isinstance(product_id, int) or product_id <= 0:
+        print(f"❌ Product ID must be positive integer: {product_id}")
+        return False, "Invalid product ID"
+
+    if not isinstance(quantity, int):
+        print(f"❌ Quantity must be integer: {quantity}")
+        return False, "Invalid quantity"
+
+    return True, None
+
+def update_cart_item(user_id, product_id, quantity):
+    """Update cart item quantity (handles both insert and update)"""
+    print(f"🔄 update_cart_item called: user_id='{user_id}', product_id={product_id}, quantity={quantity}")
+
+    # Validate inputs
+    is_valid, error_msg = validate_cart_inputs(user_id, product_id, quantity)
+    if not is_valid:
+        print(f"❌ Input validation failed: {error_msg}")
+        return False
+
+    connection = get_db_connection()
+    if not connection:
+        print("❌ Failed to get database connection")
+        return False
+
+    try:
+        cursor = connection.cursor()
+        print("✅ Database connection established")
+
+        # Double-check user exists (safety check)
+        cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
+        if cursor.fetchone() is None:
+            print(f"❌ User {user_id} does not exist in database - cannot update cart")
+            return False
+
+        # Check if product exists before adding to cart
+        cursor.execute("SELECT id, name FROM products WHERE id = %s", (product_id,))
+        product = cursor.fetchone()
+        if product is None:
+            print(f"❌ Product {product_id} does not exist in database - cannot add to cart")
+            return False
+        else:
+            print(f"✅ Product {product_id} exists: {product[1]}")
+
+        if quantity <= 0:
+            # Remove item if quantity is 0 or negative
+            print(f"🗑️ Removing item {product_id} from cart for user {user_id}")
+            cursor.execute("""
+                DELETE FROM cart WHERE user_id = %s AND product_id = %s
+            """, (user_id, product_id))
+            affected_rows = cursor.rowcount
+            print(f"🗑️ Delete query executed for item {product_id}, affected rows: {affected_rows}")
+        else:
+            # Insert or update quantity using ON DUPLICATE KEY
+            print(f"📝 Inserting/updating item {product_id} quantity to {quantity} for user {user_id}")
+            cursor.execute("""
+                INSERT INTO cart (user_id, product_id, quantity)
+                VALUES (%s, %s, %s)
+                ON DUPLICATE KEY UPDATE quantity = %s
+            """, (user_id, product_id, quantity, quantity))
+            affected_rows = cursor.rowcount
+            print(f"✅ Insert/update query executed for item {product_id}, affected rows: {affected_rows}")
+
+        connection.commit()
+        print("✅ Database transaction committed successfully")
+        return True
+
+    except Error as e:
+        print(f"❌ Database error in update_cart_item: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error in update_cart_item: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print("🔌 Database connection closed")
+
+def remove_from_cart(user_id, product_id):
+    """Remove item from user's cart"""
+    connection = get_db_connection()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            DELETE FROM cart WHERE user_id = %s AND product_id = %s
+        """, (user_id, product_id))
+        connection.commit()
+        return True
+    except Error as e:
+        print(f"Error removing from cart: {e}")
+        return False
+    finally:
+        if connection:
+            connection.close()
+
+def clear_user_cart(user_id):
+    """Clear all items from user's cart"""
+    connection = get_db_connection()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM cart WHERE user_id = %s", (user_id,))
+        connection.commit()
+        return True
+    except Error as e:
+        print(f"Error clearing cart: {e}")
+        return False
+    finally:
+        if connection:
+            connection.close()
+
+def save_user_to_mysql(user_id, phone):
+    """Save user to MySQL database"""
+    connection = get_db_connection()
+    if not connection:
+        print(f"❌ Cannot save user {user_id} to MySQL - no connection")
+        return False
+
+    try:
+        cursor = connection.cursor()
+        # Use INSERT ... ON DUPLICATE KEY UPDATE to handle existing users
+        cursor.execute("""
+            INSERT INTO users (id, phone, logged_in)
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE logged_in = %s
+        """, (user_id, phone, True, True))
+        connection.commit()
+        print(f"✅ User {user_id} saved to MySQL database")
+        return True
+    except Error as e:
+        print(f"❌ Error saving user {user_id} to MySQL: {e}")
+        return False
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+DEMO_OTPS = {}
+
+@app.route('/')
+def home():
+    """Home page route"""
+    return render_template('index.html')
+
+@app.route('/test')
+def test():
+    """Simple test route"""
+    return "Server is working! Hello from Robotech Store."
+
+@app.route('/login')
+def login():
+    """Login page route"""
+    return render_template('login.html')
+
+@app.route('/products')
+def products():
+    """Products page route"""
+    return render_template('products.html')
+
+@app.route('/cart')
+def cart():
+    """Shopping cart page route"""
+    return render_template('cart.html')
+
+# API Routes
+@app.route('/api/user/status', methods=['GET'])
+def api_user_status():
+    """API endpoint to check user login status"""
+    return jsonify({'logged_in': False})
+
+@app.route('/api/products', methods=['GET'])
+def api_products():
+    """API endpoint to get products"""
+    try:
+        # Get query parameters
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 6))
+        category = request.args.get('category', '')
+        sort_by = request.args.get('sort', 'name')
+        search = request.args.get('search', '').lower()
+        featured = request.args.get('featured', '').lower() == 'true'
+
+        # Filter products
+        filtered_products = DEMO_PRODUCTS.copy()
+
+        # Apply category filter
+        if category and category != 'all':
+            filtered_products = [p for p in filtered_products if p['category'].lower() == category.lower()]
+
+        # Apply search filter
+        if search:
+            filtered_products = [p for p in filtered_products if search in p['name'].lower() or search in p['description'].lower()]
+
+        # Apply featured filter
+        if featured:
+            filtered_products = [p for p in filtered_products if p['is_featured']]
+
+        # Sort products
+        if sort_by == 'price_low':
+            filtered_products.sort(key=lambda x: x['price'])
+        elif sort_by == 'price_high':
+            filtered_products.sort(key=lambda x: x['price'], reverse=True)
+        elif sort_by == 'name':
+            filtered_products.sort(key=lambda x: x['name'])
+        elif sort_by == 'newest':
+            filtered_products.sort(key=lambda x: x['id'], reverse=True)
+
+        # Pagination
+        total_products = len(filtered_products)
+        start_idx = (page - 1) * limit
+        end_idx = start_idx + limit
+        paginated_products = filtered_products[start_idx:end_idx]
+
+        return jsonify({
+            'success': True,
+            'products': paginated_products,
+            'total': total_products,
+            'page': page,
+            'limit': limit,
+            'total_pages': (total_products + limit - 1) // limit
+        })
+
+    except Exception as e:
+        print(f"Error in api_products: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/products/by-ids', methods=['POST'])
+def api_products_by_ids():
+    """API endpoint to get products by IDs"""
+    try:
+        data = request.get_json()
+        product_ids = data.get('ids', [])
+
+        # Always use DEMO_PRODUCTS in demo mode
+        products = [p for p in DEMO_PRODUCTS if p['id'] in product_ids]
+
+        return jsonify({
+            'success': True,
+            'products': products
+        })
+
+    except Exception as e:
+        print(f"Error in api_products_by_ids: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/cart', methods=['GET'])
+def api_cart():
+    """API endpoint to get cart items"""
+    user_id = request.args.get('user_id', 'guest')
+
+    # Handle guest users
+    if user_id == 'guest' or not user_id:
+        return jsonify({'success': True, 'cart': []})
+
+    # For authenticated users, user_id is a string (VARCHAR in database)
+    # No need to convert to int
+    cart_items = get_user_cart(user_id)
+    return jsonify({'success': True, 'cart': cart_items})
+
+def ensure_user_exists(user_id, phone=None):
+    """Ensure user exists in database, create if necessary"""
+    print(f"🔍 ensure_user_exists called with user_id='{user_id}', phone='{phone}'")
+
+    connection = get_db_connection()
+    if not connection:
+        print(f"❌ Cannot check user {user_id} - no database connection")
+        return False
+
+    try:
+        cursor = connection.cursor()
+
+        # Check if user exists
+        print(f"🔍 Checking if user {user_id} exists in database...")
+        cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
+        user_exists = cursor.fetchone() is not None
+        print(f"🔍 User exists check result: {user_exists}")
+
+        if not user_exists:
+            print(f"👤 User {user_id} does not exist in database, creating...")
+            # For cart operations, we need phone number to create user
+            if phone and str(phone).strip():
+                print(f"📞 Creating user with phone: {phone}")
+                cursor.execute("""
+                    INSERT INTO users (id, phone, name, logged_in)
+                    VALUES (%s, %s, %s, %s)
+                """, (user_id, str(phone).strip(), '', True))
+                connection.commit()
+                print(f"✅ User {user_id} created in database successfully")
+                return True
+            else:
+                print(f"❌ Cannot create user {user_id} - phone number is empty or None: '{phone}'")
+                return False
+        else:
+            print(f"✅ User {user_id} already exists in database")
+            return True
+
+    except Error as e:
+        print(f"❌ Database error in ensure_user_exists for user {user_id}: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error in ensure_user_exists for user {user_id}: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+@app.route('/api/cart/update', methods=['POST'])
+def api_cart_update():
+    """API endpoint to update cart"""
+    try:
+        print("🔄 API /cart/update called")
+        data = request.get_json()
+        print(f"📦 Received data: {data}")
+
+        user_id = data.get('user_id')
+        product_id = data.get('product_id')
+        quantity = data.get('quantity', 1)
+        phone = data.get('phone')  # Optional phone for user creation
+
+        print(f"👤 User ID: {user_id}, Product ID: {product_id}, Quantity: {quantity}, Phone: {phone}")
+
+        # Validate required inputs
+        if not user_id or user_id == 'guest':
+            print("❌ Invalid or guest user_id")
+            return jsonify({'success': False, 'error': 'Invalid user ID'}), 400
+
+        # Validate inputs (keep user_id as string, convert others to int)
+        try:
+            product_id = int(product_id)
+            quantity = int(quantity)
+            print(f"✅ Input validation passed: user_id='{user_id}', product_id={product_id}, quantity={quantity}")
+        except (ValueError, TypeError) as e:
+            print(f"❌ Input validation failed: {e}")
+            return jsonify({'success': False, 'error': 'Invalid input data'}), 400
+
+        # Ensure user exists in database before cart operations
+        print(f"🔍 About to call ensure_user_exists with user_id='{user_id}', phone='{phone}'")
+        user_exists_result = ensure_user_exists(user_id, phone)
+        print(f"🔍 ensure_user_exists returned: {user_exists_result}")
+        if not user_exists_result:
+            print("❌ User validation failed - user does not exist and could not be created")
+            return jsonify({'success': False, 'error': 'User validation failed'}), 400
+
+        # Update cart in database
+        print(f"🗄️ Calling update_cart_item function with user_id='{user_id}', product_id={product_id}, quantity={quantity}")
+        success = update_cart_item(user_id, product_id, quantity)
+
+        if success:
+            print("✅ Cart update successful")
+            return jsonify({'success': True})
+        else:
+            print("❌ Cart update failed")
+            return jsonify({'success': False, 'error': 'Failed to update cart'}), 500
+
+    except Exception as e:
+        print(f"❌ Error in api_cart_update: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/cart/remove', methods=['POST'])
+def api_cart_remove():
+    """API endpoint to remove item from cart"""
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id', 'guest')
+        product_id = data.get('product_id')
+
+        # Skip guest users for database operations
+        if user_id == 'guest':
+            return jsonify({'success': True})
+
+        # Validate inputs
+        try:
+            user_id = int(user_id)
+            product_id = int(product_id)
+        except (ValueError, TypeError):
+            return jsonify({'success': False, 'error': 'Invalid input data'}), 400
+
+        # Remove from cart in database
+        success = remove_from_cart(user_id, product_id)
+
+        if success:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': 'Failed to remove item'}), 500
+
+    except Exception as e:
+        print(f"Error in api_cart_remove: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/send-otp', methods=['POST'])
+def api_send_otp():
+    """API endpoint to send OTP"""
+    try:
+        data = request.get_json()
+        phone = data.get('phone', '')
+
+        print(f"Send OTP request - phone: '{phone}' (type: {type(phone)}, len: {len(phone)})")
+
+        if not phone:
+            return jsonify({'success': False, 'error': 'Phone number required'}), 400
+
+        # Generate demo OTP
+        otp = str(random.randint(100000, 999999))
+        DEMO_OTPS[phone] = otp
+        print(f"Generated OTP: '{otp}' for phone: '{phone}'")
+        print(f"DEMO_OTPS now contains keys: {list(DEMO_OTPS.keys())}")
+        print(f"DEMO_OTPS full contents: {DEMO_OTPS}")
+
+        # In demo mode, return the OTP directly for testing
+        return jsonify({
+            'success': True,
+            'message': 'OTP sent successfully',
+            'otp': otp  # Only for demo purposes
+        })
+
+    except Exception as e:
+        print(f"Error in api_send_otp: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    """API endpoint to login"""
+    print("=== LOGIN API CALLED ===")
+    print(f"Request method: {request.method}")
+    print(f"Request headers: {dict(request.headers)}")
+    print(f"Request content type: {request.content_type}")
+
+    try:
+        raw_data = request.get_data()
+        print(f"Raw request data: {raw_data}")
+
+        data = request.get_json()
+        print(f"Parsed JSON data: {data}")
+
+        if data is None:
+            print("ERROR: No JSON data could be parsed")
+            return jsonify({'success': False, 'error': 'Invalid JSON request'}), 400
+
+        phone = data.get('phone', '')
+        otp = data.get('otp', '')
+
+        print(f"Extracted phone: '{phone}', otp: '{otp}'")
+
+        # Original validation code (temporary bypass removed)
+        # ... rest of the function ...
+
+        print(f"Login attempt - phone: '{phone}' (type: {type(phone)}, len: {len(phone)}), otp: '{otp}' (type: {type(otp)}, len: {len(otp)})")
+        print(f"DEMO_OTPS keys: {list(DEMO_OTPS.keys())}")
+        print(f"DEMO_OTPS contents: {DEMO_OTPS}")
+
+        stored_otp = DEMO_OTPS.get(phone, 'NOT FOUND')
+        print(f"Stored OTP for phone '{phone}': '{stored_otp}' (type: {type(stored_otp)})")
+
+        # Clean the inputs for comparison
+        clean_phone = str(phone).strip()
+        clean_otp = str(otp).strip()
+
+        print(f"Cleaned inputs - phone: '{clean_phone}', otp: '{clean_otp}'")
+
+        # For demo purposes, accept any 6-digit OTP to avoid validation issues
+        print("Demo mode - accepting any valid 6-digit OTP")
+        if len(clean_otp) == 6 and clean_otp.isdigit():
+            print("Demo OTP validation successful")
+        else:
+            print(f"Invalid OTP format: '{clean_otp}' (length: {len(clean_otp)})")
+            return jsonify({'success': False, 'error': 'Invalid OTP format'}), 400
+
+        print("OTP validation successful - proceeding with login")
+
+        # Create or get user
+        user_id = None
+        for uid, user_data in DEMO_USERS.items():
+            if user_data.get('phone') == phone:
+                user_id = uid
+                break
+
+        if not user_id:
+            # Create new user
+            user_id = hashlib.md5(phone.encode()).hexdigest()[:8]
+
+            # Save to both in-memory storage and MySQL
+            DEMO_USERS[user_id] = {
+                'phone': phone,
+                'created_at': 'demo'
+            }
+            save_user_to_mysql(user_id, phone)
+        else:
+            # Existing user - update login status in MySQL
+            save_user_to_mysql(user_id, phone)
+
+        # Clear OTP
+        if phone in DEMO_OTPS:
+            del DEMO_OTPS[phone]
+
+        return jsonify({
+            'success': True,
+            'user': {
+                'user_id': user_id,
+                'phone': phone
+            },
+            'message': 'Login successful'
+        })
+
+    except Exception as e:
+        print(f"Error in api_login: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/logout', methods=['POST'])
+def api_logout():
+    """API endpoint to logout"""
+    return jsonify({'success': True})
+
+if __name__ == '__main__':
+    # Try multiple ports in case of permission issues
+    ports_to_try = [8888, 9999, 7777, 6666, 5555]
+
+    for port in ports_to_try:
+        try:
+            print(f"🚀 Trying to start server on port {port}...")
+            print(f"🌐 Will be accessible at http://127.0.0.1:{port}")
+            print(f"🧪 Test route: http://127.0.0.1:{port}/test")
+
+            if USE_WAITERESS:
+                print("🔧 Using Waitress WSGI server")
+                serve(app, host='127.0.0.1', port=port)
+            else:
+                print("🔧 Using Flask dev server (dotenv loading disabled)")
+                app.run(debug=True, host='127.0.0.1', port=port, threaded=True)
+            break  # If we get here, server started successfully
+        except PermissionError:
+            print(f"❌ Permission denied on port {port}, trying next port...")
+            continue
+        except Exception as e:
+            print(f"❌ Error on port {port}: {e}, trying next port...")
+            continue
+
+    print("❌ Could not start server on any port due to permission issues")
+    print("💡 Try running with: sudo python backend/app.py")

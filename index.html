@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
+</head>
+<body>
+    <!-- Landing Page Overlay -->
+<<<<<<< HEAD
+    <div id="landingOverlay" class="landing-overlay" style="display: none;">
+=======
+    <div id="landingOverlay" class="landing-overlay">
+>>>>>>> origin/main
+        <div class="landing-content">
+            <div class="landing-branding">
+                <h1 class="landing-title">RoboTech - Store</h1>
+                <p class="landing-tagline">Your Ultimate IoT & Electronics Components Marketplace</p>
+                <button id="proceedBtn" class="btn btn-primary btn-large">
+                    <i class="fas fa-arrow-right"></i> Proceed to Store
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal-overlay" style="display: none;">
+        <div class="login-modal">
+            <div class="login-modal-header">
+                <h2>Welcome to Robotech Store</h2>
+                <p>Please login to continue shopping</p>
+            </div>
+
+            <div class="auth-form-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showLoginTab('phone')">
+                        <i class="fas fa-mobile-alt"></i> Phone Login
+                    </button>
+                    <button class="auth-tab" onclick="showLoginTab('email')">
+                        <i class="fas fa-envelope"></i> Gmail Login
+                    </button>
+                </div>
+
+                <!-- Phone Login Tab -->
+                <div id="phoneLoginTab" class="auth-tab-content active">
+                    <form id="landingPhoneLoginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="landingPhoneNumber">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-prefix">+91</span>
+                                <input
+                                    type="tel"
+                                    id="landingPhoneNumber"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    maxlength="10"
+                                    pattern="[0-9]{10}"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group otp-group" id="landingOtpGroup" style="display: none;">
+                            <label for="landingOtp">Enter OTP</label>
+                            <div class="otp-input-container">
+                                <input
+                                    type="text"
+                                    id="landingOtp"
+                                    name="otp"
+                                    placeholder="Enter 6-digit OTP"
+                                    maxlength="6"
+                                    pattern="[0-9]{6}"
+                                >
+                            </div>
+                            <div class="otp-timer">
+                                <span id="landingOtpTimer">Resend OTP in 30s</span>
+                                <button type="button" id="landingResendOtpBtn" class="link-btn" disabled>Resend OTP</button>
+                            </div>
+                        </div>
+
+                        <button type="button" id="landingSendOtpBtn" class="btn btn-primary btn-full">
+                            <i class="fas fa-paper-plane"></i> Send OTP
+                        </button>
+
+                        <div class="demo-otp-hint" style="text-align: center; margin: 10px 0; font-size: 0.85rem; color: #666; font-style: italic;">
+                            Demo OTP: <strong>123456</strong>
+                        </div>
+
+                        <button type="submit" id="landingVerifyOtpBtn" class="btn btn-primary btn-full" style="display: none;">
+                            <i class="fas fa-check"></i> Verify OTP & Continue
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Email Login Tab -->
+                <div id="emailLoginTab" class="auth-tab-content">
+                    <div class="gmail-login-container">
+                        <p class="gmail-login-text">Continue with your Google account</p>
+                        <button class="btn btn-gmail btn-full" onclick="landingLoginWithGmail()">
+                            <i class="fab fa-google"></i>
+                            Continue with Google
+                        </button>
+                        <p class="gmail-note">
+                            <i class="fas fa-info-circle"></i>
+                            We'll use your Gmail to create or access your account
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+<<<<<<< HEAD
+    <div id="mainContent" class="main-content">
+=======
+    <div id="mainContent" class="main-content" style="display: none;">
+>>>>>>> origin/main
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="nav" id="mainNav">
+<<<<<<< HEAD
+                    <a href="/" class="nav-link active">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="#">Crystal Oscillators</a>
+                                <a href="#">Resistors</a>
+                                <a href="#">Capacitors</a>
+                                <a href="#">Inductors</a>
+                                <a href="#">LEDs</a>
+                                <a href="#">Diodes</a>
+                                <a href="#">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="#">Arduino Compatible</a>
+                                <a href="#">Raspberry Pi</a>
+                                <a href="#">NodeMCU/ESP</a>
+                                <a href="#">STM</a>
+                                <a href="#">PIC/ATMEL</a>
+                                <a href="#">Programmers</a>
+=======
+                    <a href="#home" class="nav-link active" onclick="scrollToSection('home'); return false;">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="#products" class="nav-link dropdown-toggle" onclick="scrollToSection('products'); return false;">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="#products" onclick="filterProducts('resistor'); return false;">Resistors</a>
+                                <a href="#products" onclick="filterProducts('capacitor'); return false;">Capacitors</a>
+                                <a href="#products" onclick="filterProducts('led'); return false;">LEDs</a>
+                                <a href="#products" onclick="filterProducts('sensor'); return false;">Sensors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="#products" onclick="filterProducts('arduino'); return false;">Arduino</a>
+                                <a href="#products" onclick="filterProducts('raspberry'); return false;">Raspberry Pi</a>
+                                <a href="#products" onclick="filterProducts('esp'); return false;">ESP32/NodeMCU</a>
+>>>>>>> origin/main
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#categories" class="nav-link" onclick="scrollToSection('categories'); return false;">Categories</a>
+                    <a href="#about" class="nav-link" onclick="scrollToSection('about'); return false;">About</a>
+                    <a href="#contact" class="nav-link" onclick="scrollToSection('contact'); return false;">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="user-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
+                                <i class="fas fa-user"></i>
+<<<<<<< HEAD
+                                <span id="loginText" class="user-text">My User ID: Loading...</span>
+=======
+                                <span id="loginText" class="user-text">Demo User</span>
+>>>>>>> origin/main
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+<<<<<<< HEAD
+                                <div class="account-menu-item" onclick="window.location.href = 'http://127.0.0.1:8888/orders'">
+=======
+                                <div class="account-menu-item" onclick="scrollToSection('orders')">
+>>>>>>> origin/main
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
+                        </div>
+
+<<<<<<< HEAD
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/cart'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+=======
+                        <button class="cart-btn" onclick="scrollToSection('cart')" aria-label="Shopping cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cartCount" class="cart-count">0</span>
+>>>>>>> origin/main
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<<<<<<< HEAD
+    <!-- Popular Products Section -->
+    <section class="popular-products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Popular Products</h2>
+            </div>
+
+            <!-- Featured Product Carousel -->
+            <div class="product-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide active">
+                        <div class="carousel-content">
+                            <div class="carousel-image">
+                                <img src="https://i.pinimg.com/1200x/d9/44/5c/d9445cda32fcfdbb8c674becf26fcd7c.jpg" alt="Arduino Uno" loading="lazy">
+                            </div>
+                            <div class="carousel-info">
+                                <h3>Arduino Uno</h3>
+                                <p>The classic microcontroller board for beginners and professionals alike.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide">
+                        <div class="carousel-content">
+                            <div class="carousel-image">
+                                <img src="https://i.pinimg.com/1200x/96/08/32/96083216f33e913b4b6510af5ec5714a.jpg" alt="Raspberry Pi 4" loading="lazy">
+                            </div>
+                            <div class="carousel-info">
+                                <h3>Raspberry Pi 4</h3>
+                                <p>Powerful single-board computer for advanced IoT and computing projects.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide">
+                        <div class="carousel-content">
+                            <div class="carousel-image">
+                                <img src="https://i.pinimg.com/1200x/30/fe/b6/30feb6e6f137cbca5bdc314b146b521b.jpg" alt="ESP32" loading="lazy">
+                            </div>
+                            <div class="carousel-info">
+                                <h3>ESP32</h3>
+                                <p>WiFi & Bluetooth enabled microcontroller for IoT applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-indicators">
+                    <span class="carousel-indicator active" data-slide="0"></span>
+                    <span class="carousel-indicator" data-slide="1"></span>
+                    <span class="carousel-indicator" data-slide="2"></span>
+                </div>
+            </div>
+
+            <div class="view-all-container">
+                <button class="btn btn-outline" onclick="scrollToSection('products')">
+                    View all <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+=======
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Welcome to <span class="highlight">Robotech Store</span></h1>
+                    <p class="hero-subtitle">Your Ultimate Destination for IoT & Electronics Components</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <i class="fas fa-shipping-fast"></i>
+                            <span>Fast Shipping</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Quality Assured</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-headset"></i>
+                            <span>24/7 Support</span>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large" onclick="scrollToSection('products')">
+                            <i class="fas fa-shopping-bag"></i> Shop Now
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="scrollToSection('about')">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://picsum.photos/500/400?random=electronics" alt="Robotech Store Electronics" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);" onerror="this.src='https://via.placeholder.com/500x400/3498db/ffffff?text=Robotech+Store'">
+                </div>
+            </div>
+>>>>>>> origin/main
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Discover our latest electronics components and development boards</p>
+            </div>
+
+            <div id="productsContainer" class="products-grid">
+                <!-- Products will be loaded here by JavaScript -->
+                <div class="loading-spinner" style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #3498db;"></i>
+                    <p style="margin-top: 15px; color: #666;">Loading products...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Product Categories</h2>
+                <p class="section-subtitle">Explore our wide range of electronics components</p>
+            </div>
+
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterProducts('arduino')">
+                    <div class="category-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Arduino Boards</h3>
+                    <p>Compatible development boards for all your projects</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('sensor')">
+                    <div class="category-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Sensors</h3>
+                    <p>Temperature, motion, and environmental sensors</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('esp')">
+                    <div class="category-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>ESP32/NodeMCU</h3>
+                    <p>WiFi and Bluetooth enabled microcontroller boards</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('raspberry')">
+                    <div class="category-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <h3>Raspberry Pi</h3>
+                    <p>Single-board computers for advanced projects</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<<<<<<< HEAD
+    <!-- Featured Products Section -->
+    <section class="featured-products" id="featured">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Handpicked premium components for your projects</p>
+            </div>
+
+            <div class="view-all-container">
+                <button class="btn btn-outline" onclick="scrollToSection('products')">
+                    View All Products <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+=======
+>>>>>>> origin/main
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Your Trusted Electronics Partner</h3>
+                    <p>Robotech Store is your one-stop destination for high-quality IoT and electronics components. We provide high-quality components, development boards, and sensors for makers, students, and professionals.</p>
+                    <p>With years of experience in the electronics industry, we understand the needs of hobbyists, students, and professionals alike. Our commitment to quality, competitive pricing, and excellent customer service sets us apart.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Products</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Get in touch with our team</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Address</h4>
+                            <p>Robotech Store, Plot No. 39<br>200 Feet SEZ Road, Near Malot Hospital<br>Mahapura, Jaipur - 302026</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>0141-4946677</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>support@robotechstore.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form>
+                        <div class="form-row">
+                            <input type="text" placeholder="Your Name" required>
+                            <input type="email" placeholder="Your Email" required>
+                        </div>
+                        <input type="text" placeholder="Subject" required>
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<<<<<<< HEAD
+    <!-- Special Offers Section -->
+    <section class="special-offers">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Special Offers</h2>
+                <p class="section-subtitle">Limited time deals on popular components</p>
+            </div>
+
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <div class="offer-badge">20% OFF</div>
+                    <div class="offer-content">
+                        <h3>Arduino Starter Kit</h3>
+                        <p>Get all essential Arduino components at discounted price</p>
+                        <div class="offer-price">
+                            <span class="original-price">₹2,500</span>
+                            <span class="discounted-price">₹2,000</span>
+                        </div>
+                        <button class="btn btn-primary">Shop Now</button>
+                    </div>
+                </div>
+
+                <div class="offer-card">
+                    <div class="offer-badge">Buy 2 Get 1 Free</div>
+                    <div class="offer-content">
+                        <h3>Microcontroller Boards</h3>
+                        <p>Arduino and ESP32 development boards</p>
+                        <div class="offer-price">
+                            <span class="original-price">₹1,200</span>
+                            <span class="discounted-price">₹800</span>
+                        </div>
+                        <button class="btn btn-primary">Shop Now</button>
+                    </div>
+                </div>
+
+                <div class="offer-card">
+                    <div class="offer-badge">Free Shipping</div>
+                    <div class="offer-content">
+                        <h3>Order Above ₹1,000</h3>
+                        <p>Free delivery on orders over ₹1,000</p>
+                        <div class="offer-price">
+                            <span class="shipping-note">No extra charges</span>
+                        </div>
+                        <button class="btn btn-primary">Start Shopping</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3>Subscribe to our newsletter</h3>
+                <p>Enter your email bellow to receive discount coupons, special offers, exclusive discounts and more!</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" class="newsletter-input">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+=======
+>>>>>>> origin/main
+    <!-- Cart Section (Hidden by default) -->
+    <section id="cart" class="cart-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Shopping Cart</h2>
+            </div>
+            <div id="cartContainer">
+                <p style="text-align: center; padding: 50px;">Your cart is empty. Add some products to get started!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders Section (Hidden by default) -->
+    <section id="orders" class="orders-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">My Orders</h2>
+            </div>
+            <div id="ordersContainer">
+                <p style="text-align: center; padding: 50px;">No orders found. Start shopping to place your first order!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+<<<<<<< HEAD
+                    <div class="footer-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>Robotech Store</span>
+                    </div>
+                    <p>Your trusted partner for IoT and electronics components. Quality products, fast delivery, and excellent support.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>POLICIES</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#">Reviews</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Payment</a></li>
+                        <li><a href="#">Affiliate Program</a></li>
+                        <li><a href="#">Contest</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li>Robotech Store, Plot No. 39, 200 Feet SEZ Road</li>
+                        <li>Near Malot Hospital, Mahapura, Jaipur - 302026</li>
+                        <li><i class="fas fa-phone"></i> Phone: 0141-4946677</li>
+                        <li><i class="fas fa-envelope"></i> Email: support@robotechstore.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>© 2024 Robotech Store. All Rights Reserved.</p>
+                </div>
+=======
+                    <h3>Robotech Store</h3>
+                    <p>Your trusted partner for IoT and electronics components. Quality products, fast delivery, and excellent support.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#categories">Categories</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <a href="#categories">Microcontrollers</a>
+                    <a href="#categories">Sensors</a>
+                    <a href="#categories">Actuators</a>
+                    <a href="#categories">Displays</a>
+                    <a href="#categories">Power Supply</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Robotech Store. All rights reserved.</p>
+>>>>>>> origin/main
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Global variables
+        let cart = [];
+        let currentUser = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            setupEventListeners();
+            updateCartCount();
+        }
+
+        function setupEventListeners() {
+            // Landing page proceed button
+            const proceedBtn = document.getElementById('proceedBtn');
+            if (proceedBtn) {
+                proceedBtn.addEventListener('click', showLoginModal);
+            }
+
+            // Login modal close (click outside)
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.addEventListener('click', function(e) {
+                    if (e.target === loginModal) {
+                        hideLoginModal();
+                    }
+                });
+            }
+
+            // Login form submission
+            const loginForm = document.getElementById('landingPhoneLoginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLoginSubmit);
+            }
+
+            // Send OTP button
+            const sendOtpBtn = document.getElementById('landingSendOtpBtn');
+            if (sendOtpBtn) {
+                sendOtpBtn.addEventListener('click', handleSendOtp);
+            }
+
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+            }
+        }
+
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        function hideLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function showLoginTab(tabType) {
+            // Update active tab
+            document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.auth-tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabType + 'LoginTab').classList.add('active');
+        }
+
+        function handleSendOtp() {
+            const phoneInput = document.getElementById('landingPhoneNumber');
+            const phone = phoneInput.value.trim();
+
+            if (!phone || phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+
+            // Show OTP input
+            document.getElementById('landingOtpGroup').style.display = 'block';
+            document.getElementById('landingSendOtpBtn').style.display = 'none';
+            document.getElementById('landingVerifyOtpBtn').style.display = 'block';
+
+            // Start OTP timer
+            startOtpTimer();
+
+            alert(`Demo OTP: 123456\n\nEnter this code to login.`);
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+
+            const otpInput = document.getElementById('landingOtp');
+            const otp = otpInput.value.trim();
+
+            if (otp !== '123456') {
+                alert('Invalid OTP. Use 123456 for demo.');
+                return;
+            }
+
+            // "Login" successful - hide landing page and show main content
+            const landingOverlay = document.getElementById('landingOverlay');
+            const loginModal = document.getElementById('loginModal');
+            const mainContent = document.getElementById('mainContent');
+
+            if (landingOverlay) landingOverlay.style.display = 'none';
+            if (loginModal) loginModal.style.display = 'none';
+            if (mainContent) mainContent.style.display = 'block';
+
+            // Generate a proper user ID like the Flask app does
+            const userId = 1000 + Math.floor(Math.random() * 9000);
+            currentUser = { user_id: userId, phone: '9876543210' };
+            document.getElementById('loginText').textContent = 'User ' + userId;
+
+            // Load products
+            loadProducts();
+        }
+
+        function startOtpTimer() {
+            let timeLeft = 30;
+            const timerElement = document.getElementById('landingOtpTimer');
+
+            const timer = setInterval(() => {
+                if (timerElement) {
+                    timerElement.textContent = `Resend OTP in ${timeLeft}s`;
+                }
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    if (timerElement) {
+                        timerElement.textContent = 'OTP expired. Click Resend.';
+                    }
+                }
+            }, 1000);
+        }
+
+        function landingLoginWithGmail() {
+            alert('Demo: Gmail login not implemented. Use phone login with OTP 123456');
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mainNav');
+            if (nav) {
+                nav.classList.toggle('active');
+            }
+        }
+
+        function toggleAccountMenu() {
+            const menu = document.getElementById('accountMenu');
+            if (menu) {
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+
+        function logout() {
+            // Reset to landing page
+            const landingOverlay = document.getElementById('landingOverlay');
+            const mainContent = document.getElementById('mainContent');
+
+            if (landingOverlay) landingOverlay.style.display = 'flex';
+            if (mainContent) mainContent.style.display = 'none';
+
+            currentUser = null;
+            cart = [];
+            updateCartCount();
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function loadProducts() {
+            const productsContainer = document.getElementById('productsContainer');
+            if (!productsContainer) return;
+
+            // Demo products data
+            const demoProducts = [
+                {
+                    id: 11,
+                    name: 'Arduino Uno R3',
+                    price: 450,
+                    category: 'arduino',
+                    description: 'ATmega328P microcontroller board with USB interface',
+                    image: 'https://m.media-amazon.com/images/I/51+N-57gSiL.jpg'
+                },
+                {
+                    id: 12,
+                    name: 'ESP32 Development Board',
+                    price: 350,
+                    category: 'esp',
+                    description: 'WiFi & Bluetooth enabled microcontroller',
+                    image: 'https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg'
+                },
+                {
+                    id: 13,
+                    name: 'DHT11 Temperature Sensor',
+                    price: 45,
+                    category: 'sensor',
+                    description: 'Digital temperature and humidity sensor with 1-wire interface',
+                    image: 'https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg'
+                },
+                {
+                    id: 14,
+                    name: 'HC-SR04 Ultrasonic Sensor',
+                    price: 85,
+                    category: 'sensor',
+                    description: 'Ultrasonic ranging sensor for distance measurement',
+                    image: 'https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg'
+                },
+                {
+                    id: 15,
+                    name: 'SG90 Servo Motor',
+                    price: 95,
+                    category: 'actuator',
+                    description: '9g micro servo motor for robotics',
+                    image: 'https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg'
+                },
+                {
+                    id: 16,
+                    name: 'Raspberry Pi 4',
+                    price: 2500,
+                    category: 'raspberry',
+                    description: 'Single-board computer with 4GB RAM',
+                    image: 'https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg'
+                }
+            ];
+
+            const productsHTML = demoProducts.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x150?text=${encodeURIComponent(product.name)}'">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-price">₹${product.price}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            productsContainer.innerHTML = productsHTML;
+        }
+
+        function addToCart(productId, productName, price) {
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCartCount();
+            showNotification(`${productName} added to cart!`);
+        }
+
+        function updateCartCount() {
+            const cartCountElement = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (cartCountElement) {
+                cartCountElement.textContent = totalItems;
+            }
+        }
+
+        function filterProducts(category) {
+            // Scroll to products section
+            scrollToSection('products');
+
+            // For demo, just show a message
+            showNotification(`Filtering products by category: ${category}`);
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                const query = searchInput.value.trim();
+                if (query) {
+                    showNotification(`Searching for: ${query}`);
+                }
+            }
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            `;
+
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: #27ae60;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

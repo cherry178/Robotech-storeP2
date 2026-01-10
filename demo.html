@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotech Store - Demo Mode</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <style>
+        .demo-notice {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ff6b35;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Fallback styles if CSS doesn't load */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .header { background: #2c3e50; color: white; padding: 1rem; }
+        .login-dropdown-content { display: none; position: absolute; background: white; border: 1px solid #ddd; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .login-dropdown-content.active { display: block; }
+        .btn { background: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .product-card { border: 1px solid #ddd; padding: 1rem; margin: 1rem 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="demo-notice">
+        🚀 DEMO MODE - No server required!
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <nav class="nav">
+                    <a href="#home" class="nav-link active" onclick="scrollToSection('home'); return false;">Home</a>
+                    <a href="#products" class="nav-link" onclick="scrollToSection('products'); return false;">Products</a>
+                    <a href="#categories" class="nav-link" onclick="scrollToSection('categories'); return false;">Categories</a>
+                    <a href="#about" class="nav-link" onclick="scrollToSection('about'); return false;">About</a>
+                    <a href="#contact" class="nav-link" onclick="scrollToSection('contact'); return false;">Contact</a>
+                </nav>
+
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">Login</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="login-dropdown-content" id="loginDropdown">
+                                <div class="login-header">
+                                    <h4>Customer Login</h4>
+                                    <p>If you are already registered, please log in.</p>
+                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
+                                    </div>
+                                </div>
+
+                                <div class="login-tabs">
+                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
+                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
+                                </div>
+
+                                <div id="phoneLoginTab" class="login-tab-content active">
+                                    <div class="login-form">
+                                        <div class="form-group">
+                                            <label for="headerLoginPhone">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-prefix">+91</span>
+                                                <input
+                                                    type="tel"
+                                                    id="headerLoginPhone"
+                                                    placeholder="Enter phone number"
+                                                    maxlength="10"
+                                                    pattern="[0-9]{10}"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
+                                            <label for="headerLoginOtp">Enter OTP</label>
+                                            <div class="otp-input-container">
+                                                <input
+                                                    type="text"
+                                                    id="headerLoginOtp"
+                                                    placeholder="Enter 6-digit OTP"
+                                                    maxlength="6"
+                                                    pattern="[0-9]{6}"
+                                                >
+                                            </div>
+                                            <div class="otp-timer">
+                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
+                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
+                                            <i class="fas fa-paper-plane"></i> Send OTP
+                                        </button>
+
+                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
+                                            <i class="fas fa-check"></i> Verify & Login
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="gmailLoginTab" class="login-tab-content">
+                                    <div class="gmail-login-container">
+                                        <p class="gmail-login-text">Continue with Google account</p>
+                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
+                                            <i class="fab fa-google"></i>
+                                            Continue with Google
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-icon cart-btn" onclick="alert('Demo: Cart functionality not available without server')">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Demo Content -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Welcome to Robotech Store</h1>
+                <p>Your trusted partner for IoT and electronics components</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('products')">Explore Products</button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('contact')">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="section">
+        <div class="container">
+            <h2>Demo Products</h2>
+            <p>This is a demo version running without a server. Login functionality is available!</p>
+            <div class="demo-products">
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>Arduino Uno</h3>
+                        <p>Microcontroller board</p>
+                        <div class="product-price">₹450</div>
+                        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Embedded Demo Scripts -->
+    <script>
+        // Demo variables
+        let currentUser = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDemo();
+        });
+
+        function initializeDemo() {
+            console.log('Demo initialized');
+            checkUserLoginStatus();
+
+            // Load demo products
+            loadDemoProducts();
+        }
+
+        function checkUserLoginStatus() {
+            console.log('Checking demo user login status');
+            try {
+                let storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                let storedPhone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+                let storedLoggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+                if (storedLoggedIn === 'true' && storedUserId && storedPhone) {
+                    currentUser = {
+                        user_id: parseInt(storedUserId),
+                        phone: storedPhone
+                    };
+                    console.log('Demo user restored:', currentUser);
+                    updateUserInterface();
+                } else {
+                    console.log('No demo user found');
+                    currentUser = null;
+                    updateUserInterface();
+                }
+            } catch (error) {
+                console.error('Error checking demo login:', error);
+                currentUser = null;
+            }
+        }
+
+        function updateUserInterface() {
+            const loginText = document.getElementById('loginText');
+            const loginTrigger = document.querySelector('.login-trigger');
+
+            if (loginText && currentUser) {
+                loginText.textContent = `User ${currentUser.user_id}`;
+                loginTrigger.onclick = () => toggleAccountMenu();
+            } else if (loginText) {
+                loginText.textContent = 'Login';
+                loginTrigger.onclick = () => toggleLoginDropdown();
+            }
+        }
+
+        function toggleLoginDropdown() {
+            const dropdown = document.getElementById('loginDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
+
+        function toggleAccountMenu() {
+            alert('Demo: Account menu not implemented');
+        }
+
+        function sendHeaderLoginOTP() {
+            const phoneInput = document.getElementById('headerLoginPhone');
+            let phone = phoneInput.value.trim().replace(/\D/g, '').slice(-10);
+
+            if (!phone || phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+
+            // Show loading
+            const sendBtn = document.getElementById('headerSendLoginOtpBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = 'Sending...';
+
+            setTimeout(() => {
+                // Show OTP
+                document.getElementById('headerLoginOtpGroup').style.display = 'block';
+                document.getElementById('headerSendLoginOtpBtn').style.display = 'none';
+                document.getElementById('headerVerifyLoginOtpBtn').style.display = 'block';
+
+                // Reset button
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+
+                // Show OTP popup
+                alert(`Demo OTP: 123456\n\nEnter this code to login.`);
+
+                // Start timer
+                startDemoTimer();
+            }, 1000);
+        }
+
+        function verifyHeaderLoginOTP() {
+            const otpInput = document.getElementById('headerLoginOtp');
+            const otp = otpInput.value.trim();
+
+            if (otp !== '123456') {
+                alert('Invalid OTP. Use 123456 for demo.');
+                return;
+            }
+
+            // Mock successful login
+            const mockUser = {
+                user_id: Math.floor(Math.random() * 10000),
+                phone: document.getElementById('headerLoginPhone').value.trim()
+            };
+
+            // Store in both storages
+            sessionStorage.setItem('user_id', mockUser.user_id);
+            sessionStorage.setItem('phone', mockUser.phone);
+            sessionStorage.setItem('logged_in', 'true');
+
+            localStorage.setItem('user_id', mockUser.user_id);
+            localStorage.setItem('phone', mockUser.phone);
+            localStorage.setItem('logged_in', 'true');
+
+            currentUser = mockUser;
+
+            // Update UI
+            updateUserInterface();
+
+            // Close dropdown
+            const dropdown = document.getElementById('loginDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
+
+            // Reset form
+            document.getElementById('headerLoginOtp').value = '';
+            document.getElementById('headerLoginOtpGroup').style.display = 'none';
+            document.getElementById('headerSendLoginOtpBtn').style.display = 'block';
+            document.getElementById('headerVerifyLoginOtpBtn').style.display = 'none';
+
+            alert(`Login successful! Welcome User ${mockUser.user_id}`);
+        }
+
+        function startDemoTimer() {
+            let timeLeft = 30;
+            const timerElement = document.getElementById('headerLoginOtpTimer');
+
+            const timer = setInterval(() => {
+                if (timerElement) {
+                    timerElement.textContent = `Resend OTP in ${timeLeft}s`;
+                }
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    if (timerElement) {
+                        timerElement.textContent = 'OTP expired';
+                    }
+                }
+            }, 1000);
+        }
+
+        function addToCart(productId) {
+            console.log('addToCart called with productId:', productId);
+
+            if (!currentUser) {
+                alert('Please login to add items to cart');
+                toggleLoginDropdown();
+                return;
+            }
+
+            // Demo cart functionality
+            try {
+                const cartKey = 'demo_cart_' + currentUser.user_id;
+                let cart = [];
+                const cartData = localStorage.getItem(cartKey);
+                if (cartData) {
+                    cart = JSON.parse(cartData);
+                }
+
+                // Add item
+                const existingItem = cart.find(item => item.product_id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ product_id: productId, quantity: 1 });
+                }
+
+                // Save cart
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+
+                // Update cart count
+                updateCartCount();
+
+                alert('Item added to cart!');
+            } catch (error) {
+                console.error('Error adding to demo cart:', error);
+                alert('Error adding to cart');
+            }
+        }
+
+        function updateCartCount() {
+            if (!currentUser) {
+                updateCartCountDisplay(0);
+                return;
+            }
+
+            try {
+                const cartKey = 'demo_cart_' + currentUser.user_id;
+                const cartData = localStorage.getItem(cartKey);
+                const cart = cartData ? JSON.parse(cartData) : [];
+                const count = cart.reduce((total, item) => total + item.quantity, 0);
+                updateCartCountDisplay(count);
+            } catch (error) {
+                console.error('Error updating demo cart count:', error);
+                updateCartCountDisplay(0);
+            }
+        }
+
+        function updateCartCountDisplay(count) {
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+                cartCountElement.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+        function loadDemoProducts() {
+            // Demo products are already in the HTML
+            updateCartCount();
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function loginWithGmail() {
+            alert('Demo: Gmail login not implemented');
+        }
+
+        function validatePhoneNumber(phone) {
+            return phone.length === 10 && /^\d{10}$/.test(phone);
+        }
+
+        function showLoginTab(tabType) {
+            // Simple tab switching for demo
+            document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.login-tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabType + 'LoginTab').classList.add('active');
+        }
+    </script>
+</body>
+</html>

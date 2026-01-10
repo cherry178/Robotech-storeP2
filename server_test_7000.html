@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Test - Port 7000</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f0f0f0; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        h1 { color: #28a745; }
+        .links { margin: 20px 0; }
+        a { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; }
+        a:hover { background: #0056b3; }
+        .status { background: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: left; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Server Status: RUNNING</h1>
+        <p>HTTP Server is active on port 7000</p>
+        <p>Time: <span id="time"></span></p>
+
+        <div class="links">
+            <h3>Access Your Robotech Store:</h3>
+            <a href="static_index.html">🏠 Home Page</a>
+            <a href="products.html">📦 Products Page</a>
+            <a href="demo.html">🎮 Demo Page</a>
+            <a href="simple_store.html">🛒 Simple Store</a>
+        </div>
+
+        <div class="status">
+            <h4>🔐 Login Instructions:</h4>
+            <ol style="text-align: left;">
+                <li>Go to Home Page or Products Page</li>
+                <li>Click "Login" button in header</li>
+                <li>Enter phone: <strong>9876543210</strong></li>
+                <li>Click "Send OTP"</li>
+                <li>Use OTP: <strong>123456</strong></li>
+                <li>Click "Verify & Login"</li>
+                <li>Should show "User [ID]" (not "User NaN")</li>
+            </ol>
+        </div>
+
+        <div class="status">
+            <h4>🛠️ Troubleshooting:</h4>
+            <ul style="text-align: left;">
+                <li><strong>"User NaN" issue:</strong> Click the red "🔴 Clear Login Data" button</li>
+                <li><strong>Can't see buttons:</strong> Hard refresh with Ctrl+F5</li>
+                <li><strong>Server not responding:</strong> Restart with <code>python -m http.server 7000</code></li>
+                <li><strong>Port conflict:</strong> Try port 8000 or 3000</li>
+            </ul>
+        </div>
+
+        <div class="error" style="background: #d1ecf1; color: #0c5460;">
+            <h4>🚨 If Still Not Working:</h4>
+            <p>Open your browser's Developer Tools (F12) and check the Console tab for any errors.</p>
+            <p>Try different browsers: Chrome, Firefox, Edge</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+
+        // Auto-refresh time every minute
+        setInterval(() => {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }, 60000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script src="./static/js/main.js"></script>
+    <style>
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .payment-container { margin-top: 60px; padding: 2rem 1rem; max-width: 800px; margin: 80px auto 0; }
+        .payment-form { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #eee; }
+        .form-section:last-child { border-bottom: none; }
+        .form-section h3 { margin-bottom: 1rem; color: #333; }
+        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .form-row .form-group { flex: 1; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .payment-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .payment-method { border: 2px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .payment-method:hover { border-color: #007bff; }
+        .payment-method.selected { border-color: #007bff; background: #f8f9ff; }
+        .payment-method i { font-size: 2rem; margin-bottom: 0.5rem; color: #007bff; }
+        .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+        .order-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+        .order-total { font-weight: bold; font-size: 1.2rem; color: #e74c3c; }
+        .pay-btn { background: #27ae60; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; width: 100%; margin-top: 1rem; }
+        .pay-btn:hover { background: #229954; }
+        .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .login-required { text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px; }
+        .login-required h3 { color: #856404; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">
+        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Home</a> |
+        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="static_index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Products</a>
+                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="payment.html" class="nav-link active">Payment</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="action-buttons">
+                        <div class="checkout-user">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Content -->
+    <div class="payment-container">
+        <h1><i class="fas fa-credit-card"></i> Payment</h1>
+
+        <div id="paymentContent">
+            <!-- Payment form or login required message will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Embedded Scripts -->
+    <script>
+        // Demo variables
+        let currentUser = null;
+        let cartItems = [];
+        let selectedPaymentMethod = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Payment page DOM loaded, initializing...');
+            // Immediate check for corrupted data
+            const storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (storedUserId && (storedUserId === 'NaN' || isNaN(parseInt(storedUserId)) || storedUserId.includes('demo_'))) {
+                console.log('Found corrupted data on payment page load, clearing...');
+                forceLogout();
+            }
+            initializePaymentPage();
+        });
+
+        function initializePaymentPage() {
+            console.log('Initializing payment page...');
+
+            // Setup clear data button
+            const clearBtn = document.getElementById('clearDataBtn');
+            if (clearBtn) {
+                clearBtn.onclick = forceLogout;
+                console.log('Clear data button attached');
+            }
+
+            loadPaymentPage();
+        }
+
+        function clearUserData() {
+            console.log('Clearing all user data from storage');
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('logged_in');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+        }
+
+        function forceLogout() {
+            console.log('Force logout triggered');
+            clearUserData();
+            currentUser = null;
+            loadPaymentPage();
+            alert('User data cleared. Please refresh the page.');
+        }
+
+        function loadPaymentPage() {
+            const paymentContent = document.getElementById('paymentContent');
+
+            // Load cart from backend API
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            console.log('🛒 Loading cart for payment, user_id:', userId);
+            console.log('🛒 Backend URL: http://127.0.0.1:8888/api/cart?user_id=' + userId);
+
+            if (!userId) {
+                paymentContent.innerHTML = `
+                    <div class="login-required">
+                        <h3><i class="fas fa-exclamation-triangle"></i> No Cart Found</h3>
+                        <p>Please add items to your cart before proceeding to checkout.</p>
+                        <a href="products.html" class="btn">Continue Shopping</a>
+                        <br>
+                        <a href="cart.html">Back to Cart</a>
+                    </div>
+                `;
+                return;
+            }
+
+            paymentContent.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p>Loading cart...</p></div>';
+
+            fetch(`http://127.0.0.1:8888/api/cart?user_id=${userId}`)
+                .then(response => {
+                    console.log('🛒 Cart API response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('🛒 Cart API response data:', JSON.stringify(data, null, 2));
+
+                    if (data.success && data.cart) {
+                        cartItems = data.cart.map(item => ({
+                            product_id: item.product_id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            name: item.name,
+                            image_url: item.image_url
+                        }));
+
+                        console.log('🛒 Cart loaded:', cartItems.length, 'items');
+                        console.log('🛒 Cart items details:', JSON.stringify(cartItems, null, 2));
+
+                        if (cartItems.length === 0) {
+                            paymentContent.innerHTML = `
+                                <div class="login-required">
+                                    <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
+                                    <p>Add some products to your cart before proceeding to payment.</p>
+                                    <a href="products.html" class="btn">Continue Shopping</a>
+                                    <br><br>
+                                    <button onclick="testBackendConnection()" style="margin-top: 10px; padding: 10px; background: #17a2b8; color: white; border: none; border-radius: 4px;">Test Backend Connection</button>
+                                    <br><br>
+                                    <button onclick="addTestItemToCart()" style="margin-top: 10px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px;">Add Test Item to Cart</button>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        console.log('🛒 Calling displayPaymentForm()...');
+                        displayPaymentForm();
+                    } else {
+                        console.error('🛒 Cart API returned error:', data.error);
+                        paymentContent.innerHTML = `
+                            <div class="login-required">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Error Loading Cart</h3>
+                                <p>Could not load your cart items. Error: ${data.error || 'Unknown error'}</p>
+                                <p>Please try again or contact support.</p>
+                                <a href="cart.html" class="btn">Back to Cart</a>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error loading cart:', error);
+                    paymentContent.innerHTML = `
+                        <div class="login-required">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                            <p>Failed to load cart: ${error.message}</p>
+                            <a href="cart.html" class="btn">Back to Cart</a>
+                        </div>
+                    `;
+                });
+        }
+        
+        let orderItems = []; // Make it global for processPayment
+        
+        function displayPaymentForm() {
+            console.log('🛒 displayPaymentForm() called');
+            console.log('🛒 cartItems:', JSON.stringify(cartItems, null, 2));
+
+            const paymentContent = document.getElementById('paymentContent');
+            if (!paymentContent) {
+                console.error('🛒 paymentContent element not found!');
+                return;
+            }
+
+            // Calculate totals
+            let totalItems = 0;
+            let totalPrice = 0;
+            orderItems = cartItems.map(item => {
+                totalItems += item.quantity;
+                const subtotal = item.price * item.quantity;
+                totalPrice += subtotal;
+                console.log(`🛒 Item: ${item.name} x${item.quantity} = ₹${subtotal}`);
+                return {
+                    ...item,
+                    subtotal: subtotal
+                };
+            });
+
+            console.log(`🛒 Total: ${totalItems} items, ₹${totalPrice}`);
+            console.log('🛒 orderItems:', JSON.stringify(orderItems, null, 2));
+
+            const paymentHTML = `
+                <div class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    ${orderItems.map(item => `
+                        <div class="order-item">
+                            <span>${item.name || 'Unknown Product'} (x${item.quantity})</span>
+                            <span>₹${item.subtotal}</span>
+                        </div>
+                    `).join('')}
+                    <div class="order-item order-total">
+                        <span><strong>Total (${totalItems} items)</strong></span>
+                        <span><strong>₹${totalPrice}</strong></span>
+                    </div>
+                </div>
+
+                <form class="payment-form" onsubmit="processPayment(event)">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Billing Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" value="${sessionStorage.getItem('phone') || localStorage.getItem('phone') || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Shipping Address</label>
+                            <input type="text" id="address" placeholder="Street address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">ZIP Code</label>
+                                <input type="text" id="zipCode" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
+                        <div class="payment-methods">
+                            <div class="payment-method" onclick="selectPaymentMethod('card')">
+                                <i class="fas fa-credit-card"></i>
+                                <div>Credit/Debit Card</div>
+                            </div>
+                            <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                                <i class="fas fa-mobile-alt"></i>
+                                <div>UPI</div>
+                            </div>
+                            <div class="payment-method" onclick="selectPaymentMethod('netbanking')">
+                                <i class="fas fa-university"></i>
+                                <div>Net Banking</div>
+                            </div>
+                            <div class="payment-method" onclick="selectPaymentMethod('cod')">
+                                <i class="fas fa-truck"></i>
+                                <div>Cash on Delivery</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="pay-btn" id="payBtn">
+                        <i class="fas fa-lock"></i> Pay ₹${totalPrice}
+                    </button>
+                </form>
+            `;
+
+            paymentContent.innerHTML = paymentHTML;
+            console.log('🛒 Payment form HTML set successfully');
+            console.log('🛒 Payment content innerHTML length:', paymentContent.innerHTML.length);
+        }
+
+
+        function testBackendConnection() {
+            console.log('🧪 Testing backend connection...');
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            fetch('http://127.0.0.1:8888/api/cart?user_id=' + userId)
+                .then(response => {
+                    console.log('🧪 Response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('🧪 Response data:', data);
+                    alert('Backend connection successful! Response: ' + JSON.stringify(data));
+                })
+                .catch(error => {
+                    console.error('🧪 Connection error:', error);
+                    alert('Backend connection failed: ' + error.message);
+                });
+        }
+
+        function addTestItemToCart() {
+            console.log('🧪 Adding test item to cart...');
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+
+            fetch('http://127.0.0.1:8888/api/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    product_id: 34, // Nuts & Bolts Kit
+                    quantity: 1,
+                    phone: phone
+                })
+            })
+            .then(response => {
+                console.log('🧪 Add to cart response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('🧪 Add to cart response:', data);
+                if (data.success) {
+                    alert('Test item added to cart! Reloading...');
+                    loadPaymentPage(); // Reload the payment page
+                } else {
+                    alert('Failed to add test item: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('🧪 Add to cart error:', error);
+                alert('Failed to add test item: ' + error.message);
+            });
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+
+            // Remove selected class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+
+            // Add selected class to clicked method
+            event.currentTarget.classList.add('selected');
+
+            // Enable pay button
+            const payBtn = document.getElementById('payBtn');
+            if (payBtn) {
+                payBtn.disabled = false;
+            }
+        }
+
+        function processPayment(event) {
+            event.preventDefault();
+
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            // Validate form
+            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
+            for (const field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill in ${field}`);
+                    element.focus();
+                    return;
+                }
+            }
+
+            // Show processing
+            const payBtn = document.getElementById('payBtn');
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
+
+            // Prepare billing info
+            const billingInfo = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                zipCode: document.getElementById('zipCode').value.trim()
+            };
+
+            // Create order via backend API
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            fetch('http://127.0.0.1:8888/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    billing_info: billingInfo,
+                    payment_method: selectedPaymentMethod
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Complete payment (update order status)
+                    return fetch(`http://127.0.0.1:8888/api/orders/${data.order_id}/complete`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(completeData => {
+                        if (completeData.success) {
+                            // Show success message
+                            document.getElementById('paymentContent').innerHTML = `
+                                <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
+                                    <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
+                                    <h2>Payment Successful!</h2>
+                                    <p>Thank you for your order. Your payment has been processed successfully.</p>
+                                    <p><strong>Order ID:</strong> #${data.order_id}</p>
+                                    <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
+                                    <p><strong>Total Amount:</strong> ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}</p>
+                                    <div style="margin-top: 2rem;">
+                                        <a href="static_index.html" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
+                                        <a href="cart.html" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            throw new Error(completeData.error || 'Failed to complete payment');
+                        }
+                    });
+                } else {
+                    throw new Error(data.error || 'Failed to create order');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Payment error:', error);
+                payBtn.disabled = false;
+                payBtn.innerHTML = `<i class="fas fa-lock"></i> Pay ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}`;
+                alert('Payment failed: ' + error.message);
+            });
+        }
+
+        // Login functionality removed from payment page
+    </script>
+</body>
+</html>

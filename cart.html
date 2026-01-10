@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script src="./static/js/main.js"></script>
+    <style>
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .cart-container { margin-top: 60px; padding: 2rem 1rem; max-width: 1200px; margin: 80px auto 0; }
+        .cart-empty { text-align: center; padding: 3rem; }
+        .cart-item { display: flex; align-items: center; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
+        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-weight: bold; margin-bottom: 0.5rem; }
+        .cart-item-price { color: #e74c3c; font-weight: bold; }
+        .cart-item-quantity { display: flex; align-items: center; margin: 0.5rem 0; }
+        .quantity-btn { background: #ddd; border: none; width: 30px; height: 30px; border-radius: 4px; cursor: pointer; }
+        .quantity-input { width: 50px; text-align: center; margin: 0 0.5rem; padding: 0.25rem; border: 1px solid #ddd; border-radius: 4px; }
+        .remove-btn { color: #e74c3c; cursor: pointer; margin-left: 1rem; }
+        .cart-total { text-align: right; margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
+        .cart-total h3 { margin-bottom: 1rem; }
+        .checkout-btn { background: #27ae60; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; width: 100%; margin-top: 1rem; }
+        .checkout-btn:hover { background: #229954; }
+        .login-required { text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px; margin: 2rem 0; }
+        .login-required h3 { color: #856404; margin-bottom: 1rem; }
+        .login-required .btn { background: #ffc107; color: #212529; margin: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">
+        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Home</a> |
+        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="static_index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Products</a>
+                    <a href="cart.html" class="nav-link active">Cart</a>
+                    <a href="payment.html" class="nav-link">Payment</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">Login</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="login-dropdown-content" id="loginDropdown">
+                                <div class="login-header">
+                                    <h4>Customer Login</h4>
+                                    <p>If you are already registered, please log in.</p>
+                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
+                                    </div>
+                                </div>
+
+                                <div class="login-tabs">
+                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
+                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
+                                </div>
+
+                                <div id="phoneLoginTab" class="login-tab-content active">
+                                    <div class="login-form">
+                                        <div class="form-group">
+                                            <label for="headerLoginPhone">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-prefix">+91</span>
+                                                <input
+                                                    type="tel"
+                                                    id="headerLoginPhone"
+                                                    placeholder="Enter phone number"
+                                                    maxlength="10"
+                                                    pattern="[0-9]{10}"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
+                                            <label for="headerLoginOtp">Enter OTP</label>
+                                            <div class="otp-input-container">
+                                                <input
+                                                    type="text"
+                                                    id="headerLoginOtp"
+                                                    placeholder="Enter 6-digit OTP"
+                                                    maxlength="6"
+                                                    pattern="[0-9]{6}"
+                                                >
+                                            </div>
+                                            <div class="otp-timer">
+                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
+                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
+                                            <i class="fas fa-paper-plane"></i> Send OTP
+                                        </button>
+
+                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
+                                            <i class="fas fa-check"></i> Verify & Login
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="gmailLoginTab" class="login-tab-content">
+                                    <div class="gmail-login-container">
+                                        <p class="gmail-login-text">Continue with Google account</p>
+                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
+                                            <i class="fab fa-google"></i>
+                                            Continue with Google
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Content -->
+    <div class="cart-container">
+        <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+
+        <div id="cartContent">
+            <!-- Cart items will be loaded here -->
+            <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px; margin: 2rem 0;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                <h2 style="color: #6c757d; margin-bottom: 1rem;">Loading Your Cart...</h2>
+                <p style="color: #6c757d;">Please wait while we load your cart items.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Scripts -->
+    <script>
+        console.log('🛒 CART PAGE: Script starting...');
+
+        // Initialize cart loading when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🛒 CART PAGE: DOMContentLoaded fired, loading cart...');
+            loadCartFromAPI();
+        });
+
+        // Function to load cart items from backend API
+        function loadCartFromAPI() {
+            console.log('🛒 CART PAGE: Loading cart from API...');
+
+            // Get user ID from storage (same as add-to-cart uses)
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            console.log('🛒 CART PAGE: User ID from storage:', userId);
+
+            if (!userId) {
+                console.log('🛒 CART PAGE: No user ID found, showing login prompt');
+                showLoginPrompt();
+                return;
+            }
+
+            // Make API call to get cart items
+            // Use relative URL if served from Flask, absolute URL if static file
+            const isStaticFile = window.location.protocol === 'file:' || window.location.hostname === '127.0.0.1' && window.location.port !== '8888';
+            const apiUrl = isStaticFile ? `http://127.0.0.1:8888/api/cart?user_id=${userId}` : `/api/cart?user_id=${userId}`;
+            console.log('🛒 CART PAGE: Fetching from:', apiUrl, '(static file:', isStaticFile + ')');
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log('🛒 CART PAGE: API response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('🛒 CART PAGE: API response data:', data);
+                    if (data.success && data.cart) {
+                        console.log('🛒 CART PAGE: Cart loaded with', data.cart.length, 'items');
+                        displayCartItems(data.cart);
+                    } else {
+                        console.log('🛒 CART PAGE: API returned success but no cart data');
+                        showEmptyCart();
+                    }
+                })
+                .catch(error => {
+                    console.error('🛒 CART PAGE: Error loading cart:', error);
+                    showErrorMessage('Failed to load cart: ' + error.message);
+                });
+        }
+
+        // Function to display cart items
+        function displayCartItems(cartItems) {
+            console.log('🛒 CART PAGE: Displaying', cartItems.length, 'cart items');
+
+            const cartContent = document.getElementById('cartContent');
+            if (!cartContent) {
+                console.error('🛒 CART PAGE: cartContent element not found!');
+                return;
+            }
+
+            if (cartItems.length === 0) {
+                showEmptyCart();
+                return;
+            }
+
+            // Build cart items HTML
+            let cartHTML = '<div class="cart-items" style="margin-bottom: 2rem;">';
+            let totalPrice = 0;
+            let totalItems = 0;
+
+            cartItems.forEach((item) => {
+                const name = item.name || 'Unknown Product';
+                const price = parseFloat(item.price) || 0;
+                const quantity = parseInt(item.quantity) || 1;
+                const image = item.image_url || 'https://via.placeholder.com/80x80?text=Product';
+                const description = item.description || '';
+
+                totalItems += quantity;
+                totalPrice += price * quantity;
+
+                cartHTML += `
+                    <div class="cart-item" style="display: flex; align-items: center; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <img src="${image}" alt="${name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem; border: 2px solid #f0f0f0;">
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; color: #2c3e50; font-weight: 600;">${name}</h3>
+                            <p style="margin: 0 0 1rem 0; color: #7f8c8d; font-size: 0.95rem; line-height: 1.4;">${description}</p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <span style="font-weight: 600; color: #e74c3c; font-size: 1.1rem;">₹${price.toFixed(2)} each</span>
+                                    <span style="background: #f8f9fa; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: #495057;">Qty: ${quantity}</span>
+                                </div>
+                                <span style="font-weight: 700; font-size: 1.2rem; color: #27ae60;">₹${(price * quantity).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += '</div>';
+
+            // Cart summary
+            cartHTML += `
+                <div style="padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <h3 style="margin-top: 0; color: white; font-size: 1.4rem;">🛒 Cart Summary</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3);">
+                        <span style="font-size: 1.1rem; font-weight: 500;">Total Items:</span>
+                        <span style="font-size: 1.3rem; font-weight: 700;">${totalItems}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding-top: 1rem;">
+                        <span style="font-size: 1.4rem; font-weight: 600;">Total Price:</span>
+                        <span style="font-size: 1.6rem; font-weight: 800;">₹${totalPrice.toFixed(2)}</span>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="window.location.href='payment.html'" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(40,167,69,0.3);" onmouseover="this.style.background='#218838'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(40,167,69,0.4)';" onmouseout="this.style.background='#28a745'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(40,167,69,0.3)';">✅ Proceed to Checkout</button>
+                        <a href="products.html" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,123,255,0.3);" onmouseover="this.style.background='#0056b3'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,123,255,0.4)';" onmouseout="this.style.background='#007bff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,123,255,0.3)';">🛍️ Continue Shopping</a>
+                    </div>
+                </div>
+            `;
+
+            cartContent.innerHTML = cartHTML;
+            console.log('🛒 CART PAGE: Cart display completed');
+        }
+
+        // Function to show empty cart
+        function showEmptyCart() {
+            console.log('🛒 CART PAGE: Showing empty cart');
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px;">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                        <h2 style="color: #6c757d;">Your cart is empty</h2>
+                        <p style="color: #6c757d;">Add some products to get started!</p>
+                        <a href="products.html" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Browse Products</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to show login prompt
+        function showLoginPrompt() {
+            console.log('🛒 CART PAGE: Showing login prompt');
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #856404;"></i>
+                        <h2>Please Login</h2>
+                        <p>You need to login to view your cart.</p>
+                        <a href="index.html" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #ffc107; color: #212529; text-decoration: none; border-radius: 4px;">Go to Login</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to show error message
+        function showErrorMessage(message) {
+            console.error('🛒 CART PAGE: Showing error:', message);
+            const cartContent = document.getElementById('cartContent');
+            if (cartContent) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #f8d7da; border-radius: 8px; color: #721c24;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h2>Failed to Load Cart</h2>
+                        <p>${message}</p>
+                        <button onclick="loadCartFromAPI()" style="margin-top: 1rem; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/login" class="nav-link active">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your Robotech Store account</p>
+                </div>
+
+                <!-- Login Form -->
+                <div class="auth-form-container">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" onclick="showLoginTab('phone')">
+                            <i class="fas fa-mobile-alt"></i> Phone Login
+                        </button>
+                        <button class="auth-tab" onclick="showLoginTab('email')">
+                            <i class="fas fa-envelope"></i> Gmail Login
+                        </button>
+                    </div>
+
+                    <!-- Phone Login Tab -->
+                    <div id="phoneLoginTab" class="auth-tab-content active">
+                        <form id="phoneLoginForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-prefix">+91</span>
+                                    <input
+                                        type="tel"
+                                        id="phoneNumber"
+                                        name="phone"
+                                        placeholder="Enter your phone number"
+                                        maxlength="10"
+                                        pattern="[0-9]{10}"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group otp-group" id="otpGroup" style="display: none;">
+                                <label for="otp">Enter OTP</label>
+                                <div class="otp-input-container">
+                                    <input
+                                        type="text"
+                                        id="otp"
+                                        name="otp"
+                                        placeholder="Enter 6-digit OTP"
+                                        maxlength="6"
+                                        pattern="[0-9]{6}"
+                                    >
+                                </div>
+                                <div class="otp-timer">
+                                    <span id="otpTimer">Resend OTP in 30s</span>
+                                    <button type="button" id="resendOtpBtn" class="link-btn" disabled>Resend OTP</button>
+                                </div>
+                            </div>
+
+                            <button type="button" id="sendOtpBtn" class="btn btn-primary btn-full">
+                                <i class="fas fa-paper-plane"></i> Send OTP
+                            </button>
+
+                            <button type="submit" id="verifyOtpBtn" class="btn btn-primary btn-full" style="display: none;">
+                                <i class="fas fa-check"></i> Verify OTP
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Email Login Tab -->
+                    <div id="emailLoginTab" class="auth-tab-content">
+                        <div class="gmail-login-container">
+                            <p class="gmail-login-text">Continue with your Google account</p>
+                            <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
+                                <i class="fab fa-google"></i>
+                                Continue with Google
+                            </button>
+                            <p class="gmail-note">
+                                <i class="fas fa-info-circle"></i>
+                                We'll use your Gmail to create or access your account
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auth Footer -->
+                <div class="auth-footer">
+                    <p>Don't have an account?
+                        <a href="/register" class="link-btn">Create one here</a>
+                    </p>
+                    <p>By signing in, you agree to our
+                        <a href="#" class="link-btn">Terms of Service</a> and
+                        <a href="#" class="link-btn">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Login</h3>
+                    <p>OTP-based authentication ensures your account security</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Easy Shopping</h3>
+                    <p>Seamless shopping experience with saved preferences</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick delivery to your selected address</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

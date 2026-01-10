@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Status</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 20px; border-radius: 8px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        a { color: #007bff; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Robotech Store - Server Status</h1>
+
+    <div class="status success">
+        <h3>✅ Server Status: RUNNING</h3>
+        <p>HTTP Server is active on port 3000</p>
+        <p>Time: <span id="time"></span></p>
+    </div>
+
+    <div class="status info">
+        <h3>📁 Available Files:</h3>
+        <ul>
+            <li><a href="static_index.html">🏪 Full Robotech Store (Recommended)</a></li>
+            <li><a href="demo.html">🎮 Simple Demo Version</a></li>
+            <li><a href="index.html">🔄 Auto-Redirect Page</a></li>
+            <li><a href="simple_test.html">🧪 Basic Test Page</a></li>
+        </ul>
+    </div>
+
+    <div class="status info">
+        <h3>🚀 Quick Start:</h3>
+        <ol>
+            <li>Click <strong>"Full Robotech Store"</strong> above</li>
+            <li>Wait for landing page to load</li>
+            <li>Click "Proceed to Store"</li>
+            <li>Login with any phone + OTP 123456</li>
+            <li>Browse all 66 products!</li>
+        </ol>
+    </div>
+
+    <div class="status info">
+        <h3>🛠️ Troubleshooting:</h3>
+        <ul>
+            <li><strong>If page doesn't load:</strong> Hard refresh (Ctrl+F5 or Cmd+Shift+R)</li>
+            <li><strong>If login shows "NaN":</strong> Click red "Clear Login Data" button</li>
+            <li><strong>If no products show:</strong> Check browser console for errors</li>
+            <li><strong>If server not responding:</strong> Restart with: <code>python -m http.server 3000</code></li>
+        </ul>
+    </div>
+
+    <script>
+        // Show current time
+        document.getElementById('time').textContent = new Date().toLocaleString();
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# Cursor Rules for Robotech Store Project
+
+## Project Startup
+When you open this project in Cursor, you can start the entire Robotech Store application by:
+
+1. Opening the integrated terminal (Ctrl/Cmd + `)
+2. Running: `./quick_start.sh`
+
+Or simply double-click the `RobotechStore.app` file in the project folder (macOS).
+
+## Available Commands
+- `./quick_start.sh` - Start the entire project automatically
+- `./start_project.sh` - Detailed startup with status messages
+- `./test_startup.sh` - Verify all components are working
+
+## URLs After Startup
+- Home: http://localhost:8888/
+- Products: http://localhost:8888/products
+- Cart: http://localhost:8888/cart
+- Orders: http://localhost:8888/orders
+
+## Features Working
+✅ Cart functionality
+✅ User authentication (OTP login)
+✅ Payment processing
+✅ Order management
+✅ MySQL database
+✅ Responsive design
+✅ Product catalog
+
+The project will continue running even after closing Cursor - just keep the terminal window open!
