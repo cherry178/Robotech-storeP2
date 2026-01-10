@@ -10,7 +10,7 @@
 </head>
 <body>
     <!-- Landing Page Overlay -->
-    <div id="landingOverlay" class="landing-overlay" style="display: none;">
+    <div id="landingOverlay" class="landing-overlay">
         <div class="landing-content">
             <div class="landing-branding">
                 <h1 class="landing-title">RoboTech - Store</h1>
@@ -110,7 +110,7 @@
     </div>
 
     <!-- Main Content Container -->
-    <div id="mainContent" class="main-content">
+    <div id="mainContent" class="main-content" style="display: none;">
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -247,7 +247,7 @@
             </div>
 
             <div class="view-all-container">
-                <button class="btn btn-outline" onclick="scrollToSection('products')">
+                <button class="btn btn-outline" onclick="window.location.href='/products'">
                     View all <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -585,6 +585,7 @@
         function initializeApp() {
             setupEventListeners();
             updateCartCount();
+            initializeCarousel();
         }
 
         function setupEventListeners() {
@@ -869,6 +870,40 @@
                     showNotification(`Searching for: ${query}`);
                 }
             }
+        }
+
+        function initializeCarousel() {
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.carousel-slide');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+
+            if (slides.length === 0) return;
+
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+
+                // Show current slide
+                slides[index].classList.add('active');
+                indicators[index].classList.add('active');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            // Auto-rotate every 10 seconds
+            setInterval(nextSlide, 10000);
+
+            // Click indicators to change slides
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                });
+            });
         }
 
         function showNotification(message) {
