@@ -1520,11 +1520,23 @@
 
             // Initialize products from static HTML instead of DEMO_PRODUCTS
             initializeProductsFromHTML();
-            displayProducts(); // Show initial products
-            updatePagination(); // Then create pagination
+
+            // For now, show ALL products (like local version initially does)
+            showAllProducts();
+
+            updatePagination(); // Create pagination if needed
             updateCartCount();
             initializeProductsPage();
         });
+
+        function showAllProducts() {
+            console.log('📦 Showing ALL products initially');
+            const allCards = document.querySelectorAll('.product-card');
+            allCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            console.log('✅ All', allCards.length, 'products are now visible');
+        }
 
         function initializeProductsFromHTML() {
             // Get all product cards from the static HTML
@@ -2475,7 +2487,7 @@ Is NaN: ${isNaN(parseInt(userId))}`);
             console.log('🎴 displayProducts: currentPage =', currentPage);
             console.log('🎴 displayProducts: filteredProducts.length =', filteredProducts.length);
 
-            // Hide ALL cards first (both in DOM and in filteredProducts)
+            // Hide ALL cards first
             const allCards = document.querySelectorAll('.product-card');
             console.log('🎴 displayProducts: Hiding ALL', allCards.length, 'cards in DOM');
             allCards.forEach(card => {
@@ -2492,15 +2504,18 @@ Is NaN: ${isNaN(parseInt(userId))}`);
             let shownCount = 0;
             for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
                 if (filteredProducts[i] && filteredProducts[i].element) {
-                    console.log('🎴 Showing product:', filteredProducts[i].name);
+                    console.log('🎴 Showing product at index', i, ':', filteredProducts[i].name);
                     filteredProducts[i].element.style.display = 'block';
                     shownCount++;
                 } else {
-                    console.error('🎴 Missing element for product at index', i);
+                    console.error('🎴 Missing element for product at index', i, '- filteredProducts[i] =', filteredProducts[i]);
                 }
             }
 
             console.log(`✅ Displayed ${shownCount} products on page ${currentPage}`);
+            if (shownCount === 0) {
+                console.error('❌ NO PRODUCTS WERE DISPLAYED! Check filteredProducts array and element references.');
+            }
         }
 
         function updatePagination() {
