@@ -129,26 +129,22 @@
                 <nav class="nav" id="mainNav">
                     <a href="/" class="nav-link active">Home</a>
                     <div class="nav-dropdown">
-                        <a href="#" class="nav-link dropdown-toggle">Products ▼</a>
+                        <a href="/Robotech-storeP2/products" class="nav-link dropdown-toggle">Products ▼</a>
                         <div class="dropdown-menu">
                             <div class="dropdown-column">
                                 <h4>Components</h4>
-                                <a href="#">Crystal Oscillators</a>
-                                <a href="#">Resistors</a>
-                                <a href="#">Capacitors</a>
-                                <a href="#">Inductors</a>
-                                <a href="#">LEDs</a>
-                                <a href="#">Diodes</a>
-                                <a href="#">Transistors</a>
+                                <a href="/Robotech-storeP2/products?category=Resistors">Resistors</a>
+                                <a href="/Robotech-storeP2/products?category=Capacitors">Capacitors</a>
+                                <a href="/Robotech-storeP2/products?category=LEDs">LEDs</a>
+                                <a href="/Robotech-storeP2/products?category=Diodes">Diodes</a>
+                                <a href="/Robotech-storeP2/products?category=Transistors">Transistors</a>
                             </div>
                             <div class="dropdown-column">
                                 <h4>Development Boards</h4>
-                                <a href="#">Arduino Compatible</a>
-                                <a href="#">Raspberry Pi</a>
-                                <a href="#">NodeMCU/ESP</a>
-                                <a href="#">STM</a>
-                                <a href="#">PIC/ATMEL</a>
-                                <a href="#">Programmers</a>
+                                <a href="/Robotech-storeP2/products?category=Microcontrollers">Microcontrollers</a>
+                                <a href="/Robotech-storeP2/products?category=Arduino">Arduino</a>
+                                <a href="/Robotech-storeP2/products?category=Raspberry%20Pi">Raspberry Pi</a>
+                                <a href="/Robotech-storeP2/products?category=ESP">ESP Boards</a>
                             </div>
                         </div>
                     </div>
@@ -666,7 +662,18 @@
             // Landing page proceed button
             const proceedBtn = document.getElementById('proceedBtn');
             if (proceedBtn) {
-                proceedBtn.addEventListener('click', showLoginModal);
+                proceedBtn.addEventListener('click', function() {
+                    // For GitHub Pages demo, directly show main content without login
+                    const landingOverlay = document.getElementById('landingOverlay');
+                    const mainContent = document.getElementById('mainContent');
+
+                    if (landingOverlay) landingOverlay.style.display = 'none';
+                    if (mainContent) mainContent.style.display = 'block';
+
+                    // Generate a demo user ID
+                    const userId = 1000 + Math.floor(Math.random() * 9000);
+                    document.getElementById('loginText').textContent = 'User ' + userId;
+                });
             }
 
             // Login modal close (click outside)
