@@ -1131,44 +1131,36 @@
             // Find the product name for debugging
             console.log('🛒 DEBUG: Looking up product name for ID', productId);
 
-            // Check if user is logged in by checking storage and currentUser (same as main.js)
+            // For GitHub Pages - allow guest users to add to cart (since no real login system)
+            // Check if we have any user session (demo or real)
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
                               (localStorage.getItem('logged_in') === 'true');
 
             console.log('addToCart check - currentUser:', currentUser, 'userId:', userId, 'isLoggedIn:', isLoggedIn);
 
-            if (!currentUser && (!isLoggedIn || !userId)) {
-                console.log('User not logged in, redirecting to landing page');
-                showCartNotification('Please login to add items to your cart', 'warning');
-                // Redirect to home page since that's our entry point
+            // If no user session at all, initialize demo user first
+            if (!currentUser && (!userId || !isLoggedIn)) {
+                console.log('No user session found, initializing demo user for cart functionality');
+                initializeUserDisplay(); // This will set demo user
+
+                // Wait a bit for initialization, then retry
                 setTimeout(() => {
-                    window.location.href = '/Robotech-storeP2/';
-                }, 1000);
+                    addToCart(productId);
+                }, 100);
                 return;
             }
 
-            // User is logged in - add to authenticated cart (simulate API call)
-            console.log('User is logged in, adding to authenticated cart');
+            // User is available (demo or real) - add to cart
+            console.log('User available, adding to cart');
             addToAuthenticatedCart(productId);
         }
 
         function addToAuthenticatedCart(productId) {
             console.log('🛒 addToAuthenticatedCart called with productId:', productId, typeof productId);
 
-            // Get user ID from storage (same as main.js)
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
-                              (localStorage.getItem('logged_in') === 'true');
-
-            console.log('🛒 addToAuthenticatedCart - userId:', userId, 'phone:', phone, 'isLoggedIn:', isLoggedIn);
-
-            if (!userId || !isLoggedIn) {
-                console.error('❌ No authenticated user session for cart');
-                showCartNotification('Please login to add items to cart', 'error');
-                return;
-            }
+            // For GitHub Pages - no need to check user authentication since we allow guests
+            // Just add the product to cart directly
 
             // Find the product
             const product = ALL_PRODUCTS.find(p => p.id === parseInt(productId));
@@ -1178,8 +1170,7 @@
                 return;
             }
 
-            // Simulate API call success (since we can't make real API calls on GitHub Pages)
-            console.log('📤 Simulating API call success for product:', product.name);
+            console.log('📦 Adding product to cart:', product.name);
 
             // Get current cart from localStorage
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -1188,6 +1179,7 @@
             const existingItem = cart.find(item => item.id === product.id);
             if (existingItem) {
                 existingItem.quantity += 1;
+                console.log('📦 Increased quantity of existing item:', product.name, 'to', existingItem.quantity);
             } else {
                 cart.push({
                     id: product.id,
@@ -1196,6 +1188,7 @@
                     image_url: product.image_url,
                     quantity: 1
                 });
+                console.log('📦 Added new item to cart:', product.name);
             }
 
             // Save cart to localStorage
@@ -1204,10 +1197,10 @@
             // Update cart count in header
             updateCartCount();
 
-            // Show success message (same as main.js)
+            // Show success message (matching main.js style)
             showCartNotification(product.name + ' added to cart successfully!', 'success');
 
-            console.log('✅ Product added to cart:', product.name, 'Cart now has', cart.length, 'items');
+            console.log('✅ Product added to cart. Total cart items:', cart.reduce((sum, item) => sum + item.quantity, 0));
         }
 
         function updateCartCount() {
