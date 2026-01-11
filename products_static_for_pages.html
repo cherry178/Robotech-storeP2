@@ -1121,23 +1121,35 @@
         }
 
         function initializeUserDisplay() {
-            console.log('products_static.html: initializeUserDisplay called');
-            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            let isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') || (localStorage.getItem('logged_in') === 'true');
+            console.log('products_static.html: initializeUserDisplay called at URL:', window.location.href);
 
-            console.log('products_static.html: sessionStorage check - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
-            console.log('products_static.html: localStorage check - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            // Clear any existing session data first to ensure fresh read
+            sessionStorage.clear();
+
+            let userId = localStorage.getItem('user_id');
+            let phone = localStorage.getItem('phone');
+            let isLoggedIn = localStorage.getItem('logged_in') === 'true';
+
+            console.log('products_static.html: localStorage check - userId:', userId, 'phone:', phone, 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('products_static.html: sessionStorage cleared and re-reading from localStorage');
+            console.log('products_static.html: All localStorage keys:', Object.keys(localStorage));
 
             const loginTextElement = document.getElementById('loginText');
             if (loginTextElement) {
                 if (userId && phone && isLoggedIn) {
                     loginTextElement.textContent = 'My User ID: ' + userId;
                     console.log('products_static.html: ✅ User found in storage:', userId, 'Phone:', phone);
+
+                    // Sync to sessionStorage for current session
+                    sessionStorage.setItem('user_id', userId);
+                    sessionStorage.setItem('phone', phone);
+                    sessionStorage.setItem('logged_in', 'true');
                 } else {
-                    // For GitHub Pages, if no user is logged in, show demo mode
-                    loginTextElement.textContent = 'Demo Mode - Login from Home';
-                    console.log('products_static.html: ❌ No user logged in, showing demo mode');
+                    // For GitHub Pages, if no user is logged in, redirect to home
+                    console.log('products_static.html: ❌ No user logged in, redirecting to home');
+                    alert('Please login first from the home page!');
+                    window.location.href = '/Robotech-storeP2/';
+                    return;
                 }
             } else {
                 console.error('products_static.html: loginText element not found!');

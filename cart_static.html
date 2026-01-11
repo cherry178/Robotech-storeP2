@@ -1081,26 +1081,36 @@
         }
 
         function initializeUserDisplay() {
-            console.log('🛒 Cart page initializeUserDisplay called');
+            console.log('🛒 Cart page initializeUserDisplay called at URL:', window.location.href);
 
-            // Check for existing user session (same as other pages)
-            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+            // Clear session and read from localStorage to ensure consistency
+            sessionStorage.clear();
 
-            console.log('🛒 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
-            console.log('🛒 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            let userId = localStorage.getItem('user_id');
+            let phone = localStorage.getItem('phone');
+            let loggedIn = localStorage.getItem('logged_in') === 'true';
+
+            console.log('🛒 localStorage - userId:', userId, 'phone:', phone, 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('🛒 sessionStorage cleared for consistency');
+            console.log('🛒 All localStorage keys:', Object.keys(localStorage));
 
             const loginTextElement = document.getElementById('loginText');
 
-            if (userId && phone && loggedIn === 'true') {
+            if (userId && phone && loggedIn) {
                 // Show existing user ID
                 loginTextElement.textContent = 'My User ID: ' + userId;
                 console.log('✅ Cart page: Using existing user ID:', userId, 'Phone:', phone);
+
+                // Sync to sessionStorage for current session
+                sessionStorage.setItem('user_id', userId);
+                sessionStorage.setItem('phone', phone);
+                sessionStorage.setItem('logged_in', 'true');
             } else {
-                // No user logged in
-                loginTextElement.textContent = 'Demo Mode - Login from Home';
-                console.log('❌ Cart page: No user logged in, showing demo mode');
+                // No user logged in - redirect to home
+                console.log('❌ Cart page: No user logged in, redirecting to home');
+                alert('Please login first from the home page!');
+                window.location.href = '/Robotech-storeP2/';
+                return;
             }
         }
     </script>
