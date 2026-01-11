@@ -768,13 +768,33 @@
         let productsCurrentPage = 1;
         let productsTotalPages = 1;
 
-        // Initialize the app
+        // Initialize user display and cart on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Static products page loaded');
+            initializeUserDisplay();
             loadProducts();
             setupSearchEventListeners();
             updateCartCount();
         });
+
+        function initializeUserDisplay() {
+            // Try to get user info from localStorage/sessionStorage
+            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            const loginTextElement = document.getElementById('loginText');
+
+            if (userId && phone && loggedIn === 'true') {
+                // Show actual user ID
+                loginTextElement.textContent = 'My User ID: ' + userId;
+                console.log('User found:', userId, phone);
+            } else {
+                // Show demo user
+                loginTextElement.textContent = 'Demo User';
+                console.log('No valid user found, showing demo');
+            }
+        }
 
         function setupSearchEventListeners() {
             const searchInput = document.getElementById('searchInput');
@@ -1057,10 +1077,15 @@
         }
 
         function addToCart(productId) {
+            console.log('addToCart called with productId:', productId);
+            console.log('ALL_PRODUCTS length:', ALL_PRODUCTS.length);
+
             // Find the product
             const product = ALL_PRODUCTS.find(p => p.id === productId);
+            console.log('Found product:', product);
+
             if (!product) {
-                alert('Product not found!');
+                alert('Product not found! ID: ' + productId);
                 return;
             }
 
@@ -1086,9 +1111,11 @@
 
             // Update cart count in header
             updateCartCount();
+            console.log('Cart updated, new cart:', cart);
 
             // Show success message
             showCartNotification(product.name + ' added to cart successfully!');
+            console.log('Notification shown for:', product.name);
         }
 
         function updateCartCount() {
