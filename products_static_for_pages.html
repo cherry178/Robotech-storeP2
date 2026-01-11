@@ -1071,12 +1071,20 @@
         }
 
         function addToUserCart(productId, productName, price) {
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            console.log('🛒 addToUserCart called - userId:', userId, 'product:', productName);
+            // Get user ID more reliably - check both storages
+            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            console.log('🛒 addToUserCart called - sessionStorage userId:', sessionStorage.getItem('user_id'), 'localStorage userId:', localStorage.getItem('user_id'), 'product:', productName);
 
             if (!userId) {
-                console.log('❌ No user ID found, cannot add to cart');
-                return;
+                console.log('❌ No user ID found, checking if user needs to login');
+                // Try to get from localStorage directly
+                userId = localStorage.getItem('user_id');
+                if (!userId) {
+                    alert('Please login first to add items to cart!');
+                    window.location.href = '/Robotech-storeP2/';
+                    return;
+                }
+                console.log('🛒 Found user ID in localStorage:', userId);
             }
 
             const cartKey = `cart_user_${userId}`;
@@ -1098,6 +1106,9 @@
             }
 
             localStorage.setItem(cartKey, JSON.stringify(userCart));
+            console.log('💾 Saved cart data to localStorage key:', cartKey, 'Data:', JSON.stringify(userCart));
+            console.log('💾 All localStorage keys after save:', Object.keys(localStorage));
+
             updateCartCount();
             console.log('💾 Saved cart for user', userId, '- total items:', userCart.length);
         }
@@ -1150,10 +1161,13 @@
                     loginTextElement.textContent = 'My User ID: ' + userId;
                     console.log('products_static.html: ✅ User found in storage:', userId, 'Phone:', phone);
 
-                    // Sync to sessionStorage for current session
-                    sessionStorage.setItem('user_id', userId);
-                    sessionStorage.setItem('phone', phone);
-                    sessionStorage.setItem('logged_in', 'true');
+            // Clean up any old cart data that doesn't belong to this user
+            cleanupOldCartData(userId);
+
+            // Sync to sessionStorage for current session
+            sessionStorage.setItem('user_id', userId);
+            sessionStorage.setItem('phone', phone);
+            sessionStorage.setItem('logged_in', 'true');
                 } else {
                     // For GitHub Pages, if no user is logged in, redirect to home
                     console.log('products_static.html: ❌ No user logged in, redirecting to home');
@@ -1163,6 +1177,22 @@
                 }
             } else {
                 console.error('products_static.html: loginText element not found!');
+            }
+        }
+
+        function cleanupOldCartData(currentUserId) {
+            const allKeys = Object.keys(localStorage);
+            const oldCartKeys = allKeys.filter(key => {
+                return key.startsWith('cart') && key !== `cart_user_${currentUserId}`;
+            });
+
+            oldCartKeys.forEach(key => {
+                console.log('🧹 Cleaning up old cart data:', key);
+                localStorage.removeItem(key);
+            });
+
+            if (oldCartKeys.length > 0) {
+                console.log('🧹 Cleaned up', oldCartKeys.length, 'old cart entries');
             }
         }
     </script>
