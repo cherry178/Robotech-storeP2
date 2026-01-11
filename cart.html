@@ -6,49 +6,203 @@
     <title>Shopping Cart - Robotech Store</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./static/css/style.css">
-    <script src="./static/js/main.js"></script>
+    <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
     <style>
-        .demo-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #ff6b35;
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 10000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        .cart-container { margin-top: 60px; padding: 2rem 1rem; max-width: 1200px; margin: 80px auto 0; }
-        .cart-empty { text-align: center; padding: 3rem; }
-        .cart-item { display: flex; align-items: center; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
-        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }
-        .cart-item-details { flex: 1; }
-        .cart-item-title { font-weight: bold; margin-bottom: 0.5rem; }
-        .cart-item-price { color: #e74c3c; font-weight: bold; }
-        .cart-item-quantity { display: flex; align-items: center; margin: 0.5rem 0; }
-        .quantity-btn { background: #ddd; border: none; width: 30px; height: 30px; border-radius: 4px; cursor: pointer; }
-        .quantity-input { width: 50px; text-align: center; margin: 0 0.5rem; padding: 0.25rem; border: 1px solid #ddd; border-radius: 4px; }
-        .remove-btn { color: #e74c3c; cursor: pointer; margin-left: 1rem; }
-        .cart-total { text-align: right; margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
-        .cart-total h3 { margin-bottom: 1rem; }
-        .checkout-btn { background: #27ae60; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; width: 100%; margin-top: 1rem; }
-        .checkout-btn:hover { background: #229954; }
-        .login-required { text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px; margin: 2rem 0; }
-        .login-required h3 { color: #856404; margin-bottom: 1rem; }
-        .login-required .btn { background: #ffc107; color: #212529; margin: 0.5rem; }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .item-image i {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-price {
+            color: #ff6b35;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 1rem;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+        }
+
+        .quantity-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .item-total {
+            font-weight: 600;
+            color: #2d3748;
+            margin-right: 1rem;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .remove-btn {
+            color: #e53e3e;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            background: #fed7d7;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-cart p {
+            color: #718096;
+            margin-bottom: 2rem;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
-    <div class="demo-banner">
-        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Home</a> |
-        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -58,211 +212,736 @@
                     <span>Robotech Store</span>
                 </div>
 
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
                 <!-- Navigation -->
-                <nav class="nav">
-                    <a href="static_index.html" class="nav-link">Home</a>
-                    <a href="products.html" class="nav-link">Products</a>
-                    <a href="cart.html" class="nav-link active">Cart</a>
-                    <a href="payment.html" class="nav-link">Payment</a>
+                <nav class="nav" id="mainNav">
+                    <a href="/Robotech-storeP2/" class="nav-link">Home</a>
+                    <a href="/Robotech-storeP2/products.html" class="nav-link">Products</a>
+                    <a href="#categories" class="nav-link">Categories</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
                 </nav>
 
                 <!-- User Actions -->
                 <div class="user-actions">
                     <div class="action-buttons">
                         <div class="login-dropdown">
-                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                            <button class="user-trigger">
                                 <i class="fas fa-user"></i>
-                                <span id="loginText">Login</span>
-                                <i class="fas fa-chevron-down"></i>
+                                <span id="loginText">Demo User</span>
                             </button>
-
-                            <div class="login-dropdown-content" id="loginDropdown">
-                                <div class="login-header">
-                                    <h4>Customer Login</h4>
-                                    <p>If you are already registered, please log in.</p>
-                                    <div class="demo-notice" style="background: #3b82f6; margin-top: 10px; font-size: 12px;">
-                                        <i class="fas fa-info-circle"></i>
-                                        <span>Demo Mode: Enter any phone & OTP 123456</span>
-                                    </div>
-                                </div>
-
-                                <div class="login-tabs">
-                                    <button class="login-tab active" onclick="showLoginTab('phone')">Phone</button>
-                                    <button class="login-tab" onclick="showLoginTab('gmail')">Gmail</button>
-                                </div>
-
-                                <div id="phoneLoginTab" class="login-tab-content active">
-                                    <div class="login-form">
-                                        <div class="form-group">
-                                            <label for="headerLoginPhone">Phone Number</label>
-                                            <div class="input-group">
-                                                <span class="input-prefix">+91</span>
-                                                <input
-                                                    type="tel"
-                                                    id="headerLoginPhone"
-                                                    placeholder="Enter phone number"
-                                                    maxlength="10"
-                                                    pattern="[0-9]{10}"
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group otp-group" id="headerLoginOtpGroup" style="display: none;">
-                                            <label for="headerLoginOtp">Enter OTP</label>
-                                            <div class="otp-input-container">
-                                                <input
-                                                    type="text"
-                                                    id="headerLoginOtp"
-                                                    placeholder="Enter 6-digit OTP"
-                                                    maxlength="6"
-                                                    pattern="[0-9]{6}"
-                                                >
-                                            </div>
-                                            <div class="otp-timer">
-                                                <span id="headerLoginOtpTimer">Resend OTP in 30s</span>
-                                                <button type="button" id="headerResendLoginOtpBtn" class="link-btn" disabled>Resend</button>
-                                            </div>
-                                        </div>
-
-                                        <button type="button" id="headerSendLoginOtpBtn" class="btn btn-primary btn-full">
-                                            <i class="fas fa-paper-plane"></i> Send OTP
-                                        </button>
-
-                                        <button type="button" id="headerVerifyLoginOtpBtn" class="btn btn-primary btn-full" style="display: none;" onclick="verifyHeaderLoginOTP()">
-                                            <i class="fas fa-check"></i> Verify & Login
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div id="gmailLoginTab" class="login-tab-content">
-                                    <div class="gmail-login-container">
-                                        <p class="gmail-login-text">Continue with Google account</p>
-                                        <button class="btn btn-gmail btn-full" onclick="loginWithGmail()">
-                                            <i class="fab fa-google"></i>
-                                            Continue with Google
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Cart Content -->
-    <div class="cart-container">
-        <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container">
+            <div class="cart-container">
+                <div class="cart-header">
+                    <h1>Shopping Cart</h1>
+                    <p>Review your items and proceed to checkout</p>
+                </div>
 
-        <div id="cartContent">
-            <!-- Cart items will be loaded here -->
-            <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px; margin: 2rem 0;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
-                <h2 style="color: #6c757d; margin-bottom: 1rem;">Loading Your Cart...</h2>
-                <p style="color: #6c757d;">Please wait while we load your cart items.</p>
+                <div id="cartContent">
+                    <!-- Cart items will be loaded here -->
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Embedded Scripts -->
+    <!-- Scripts -->
     <script>
-        console.log('🛒 CART PAGE: Script starting...');
+        // Embedded products data for cart reference
+        const ALL_PRODUCTS = [
+    {
+        "id": 11,
+        "name": "Arduino Uno R3",
+        "description": "ATmega328P microcontroller board with USB interface",
+        "price": 450.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 30,
+        "image_url": "https://m.media-amazon.com/images/I/51+N-57gSiL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 12,
+        "name": "ESP32 Development Board",
+        "description": "WiFi & Bluetooth enabled microcontroller",
+        "price": 350.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 40,
+        "image_url": "https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 13,
+        "name": "DHT11 Temperature & Humidity Sensor",
+        "description": "Digital temperature and humidity sensor with 1-wire interface",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 14,
+        "name": "HC-SR04 Ultrasonic Sensor",
+        "description": "Ultrasonic ranging sensor for distance measurement",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 15,
+        "name": "SG90 Servo Motor",
+        "description": "9g micro servo motor for robotics",
+        "price": 95.0,
+        "category": "Actuators",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 16,
+        "name": "DC Motor",
+        "description": "12V DC geared motor for robotics and automation projects",
+        "price": 150.0,
+        "category": "Actuators",
+        "stock_quantity": 85,
+        "image_url": "https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 17,
+        "name": "Stepper Motor",
+        "description": "NEMA 17 stepper motor with 1.8° step angle for precision control",
+        "price": 450.0,
+        "category": "Actuators",
+        "stock_quantity": 45,
+        "image_url": "https://m.media-amazon.com/images/I/51fLU88NI6L.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 18,
+        "name": "LCD Crystal Display",
+        "description": "16x2 character LCD display module with backlight",
+        "price": 120.0,
+        "category": "Displays",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 19,
+        "name": "OLED Display",
+        "description": "0.96 inch I2C OLED display module with 128x64 resolution",
+        "price": 150.0,
+        "category": "Displays",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 20,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 21,
+        "name": "7-Segment Display",
+        "description": "4-digit 7-segment display with decimal points",
+        "price": 65.0,
+        "category": "Displays",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 22,
+        "name": "E-paper Display",
+        "description": "1.54 inch e-paper display for low power applications",
+        "price": 650.0,
+        "category": "Displays",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 23,
+        "name": "LED Matrix Display",
+        "description": "8x8 LED matrix display with MAX7219 driver",
+        "price": 95.0,
+        "category": "Displays",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 24,
+        "name": "LCD Touchscreen Module",
+        "description": "2.4 inch LCD touchscreen module for user interfaces",
+        "price": 1200.0,
+        "category": "Displays",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 25,
+        "name": "2 Battery Holders",
+        "description": "AA battery holder for 2 batteries in series",
+        "price": 25.0,
+        "category": "Power Supply",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 26,
+        "name": "3 Battery Holders",
+        "description": "AA battery holder for 3 batteries in series",
+        "price": 35.0,
+        "category": "Power Supply",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 27,
+        "name": "DC-DC Converter",
+        "description": "Adjustable DC-DC buck converter module 5V-35V",
+        "price": 85.0,
+        "category": "Power Supply",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 28,
+        "name": "Power Bank Module",
+        "description": "18650 lithium battery power bank module",
+        "price": 180.0,
+        "category": "Power Supply",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 29,
+        "name": "Breadboard",
+        "description": "830 tie-point solderless breadboard for prototyping",
+        "price": 85.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 30,
+        "name": "Male-Male Jumper Wires",
+        "description": "40-piece male-to-male jumper wire set",
+        "price": 45.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 200,
+        "image_url": "https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 31,
+        "name": "Male-Female Jumper Wires",
+        "description": "40-piece male-to-female jumper wire set",
+        "price": 50.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 180,
+        "image_url": "https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 32,
+        "name": "Lithium Polymer Battery",
+        "description": "3.7V 1000mAh LiPo battery with JST connector",
+        "price": 250.0,
+        "category": "Power Supply",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 33,
+        "name": "PCB Prototyping Board",
+        "description": "Double-sided PCB prototyping board with copper pads",
+        "price": 120.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 34,
+        "name": "Nuts & Bolts Kit",
+        "description": "Assorted nuts and bolts set for electronics projects",
+        "price": 65.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 38,
+        "name": "Linear Voltage Regulator",
+        "description": "LM7805 5V linear voltage regulator IC",
+        "price": 15.0,
+        "category": "Power Supply",
+        "stock_quantity": 300,
+        "image_url": "https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 39,
+        "name": "Audio Adapter Board",
+        "description": "Audio amplifier board with speaker connector",
+        "price": 120.0,
+        "category": "Audio Components",
+        "stock_quantity": 50,
+        "image_url": "https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 40,
+        "name": "USB Cable",
+        "description": "USB 2.0 A to B cable for programming and data transfer",
+        "price": 35.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 250,
+        "image_url": "https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 41,
+        "name": "Brushless DC Motor",
+        "description": "High-efficiency brushless DC motor for precision applications",
+        "price": 850.0,
+        "category": "Actuators",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 42,
+        "name": "Bluetooth Controlled Linear Actuator",
+        "description": "Wireless controlled linear motion actuator",
+        "price": 2500.0,
+        "category": "Actuators",
+        "stock_quantity": 8,
+        "image_url": "https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 43,
+        "name": "Continuous Rotation Robot Servo",
+        "description": "360-degree continuous rotation servo motor",
+        "price": 180.0,
+        "category": "Actuators",
+        "stock_quantity": 45,
+        "image_url": "https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 44,
+        "name": "Motor Driver Shield",
+        "description": "Arduino shield for motor control applications",
+        "price": 350.0,
+        "category": "Actuators",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 45,
+        "name": "H-Bridge Motor Control Module",
+        "description": "Dual H-bridge motor driver for stepper motors",
+        "price": 120.0,
+        "category": "Actuators",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 46,
+        "name": "Raspberry Pi Zero W",
+        "description": "Compact single-board computer with WiFi",
+        "price": 1200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 35,
+        "image_url": "https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 47,
+        "name": "Arduino Mega",
+        "description": "ATmega2560 microcontroller board",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 20,
+        "image_url": "https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 48,
+        "name": "Arduino Nano",
+        "description": "Compact ATmega328 microcontroller board",
+        "price": 250.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 50,
+        "image_url": "https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 49,
+        "name": "Arduino Due",
+        "description": "ARM Cortex-M3 microcontroller board with 32-bit architecture",
+        "price": 2200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 50,
+        "name": "ESP8266",
+        "description": "WiFi enabled microcontroller module",
+        "price": 150.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 51,
+        "name": "Adafruit Feather M0",
+        "description": "ARM Cortex-M0+ microcontroller board with Bluetooth",
+        "price": 650.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 52,
+        "name": "Teensy 4.1",
+        "description": "ARM Cortex-M7 microcontroller development board",
+        "price": 850.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 22,
+        "image_url": "https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 53,
+        "name": "Banana Pi",
+        "description": "Single-board computer with Allwinner A20 processor",
+        "price": 2500.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 12,
+        "image_url": "https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 54,
+        "name": "Orange Pi",
+        "description": "Single-board computer with H3 processor",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 18,
+        "image_url": "https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 55,
+        "name": "Rain Sensor",
+        "description": "Rain detection sensor module",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 55,
+        "image_url": "https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 56,
+        "name": "Sound Vibration Sensor",
+        "description": "Vibration and sound detection sensor",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 57,
+        "name": "Color Sensor (TCS34725)",
+        "description": "RGB color sensor with IR blocking filter",
+        "price": 180.0,
+        "category": "Sensors",
+        "stock_quantity": 40,
+        "image_url": "https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 58,
+        "name": "Sound Sensor",
+        "description": "Microphone sound detection module",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 59,
+        "name": "Water Level Sensor",
+        "description": "Liquid level detection sensor",
+        "price": 65.0,
+        "category": "Sensors",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 60,
+        "name": "5V Relay Module",
+        "description": "Electromagnetic relay module for switching",
+        "price": 35.0,
+        "category": "Actuators",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 61,
+        "name": "Electret Microphone Module",
+        "description": "Condenser microphone module for audio input",
+        "price": 40.0,
+        "category": "Audio Components",
+        "stock_quantity": 75,
+        "image_url": "https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 62,
+        "name": "Voice Recognition Microphone Board",
+        "description": "Advanced voice recognition and processing board",
+        "price": 350.0,
+        "category": "Audio Components",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 63,
+        "name": "Robocraze Speech Recognition Module",
+        "description": "Voice command recognition module",
+        "price": 450.0,
+        "category": "Audio Components",
+        "stock_quantity": 20,
+        "image_url": "https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 64,
+        "name": "Active Buzzer Module",
+        "description": "Electronic buzzer module with built-in oscillator",
+        "price": 25.0,
+        "category": "Audio Components",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/43/10/87/431087ed78d6e014a611787cb4ac6963.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 65,
+        "name": "Passive Buzzer",
+        "description": "Piezo buzzer for audio output without oscillator",
+        "price": 20.0,
+        "category": "Audio Components",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/736x/7d/58/ed/7d58ed71e86237abc1f31b67d8f08639.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 68,
+        "name": "Infrared Obstacle Sensor",
+        "description": "IR proximity sensor for obstacle detection",
+        "price": 35.0,
+        "category": "Sensors",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/736x/15/fe/19/15fe193153c29952640b42ea92b8ba12.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 69,
+        "name": "PIR Motion Sensor",
+        "description": "Passive infrared motion detector sensor",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 65,
+        "image_url": "https://i.pinimg.com/736x/fb/3e/6d/fb3e6d329d4c2356c76c84246ceb1dca.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 70,
+        "name": "Temperature Sensor (DS18B20)",
+        "description": "Digital temperature sensor with 1-wire interface",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/78/8b/ea/788beaacc3994d3b7a80b04aeb6b08ed.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 71,
+        "name": "Pressure Sensor (BMP280)",
+        "description": "Barometric pressure and temperature sensor",
+        "price": 120.0,
+        "category": "Sensors",
+        "stock_quantity": 45,
+        "image_url": "https://i.pinimg.com/736x/2c/f3/25/2cf3253970912c9d71827c0754d24b52.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 72,
+        "name": "Gas Sensor (MQ-2)",
+        "description": "Combustible gas and smoke sensor",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/736x/25/45/c7/2545c7432cd113a3d69dab5e25aefe65.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 73,
+        "name": "Gas Sensor (MQ-135)",
+        "description": "Air quality sensor for detecting harmful gases",
+        "price": 90.0,
+        "category": "Sensors",
+        "stock_quantity": 55,
+        "image_url": "https://i.pinimg.com/736x/35/3c/cb/353ccbf6dac0d3e6e924149b04651dd1.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 74,
+        "name": "Light Sensor (LDR)",
+        "description": "Light dependent resistor for light intensity measurement",
+        "price": 15.0,
+        "category": "Sensors",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/736x/2a/29/86/2a29868718c02a045dee1db8eb5d1b03.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 75,
+        "name": "Touch Sensor",
+        "description": "Capacitive touch sensor module",
+        "price": 30.0,
+        "category": "Sensors",
+        "stock_quantity": 95,
+        "image_url": "https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg",
+        "is_featured": false
+    }
+];
 
-        // Initialize cart loading when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🛒 CART PAGE: DOMContentLoaded fired, loading cart...');
-            loadCartFromAPI();
-        });
-
-        // Function to load cart items from backend API
-        function loadCartFromAPI() {
-            console.log('🛒 CART PAGE: Loading cart from API...');
-
-            // Get user ID from storage (same as add-to-cart uses)
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            console.log('🛒 CART PAGE: User ID from storage:', userId);
-
-            if (!userId) {
-                console.log('🛒 CART PAGE: No user ID found, showing login prompt');
-                showLoginPrompt();
+        function updateCartCount() {
+            const cartKey = getUserCartKey();
+            if (!cartKey) {
+                document.getElementById('cartCount').textContent = '0';
                 return;
             }
 
-            // Make API call to get cart items
-            // Use relative URL if served from Flask, absolute URL if static file
-            const isStaticFile = window.location.protocol === 'file:' || window.location.hostname === '127.0.0.1' && window.location.port !== '8888';
-            const apiUrl = isStaticFile ? `http://127.0.0.1:8888/api/cart?user_id=${userId}` : `/api/cart?user_id=${userId}`;
-            console.log('🛒 CART PAGE: Fetching from:', apiUrl, '(static file:', isStaticFile + ')');
-
-            fetch(apiUrl)
-                .then(response => {
-                    console.log('🛒 CART PAGE: API response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('🛒 CART PAGE: API response data:', data);
-                    if (data.success && data.cart) {
-                        console.log('🛒 CART PAGE: Cart loaded with', data.cart.length, 'items');
-                        displayCartItems(data.cart);
-                    } else {
-                        console.log('🛒 CART PAGE: API returned success but no cart data');
-                        showEmptyCart();
-                    }
-                })
-                .catch(error => {
-                    console.error('🛒 CART PAGE: Error loading cart:', error);
-                    showErrorMessage('Failed to load cart: ' + error.message);
-                });
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = totalItems;
+            }
         }
 
-        // Function to display cart items
-        function displayCartItems(cartItems) {
-            console.log('🛒 CART PAGE: Displaying', cartItems.length, 'cart items');
+        function loadCart() {
+            const cartKey = getUserCartKey();
+            console.log('🛒 loadCart called - cartKey:', cartKey);
 
+            if (!cartKey) {
+                console.log('❌ No cart key (user not logged in)');
+                document.getElementById('cartContent').innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Please login first</h3>
+                        <p>You need to login to view your cart</p>
+                        <a href="/Robotech-storeP2/" class="btn btn-primary">Go to Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            console.log('🛒 Loaded cart data:', cart);
             const cartContent = document.getElementById('cartContent');
-            if (!cartContent) {
-                console.error('🛒 CART PAGE: cartContent element not found!');
+
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some amazing products to your cart and start shopping!</p>
+                        <a href="/Robotech-storeP2/products" class="shop-btn">
+                            <i class="fas fa-arrow-left"></i> Continue Shopping
+                        </a>
+                    </div>
+                `;
                 return;
             }
 
-            if (cartItems.length === 0) {
-                showEmptyCart();
-                return;
-            }
+            let cartHTML = '<div class="cart-items">';
+            let total = 0;
 
-            // Build cart items HTML
-            let cartHTML = '<div class="cart-items" style="margin-bottom: 2rem;">';
-            let totalPrice = 0;
-            let totalItems = 0;
-
-            cartItems.forEach((item) => {
-                const name = item.name || 'Unknown Product';
-                const price = parseFloat(item.price) || 0;
-                const quantity = parseInt(item.quantity) || 1;
-                const image = item.image_url || 'https://via.placeholder.com/80x80?text=Product';
-                const description = item.description || '';
-
-                totalItems += quantity;
-                totalPrice += price * quantity;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
 
                 cartHTML += `
-                    <div class="cart-item" style="display: flex; align-items: center; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <img src="${image}" alt="${name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 1.5rem; border: 2px solid #f0f0f0;">
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; color: #2c3e50; font-weight: 600;">${name}</h3>
-                            <p style="margin: 0 0 1rem 0; color: #7f8c8d; font-size: 0.95rem; line-height: 1.4;">${description}</p>
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-                                <div style="display: flex; align-items: center; gap: 15px;">
-                                    <span style="font-weight: 600; color: #e74c3c; font-size: 1.1rem;">₹${price.toFixed(2)} each</span>
-                                    <span style="background: #f8f9fa; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: #495057;">Qty: ${quantity}</span>
-                                </div>
-                                <span style="font-weight: 700; font-size: 1.2rem; color: #27ae60;">₹${(price * quantity).toFixed(2)}</span>
-                            </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="item-details">
+                            <div class="item-title">${item.name}</div>
+                            <div class="item-price">Rs ${item.price}</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
+                            <span class="quantity-display">${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <div class="item-total">Rs ${itemTotal}</div>
+                        <div class="remove-btn" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i>
                         </div>
                     </div>
                 `;
@@ -270,75 +949,181 @@
 
             cartHTML += '</div>';
 
-            // Cart summary
             cartHTML += `
-                <div style="padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <h3 style="margin-top: 0; color: white; font-size: 1.4rem;">🛒 Cart Summary</h3>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0; padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3);">
-                        <span style="font-size: 1.1rem; font-weight: 500;">Total Items:</span>
-                        <span style="font-size: 1.3rem; font-weight: 700;">${totalItems}</span>
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>Rs ${total}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding-top: 1rem;">
-                        <span style="font-size: 1.4rem; font-weight: 600;">Total Price:</span>
-                        <span style="font-size: 1.6rem; font-weight: 800;">₹${totalPrice.toFixed(2)}</span>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>Free</span>
                     </div>
-                    <div style="margin-top: 2rem; display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button onclick="window.location.href='payment.html'" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(40,167,69,0.3);" onmouseover="this.style.background='#218838'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(40,167,69,0.4)';" onmouseout="this.style.background='#28a745'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(40,167,69,0.3)';">✅ Proceed to Checkout</button>
-                        <a href="products.html" style="flex: 1; min-width: 200px; padding: 15px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,123,255,0.3);" onmouseover="this.style.background='#0056b3'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,123,255,0.4)';" onmouseout="this.style.background='#007bff'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,123,255,0.3)';">🛍️ Continue Shopping</a>
+                    <div class="summary-row">
+                        <span>GST (18%):</span>
+                        <span>Rs ${(total * 0.18).toFixed(2)}</span>
                     </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span>Rs ${(total * 1.18).toFixed(2)}</span>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">
+                        <i class="fas fa-credit-card"></i> Proceed to Checkout
+                    </button>
                 </div>
             `;
 
             cartContent.innerHTML = cartHTML;
-            console.log('🛒 CART PAGE: Cart display completed');
         }
 
-        // Function to show empty cart
-        function showEmptyCart() {
-            console.log('🛒 CART PAGE: Showing empty cart');
-            const cartContent = document.getElementById('cartContent');
-            if (cartContent) {
-                cartContent.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 8px;">
-                        <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
-                        <h2 style="color: #6c757d;">Your cart is empty</h2>
-                        <p style="color: #6c757d;">Add some products to get started!</p>
-                        <a href="products.html" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Browse Products</a>
-                    </div>
-                `;
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity <= 0) {
+                removeItem(index);
+                return;
             }
+
+            const cartKey = getUserCartKey();
+            if (!cartKey) return;
+
+            let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            cart[index].quantity = newQuantity;
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+
+            updateCartCount();
+            loadCart();
         }
 
-        // Function to show login prompt
-        function showLoginPrompt() {
-            console.log('🛒 CART PAGE: Showing login prompt');
-            const cartContent = document.getElementById('cartContent');
-            if (cartContent) {
-                cartContent.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; background: #fff3cd; border-radius: 8px;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #856404;"></i>
-                        <h2>Please Login</h2>
-                        <p>You need to login to view your cart.</p>
-                        <a href="index.html" style="display: inline-block; margin-top: 1rem; padding: 10px 20px; background: #ffc107; color: #212529; text-decoration: none; border-radius: 4px;">Go to Login</a>
-                    </div>
-                `;
+        function removeItem(index) {
+            const cartKey = getUserCartKey();
+            if (!cartKey) return;
+
+            let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+
+            updateCartCount();
+            loadCart();
+
+            showNotification('Item removed from cart', 'warning');
+        }
+
+        function checkout() {
+            alert('Checkout functionality would integrate with payment gateway here.\n\nCart Total: Rs ' + (calculateTotal() * 1.18).toFixed(2) + '\n\nDemo: This would redirect to payment page.');
+        }
+
+        function calculateTotal() {
+            const cartKey = getUserCartKey();
+            if (!cartKey) return 0;
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: '#4CAF50',
+                warning: '#FF9800',
+                error: '#F44336'
+            };
+
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    font-size: 14px;
+                    font-weight: 500;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease;
+                ">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            const notifElement = notification.firstElementChild;
+
+            setTimeout(() => {
+                notifElement.style.opacity = '1';
+                notifElement.style.transform = 'translateY(0)';
+            }, 10);
+
+            setTimeout(() => {
+                notifElement.style.opacity = '0';
+                notifElement.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize cart and user display on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUserDisplay();
+            updateCartCount();
+            loadCart();
+        });
+
+        function getUserCartKey() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            return userId ? `cart_user_${userId}` : null;
+        }
+
+        function initializeUserDisplay() {
+            console.log('🛒 Cart page initializeUserDisplay called at URL:', window.location.href);
+            console.log('🛒 Current URL path:', window.location.pathname);
+
+            // Clear session and read from localStorage to ensure consistency
+            sessionStorage.clear();
+
+            let userId = localStorage.getItem('user_id');
+            let phone = localStorage.getItem('phone');
+            let loggedIn = localStorage.getItem('logged_in') === 'true';
+
+            console.log('🛒 localStorage - userId:', userId, 'phone:', phone, 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('🛒 sessionStorage cleared for consistency');
+            console.log('🛒 All localStorage keys:', Object.keys(localStorage));
+
+            // If user is logged in, ensure phone mapping consistency
+            if (userId && phone && loggedIn) {
+                const mappedPhone = localStorage.getItem('phone_' + userId);
+                if (mappedPhone && mappedPhone !== phone) {
+                    console.log('🛒 ⚠️ Phone mismatch detected, using stored mapping');
+                    phone = mappedPhone;
+                    localStorage.setItem('phone', phone);
+                }
             }
-        }
 
-        // Function to show error message
-        function showErrorMessage(message) {
-            console.error('🛒 CART PAGE: Showing error:', message);
-            const cartContent = document.getElementById('cartContent');
-            if (cartContent) {
-                cartContent.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; background: #f8d7da; border-radius: 8px; color: #721c24;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <h2>Failed to Load Cart</h2>
-                        <p>${message}</p>
-                        <button onclick="loadCartFromAPI()" style="margin-top: 1rem; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
-                    </div>
-                `;
+            const loginTextElement = document.getElementById('loginText');
+
+            if (userId && phone && loggedIn) {
+                // Show existing user ID
+                loginTextElement.textContent = 'My User ID: ' + userId;
+                console.log('✅ Cart page: Using existing user ID:', userId, 'Phone:', phone);
+
+                // Sync to sessionStorage for current session
+                sessionStorage.setItem('user_id', userId);
+                sessionStorage.setItem('phone', phone);
+                sessionStorage.setItem('logged_in', 'true');
+            } else {
+                // No user logged in - redirect to home
+                console.log('❌ Cart page: No user logged in, redirecting to home');
+                alert('Please login first from the home page!');
+                window.location.href = '/Robotech-storeP2/';
+                return;
             }
         }
     </script>
-</body></html>
+</body>
+</html>

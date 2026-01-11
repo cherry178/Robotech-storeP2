@@ -178,7 +178,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart_static.html'">
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart'">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
@@ -1042,8 +1042,18 @@
         }
 
         function updateCartCount() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                const cartCountElement = document.getElementById('cartCount');
+                if (cartCountElement) cartCountElement.textContent = '0';
+                return;
+            }
+
+            const cartKey = `cart_user_${userId}`;
+            const userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const totalItems = userCart.reduce((sum, item) => sum + item.quantity, 0);
+
             const cartCountElement = document.getElementById('cartCount');
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             if (cartCountElement) {
                 cartCountElement.textContent = totalItems;
             }
