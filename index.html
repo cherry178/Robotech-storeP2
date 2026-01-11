@@ -651,10 +651,29 @@
         }
 
         function checkExistingLogin() {
-            // Always start fresh for demo purposes - allow login with any phone number
-            // Clear any existing session data to allow fresh login
-            sessionStorage.clear();
-            console.log('🚀 Fresh session - cleared old data, ready for new login');
+            // Check if user is already logged in from localStorage
+            const userId = localStorage.getItem('user_id');
+            const phone = localStorage.getItem('phone');
+            const loggedIn = localStorage.getItem('logged_in');
+
+            if (userId && phone && loggedIn === 'true') {
+                console.log('🚀 User already logged in with ID:', userId, '- skipping landing page');
+                // User is logged in - hide landing page and show main content
+                const landingOverlay = document.getElementById('landingOverlay');
+                const mainContent = document.getElementById('mainContent');
+
+                if (landingOverlay) landingOverlay.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+
+                // Also set sessionStorage for current session
+                sessionStorage.setItem('user_id', userId);
+                sessionStorage.setItem('phone', phone);
+                sessionStorage.setItem('logged_in', 'true');
+            } else {
+                console.log('🚀 No existing login, showing landing page');
+                // Clear any stale session data
+                sessionStorage.clear();
+            }
         }
 
         function setupEventListeners() {
@@ -834,6 +853,12 @@
         }
 
         function logout() {
+            // Clear login data
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+            sessionStorage.clear();
+
             // Reset to landing page
             const landingOverlay = document.getElementById('landingOverlay');
             const mainContent = document.getElementById('mainContent');
@@ -844,6 +869,8 @@
             currentUser = null;
             cart = [];
             updateCartCount();
+
+            console.log('👋 User logged out - login data cleared');
         }
 
         function scrollToSection(sectionId) {
