@@ -900,8 +900,10 @@
                 return;
             }
 
-            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
-            console.log('🛒 Loaded cart data:', cart);
+            const cartData = localStorage.getItem(cartKey);
+            console.log('🛒 Cart key:', cartKey, 'Raw data from localStorage:', cartData);
+            const cart = JSON.parse(cartData || '[]');
+            console.log('🛒 Parsed cart data:', cart, 'Length:', cart.length);
             const cartContent = document.getElementById('cartContent');
 
             if (cart.length === 0) {
@@ -1108,9 +1110,23 @@
             const loginTextElement = document.getElementById('loginText');
 
             if (userId && phone && loggedIn) {
+                // Validate that the user data is consistent
+                const mappedPhone = localStorage.getItem('phone_' + userId);
+                if (!mappedPhone || mappedPhone !== phone) {
+                    console.log('❌ Cart page: Invalid user session data, redirecting to home');
+                    // Clear invalid data
+                    localStorage.removeItem('user_id');
+                    localStorage.removeItem('phone');
+                    localStorage.removeItem('logged_in');
+                    sessionStorage.clear();
+                    alert('Session expired. Please login again!');
+                    window.location.href = '/Robotech-storeP2/';
+                    return;
+                }
+
                 // Show existing user ID
                 loginTextElement.textContent = 'My User ID: ' + userId;
-                console.log('✅ Cart page: Using existing user ID:', userId, 'Phone:', phone);
+                console.log('✅ Cart page: Using valid user ID:', userId, 'Phone:', phone);
 
                 // Sync to sessionStorage for current session
                 sessionStorage.setItem('user_id', userId);
