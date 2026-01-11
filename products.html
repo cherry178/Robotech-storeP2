@@ -1103,7 +1103,7 @@
             } else {
                 // Get product image URL
                 const product = ALL_PRODUCTS.find(p => p.id === productId);
-                const imageUrl = product ? product.image_url : '/Robotech-storeP2/static/images/product-placeholder.jpg';
+                const imageUrl = product && product.image_url ? product.image_url : '';
 
                 userCart.push({
                     id: productId,
