@@ -212,9 +212,12 @@
 
             // Load actual order history from localStorage
             const orderHistoryKey = `orders_user_${userId}`;
-            const orderHistory = JSON.parse(localStorage.getItem(orderHistoryKey) || '[]');
+            const orderHistoryRaw = localStorage.getItem(orderHistoryKey);
+            console.log('📋 Order history key:', orderHistoryKey, 'Raw data:', orderHistoryRaw);
 
+            const orderHistory = JSON.parse(orderHistoryRaw || '[]');
             console.log('📋 Loading orders for user:', userId, 'Found:', orderHistory.length, 'orders');
+            console.log('📋 Order history:', orderHistory);
 
             if (orderHistory.length === 0) {
                 ordersContent.innerHTML = `

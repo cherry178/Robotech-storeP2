@@ -251,52 +251,6 @@
 
             console.log('Payment form displayed');
         }
-        
-        function processPayment(event) {
-            event.preventDefault();
-
-            // Basic validation
-            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
-            for (const field of requiredFields) {
-                const element = document.getElementById(field);
-                if (!element.value.trim()) {
-                    alert(`Please fill in ${field}`);
-                    element.focus();
-                    return;
-                }
-            }
-
-            if (!selectedPaymentMethod) {
-                alert('Please select a payment method');
-                return;
-            }
-
-            // Show processing
-            const payBtn = document.getElementById('payBtn');
-            payBtn.disabled = true;
-            payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
-
-            // Simulate payment processing
-            setTimeout(() => {
-                const orderId = 'ORD-' + Date.now();
-
-                // Show success message
-                document.getElementById('paymentContent').innerHTML = `
-                    <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
-                        <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
-                        <h2>Payment Successful!</h2>
-                        <p>Thank you for your order. Your payment has been processed successfully.</p>
-                        <p><strong>Order ID:</strong> #${orderId}</p>
-                        <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                        <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
-                        <div style="margin-top: 2rem;">
-                            <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
-                        </div>
-                    </div>
-                `;
-            }, 2000);
-        }
 
 
         function testBackendConnection() {
@@ -495,6 +449,19 @@
             // Simulate payment processing
             setTimeout(() => {
                 const orderId = 'ORD-' + Date.now();
+
+                // Save order to history
+                const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                if (userId && cartItems.length > 0) {
+                    saveOrderToHistory(userId, orderId, cartItems, selectedPaymentMethod);
+                }
+
+                // Clear cart after successful payment
+                if (userId) {
+                    const cartKey = `cart_user_${userId}`;
+                    localStorage.removeItem(cartKey);
+                    console.log('🛒 Cart cleared after successful payment');
+                }
 
                 // Show success message
                 document.getElementById('paymentContent').innerHTML = `
