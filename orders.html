@@ -273,6 +273,13 @@
                 </div>
             `).join('');
         }
+
+        function toggleLoginDropdown() {
+            const dropdown = document.getElementById('loginDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+        }
     </script>
 </body>
 </html>

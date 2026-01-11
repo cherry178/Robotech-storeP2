@@ -99,6 +99,7 @@
         // Demo variables
         let currentUser = null;
         let cartItems = [];
+        let currentCartItems = []; // Global variable to store current cart items
         let selectedPaymentMethod = null;
         let totalAmount = 0;
 
@@ -131,19 +132,19 @@
 
             // Load cart data
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            let cartItems = [];
+            currentCartItems = [];
             let totalAmount = 0;
 
             if (userId) {
                 const cartKey = `cart_user_${userId}`;
                 const cartData = localStorage.getItem(cartKey);
                 if (cartData) {
-                    cartItems = JSON.parse(cartData);
-                    totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    currentCartItems = JSON.parse(cartData);
+                    totalAmount = currentCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 }
             }
 
-            console.log('Cart items for payment:', cartItems.length, 'Total:', totalAmount);
+            console.log('Cart items for payment:', currentCartItems.length, 'Total:', totalAmount);
 
             const paymentContent = document.getElementById('paymentContent');
             if (!paymentContent) {
@@ -452,8 +453,9 @@
 
                 // Save order to history
                 const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-                if (userId && cartItems.length > 0) {
-                    saveOrderToHistory(userId, orderId, cartItems, selectedPaymentMethod);
+                if (userId && currentCartItems.length > 0) {
+                    saveOrderToHistory(userId, orderId, currentCartItems, selectedPaymentMethod);
+                    console.log('📋 Order saved to history for user:', userId, 'Items:', currentCartItems.length);
                 }
 
                 // Clear cart after successful payment
