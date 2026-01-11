@@ -71,10 +71,27 @@
                 <!-- User Actions -->
                 <div class="user-actions">
                     <div class="action-buttons">
-                        <div class="checkout-user">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span>Checkout</span>
+                        <div class="login-dropdown">
+                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">My User ID: Loading...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item" onclick="window.location.href = '/Robotech-storeP2/orders'">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
                         </div>
+
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart'">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -535,6 +552,26 @@
 
             console.log('✅ User session reinforced, navigating to orders');
             window.location.href = '/Robotech-storeP2/orders';
+        }
+
+        function toggleAccountMenu() {
+            const menu = document.getElementById('accountMenu');
+            if (menu) {
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        function logout() {
+            // Clear user session
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('logged_in');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+
+            // Redirect to home page
+            window.location.href = '/Robotech-storeP2/';
         }
 
         // Login functionality removed from payment page

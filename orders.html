@@ -70,13 +70,22 @@
                 <div class="user-actions">
                     <div class="action-buttons">
                         <div class="login-dropdown">
-                            <button class="login-trigger" onclick="toggleLoginDropdown()">
+                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
                                 <i class="fas fa-user"></i>
                                 <span id="loginText">Login</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
 
-                            <div class="login-dropdown-content" id="loginDropdown">
+                            <div class="account-menu" id="accountMenu" style="display: none;">
+                                <div class="account-menu-item" onclick="window.location.href = '/Robotech-storeP2/orders'">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </div>
+                                <div class="account-menu-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
+                            </div>
+
+                            <!-- Commented out old login dropdown content
                                 <div class="login-header">
                                     <h4>Customer Login</h4>
                                     <p>If you are already registered, please log in.</p>
@@ -145,7 +154,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            -->
                     </div>
                 </div>
             </div>
@@ -274,11 +283,24 @@
             `).join('');
         }
 
-        function toggleLoginDropdown() {
-            const dropdown = document.getElementById('loginDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
+        function toggleAccountMenu() {
+            const menu = document.getElementById('accountMenu');
+            if (menu) {
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
             }
+        }
+
+        function logout() {
+            // Clear user session
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('logged_in');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('logged_in');
+
+            // Redirect to home page
+            window.location.href = '/Robotech-storeP2/';
         }
     </script>
 </body>
