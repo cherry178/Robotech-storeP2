@@ -736,15 +736,21 @@
                 return;
             }
 
-            // Show OTP input
+            // Simulate API call (like localhost does)
+            console.log('📤 Simulating OTP send to:', phone);
+
+            // Show success notification (like localhost)
+            showNotification('OTP sent successfully', 'success');
+
+            // Show OTP input (like localhost)
             document.getElementById('landingOtpGroup').style.display = 'block';
             document.getElementById('landingSendOtpBtn').style.display = 'none';
             document.getElementById('landingVerifyOtpBtn').style.display = 'block';
 
-            // Start OTP timer
+            // Start OTP timer (like localhost)
             startOtpTimer();
 
-            alert(`Demo OTP: 123456\n\nEnter this code to login.`);
+            console.log('✅ OTP send simulation complete - user should enter 123456');
         }
 
         function handleLoginSubmit(e) {
