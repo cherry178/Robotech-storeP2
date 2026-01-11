@@ -49,7 +49,6 @@
 </head>
 <body>
     <div class="demo-banner">
-        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
     </div>
 
     <!-- Header -->
@@ -97,6 +96,7 @@
         let currentUser = null;
         let cartItems = [];
         let selectedPaymentMethod = null;
+        let cartItems = [];
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -126,12 +126,6 @@
         function initializePaymentPage() {
             console.log('Initializing payment page...');
 
-            // Setup clear data button
-            const clearBtn = document.getElementById('clearDataBtn');
-            if (clearBtn) {
-                clearBtn.onclick = forceLogout;
-                console.log('Clear data button attached');
-            }
 
             loadPaymentPage();
         }
@@ -612,9 +606,13 @@
                         message: 'Payment processed successfully!'
                     };
 
-                    // Clear cart after successful payment
+                    // Save order to order history
                     const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
                     if (userId) {
+                        saveOrderToHistory(userId, data.order_id, cartItems, selectedPaymentMethod);
+                        console.log('📋 Order saved to history:', data.order_id);
+
+                        // Clear cart after successful payment
                         const cartKey = `cart_user_${userId}`;
                         localStorage.removeItem(cartKey);
                         console.log('🛒 Cart cleared after successful payment');
@@ -642,6 +640,24 @@
                     alert('Payment failed: ' + error.message);
                 }
             }, 2000); // 2 second delay to simulate processing
+        }
+
+        function saveOrderToHistory(userId, orderId, items, paymentMethod) {
+            const orderHistoryKey = `orders_user_${userId}`;
+            let orderHistory = JSON.parse(localStorage.getItem(orderHistoryKey) || '[]');
+
+            const newOrder = {
+                id: orderId,
+                date: new Date().toISOString().split('T')[0],
+                status: 'processing',
+                payment_method: paymentMethod,
+                items: items,
+                total: items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            };
+
+            orderHistory.unshift(newOrder); // Add to beginning of array
+            localStorage.setItem(orderHistoryKey, JSON.stringify(orderHistory));
+            console.log('📋 Order saved to history:', orderId, 'Total orders:', orderHistory.length);
         }
 
         // Login functionality removed from payment page

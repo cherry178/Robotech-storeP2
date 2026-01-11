@@ -6,8 +6,7 @@
     <title>My Orders - Robotech Store</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./static/css/style.css">
-    <script src="./static/js/main.js"></script>
+    <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
     <style>
         .demo-banner {
             position: fixed;
@@ -46,8 +45,6 @@
     </style>
 </head>
 <body>
-    <div class="demo-banner">
-        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Store</a> |
         <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
     </div>
 
@@ -63,8 +60,8 @@
                 <!-- Navigation -->
                 <nav class="nav">
                     <a href="static_index.html" class="nav-link">Home</a>
-                    <a href="products.html" class="nav-link">Products</a>
-                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="/Robotech-storeP2/products" class="nav-link">Products</a>
+                    <a href="/Robotech-storeP2/cart" class="nav-link">Cart</a>
                     <a href="payment.html" class="nav-link">Payment</a>
                     <a href="orders.html" class="nav-link active">Orders</a>
                 </nav>
@@ -176,20 +173,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Orders page initializing...');
 
-            // Setup clear data button
-            const clearBtn = document.getElementById('clearDataBtn');
-            if (clearBtn) {
-                clearBtn.onclick = forceLogout;
+            // Check if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            if (!userId || !phone || loggedIn !== 'true') {
+                console.log('User not logged in, showing login required');
+                showLoginRequired();
+                return;
             }
 
-            // Wait for main.js to load, then check login and load orders
-            setTimeout(function() {
-                if (typeof currentUser !== 'undefined' && currentUser) {
-                    loadOrders();
-                } else {
-                    showLoginRequired();
-                }
-            }, 1000);
+            // Sync to sessionStorage
+            sessionStorage.setItem('user_id', userId);
+            sessionStorage.setItem('phone', phone);
+            sessionStorage.setItem('logged_in', 'true');
+
+            console.log('User authenticated for orders:', userId);
+            loadOrders();
         });
 
         function showLoginRequired() {
@@ -207,53 +208,28 @@
 
         function loadOrders() {
             const ordersContent = document.getElementById('ordersContent');
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
 
-            // Demo orders data
-            const demoOrders = [
-                {
-                    id: 'ORD001',
-                    date: '2024-01-15',
-                    status: 'delivered',
-                    items: [
-                        { name: 'Arduino Uno R3', quantity: 1, price: 450 },
-                        { name: 'DHT11 Sensor', quantity: 2, price: 45 }
-                    ],
-                    total: 540
-                },
-                {
-                    id: 'ORD002',
-                    date: '2024-01-10',
-                    status: 'shipped',
-                    items: [
-                        { name: 'ESP32 Board', quantity: 1, price: 350 },
-                        { name: 'LED Matrix', quantity: 1, price: 95 }
-                    ],
-                    total: 445
-                },
-                {
-                    id: 'ORD003',
-                    date: '2024-01-05',
-                    status: 'processing',
-                    items: [
-                        { name: 'Servo Motor', quantity: 3, price: 95 }
-                    ],
-                    total: 285
-                }
-            ];
+            // Load actual order history from localStorage
+            const orderHistoryKey = `orders_user_${userId}`;
+            const orderHistory = JSON.parse(localStorage.getItem(orderHistoryKey) || '[]');
 
-            if (demoOrders.length === 0) {
+            console.log('📋 Loading orders for user:', userId, 'Found:', orderHistory.length, 'orders');
+
+            if (orderHistory.length === 0) {
                 ordersContent.innerHTML = `
                     <div class="no-orders">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="fas fa-shopping-bag"></i>
                         <h3>No Orders Yet</h3>
-                        <p>You haven't placed any orders yet.</p>
-                        <a href="products.html" class="btn" style="margin-top: 1rem;">Start Shopping</a>
+                        <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                        <a href="/Robotech-storeP2/products" class="btn">Start Shopping</a>
                     </div>
                 `;
                 return;
             }
 
-            ordersContent.innerHTML = demoOrders.map(order => `
+            // Display actual orders
+            ordersContent.innerHTML = orderHistory.map(order => `
                 <div class="order-card">
                     <div class="order-header">
                         <div>
@@ -270,7 +246,7 @@
                             <div class="order-item">
                                 <div class="item-info">
                                     <div class="item-image">
-                                        <i class="fas fa-cube"></i>
+                                        <img src="${item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
                                     </div>
                                     <div class="item-details">
                                         <h4>${item.name}</h4>

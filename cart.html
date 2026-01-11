@@ -951,7 +951,7 @@
                 cartHTML += `
                     <div class="cart-item">
                         <div class="item-image">
-                            <i class="fas fa-cube"></i>
+                            <img src="${item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                         </div>
                         <div class="item-details">
                             <div class="item-title">${item.name}</div>
