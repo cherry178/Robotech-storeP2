@@ -463,6 +463,18 @@
                     console.log('🛒 Cart cleared after successful payment');
                 }
 
+                // Ensure user session is maintained for navigation
+                console.log('💳 Payment success - ensuring user session for navigation');
+                console.log('💳 Current user session - userId:', userId, 'phone:', sessionStorage.getItem('phone'));
+
+                // Double-check user session is saved
+                if (userId) {
+                    localStorage.setItem('user_id', userId);
+                    localStorage.setItem('phone', sessionStorage.getItem('phone') || localStorage.getItem('phone'));
+                    localStorage.setItem('logged_in', 'true');
+                    console.log('💳 User session reinforced for navigation');
+                }
+
                 // Show success message
                 document.getElementById('paymentContent').innerHTML = `
                     <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
@@ -474,7 +486,7 @@
                         <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
                         <div style="margin-top: 2rem;">
                             <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
+                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;" onclick="console.log('📋 Navigating to orders with userId:', '${userId}')">View Orders</a>
                         </div>
                     </div>
                 `;

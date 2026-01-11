@@ -178,8 +178,14 @@
             const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
             const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
 
+            console.log('🔍 Orders page - checking user session:');
+            console.log('🔍 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
+            console.log('🔍 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('🔍 Combined check - userId:', userId, 'phone:', phone, 'loggedIn:', loggedIn);
+
             if (!userId || !phone || loggedIn !== 'true') {
-                console.log('User not logged in, showing login required');
+                console.log('❌ User not logged in, showing login required');
+                console.log('❌ Missing data - userId:', !!userId, 'phone:', !!phone, 'loggedIn:', loggedIn);
                 showLoginRequired();
                 return;
             }
