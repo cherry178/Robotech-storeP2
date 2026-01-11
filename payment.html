@@ -36,6 +36,7 @@
         .payment-method:hover { border-color: #007bff; }
         .payment-method.selected { border-color: #007bff; background: #f8f9ff; }
         .payment-method i { font-size: 2rem; margin-bottom: 0.5rem; color: #007bff; }
+        .payment-details { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee; }
         .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
         .order-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
         .order-total { font-weight: bold; font-size: 1.2rem; color: #e74c3c; }
@@ -208,13 +209,13 @@
                 return;
             }
 
-            // Convert cart items to payment format
+            // Convert cart items to payment format (images already included in cart data)
             cartItems = cart.map(item => ({
                 product_id: item.id,
                 quantity: item.quantity,
                 price: item.price,
                 name: item.name,
-                image_url: '' // No image URL in cart data
+                image_url: item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'
             }));
 
             console.log('💳 Cart loaded:', cartItems.length, 'items');
@@ -259,8 +260,14 @@
                     <h3><i class="fas fa-receipt"></i> Order Summary</h3>
                     ${orderItems.map(item => `
                         <div class="order-item">
-                            <span>${item.name || 'Unknown Product'} (x${item.quantity})</span>
-                            <span>₹${item.subtotal}</span>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <img src="${item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                <div>
+                                    <div style="font-weight: 500;">${item.name || 'Unknown Product'}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">Quantity: ${item.quantity}</div>
+                                </div>
+                            </div>
+                            <span style="font-weight: 500;">₹${item.subtotal}</span>
                         </div>
                     `).join('')}
                     <div class="order-item order-total">
@@ -325,6 +332,10 @@
                                 <i class="fas fa-truck"></i>
                                 <div>Cash on Delivery</div>
                             </div>
+                        </div>
+
+                        <div id="paymentDetails" class="payment-details" style="display: none;">
+                            <!-- Payment method specific fields will be inserted here -->
                         </div>
                     </div>
 
@@ -403,11 +414,110 @@
             // Add selected class to clicked method
             event.currentTarget.classList.add('selected');
 
+            // Show payment method specific fields
+            showPaymentDetails(method);
+
             // Enable pay button
             const payBtn = document.getElementById('payBtn');
             if (payBtn) {
                 payBtn.disabled = false;
             }
+        }
+
+        function showPaymentDetails(method) {
+            const paymentDetails = document.getElementById('paymentDetails');
+            let detailsHTML = '';
+
+            switch (method) {
+                case 'card':
+                    detailsHTML = `
+                        <div class="form-section">
+                            <h3><i class="fas fa-credit-card"></i> Card Details</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number *</label>
+                                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardName">Cardholder Name *</label>
+                                    <input type="text" id="cardName" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date *</label>
+                                    <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV *</label>
+                                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'upi':
+                    detailsHTML = `
+                        <div class="form-section">
+                            <h3><i class="fas fa-mobile-alt"></i> UPI Details</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="upiId">UPI ID *</label>
+                                    <input type="text" id="upiId" placeholder="yourname@upi" required>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                                <i class="fas fa-info-circle"></i> Enter your UPI ID (e.g., yourname@paytm, yourname@ybl)
+                            </p>
+                        </div>
+                    `;
+                    break;
+                case 'netbanking':
+                    detailsHTML = `
+                        <div class="form-section">
+                            <h3><i class="fas fa-university"></i> Net Banking Details</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bankName">Select Bank *</label>
+                                    <select id="bankName" required>
+                                        <option value="">Choose your bank</option>
+                                        <option value="sbi">State Bank of India</option>
+                                        <option value="hdfc">HDFC Bank</option>
+                                        <option value="icici">ICICI Bank</option>
+                                        <option value="axis">Axis Bank</option>
+                                        <option value="pnb">Punjab National Bank</option>
+                                        <option value="kotak">Kotak Mahindra Bank</option>
+                                        <option value="other">Other Bank</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="customerId">Customer ID / User ID *</label>
+                                    <input type="text" id="customerId" placeholder="Enter your bank customer ID" required>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'cod':
+                    detailsHTML = `
+                        <div class="form-section">
+                            <h3><i class="fas fa-truck"></i> Cash on Delivery</h3>
+                            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border: 1px solid #ffeaa7;">
+                                <p style="margin: 0; color: #856404;">
+                                    <i class="fas fa-info-circle"></i> <strong>Cash on Delivery:</strong> Pay in cash when your order is delivered to your doorstep. Additional delivery charges may apply.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+
+            paymentDetails.innerHTML = detailsHTML;
+            paymentDetails.style.display = detailsHTML ? 'block' : 'none';
         }
 
         function processPayment(event) {
@@ -428,6 +538,53 @@
                     return;
                 }
             }
+
+            // Validate payment method specific fields
+            if (selectedPaymentMethod === 'card') {
+                const cardFields = ['cardNumber', 'cardName', 'expiryDate', 'cvv'];
+                for (const field of cardFields) {
+                    const element = document.getElementById(field);
+                    if (!element.value.trim()) {
+                        alert(`Please fill in card ${field.replace('card', '').toLowerCase()}`);
+                        element.focus();
+                        return;
+                    }
+                }
+                // Basic card number validation
+                const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                if (cardNumber.length < 13 || cardNumber.length > 19 || !/^\d+$/.test(cardNumber)) {
+                    alert('Please enter a valid card number');
+                    document.getElementById('cardNumber').focus();
+                    return;
+                }
+            } else if (selectedPaymentMethod === 'upi') {
+                const upiId = document.getElementById('upiId').value.trim();
+                if (!upiId) {
+                    alert('Please enter your UPI ID');
+                    document.getElementById('upiId').focus();
+                    return;
+                }
+                // Basic UPI validation
+                if (!upiId.includes('@')) {
+                    alert('Please enter a valid UPI ID (must contain @)');
+                    document.getElementById('upiId').focus();
+                    return;
+                }
+            } else if (selectedPaymentMethod === 'netbanking') {
+                const bankName = document.getElementById('bankName').value;
+                const customerId = document.getElementById('customerId').value.trim();
+                if (!bankName) {
+                    alert('Please select your bank');
+                    document.getElementById('bankName').focus();
+                    return;
+                }
+                if (!customerId) {
+                    alert('Please enter your customer ID');
+                    document.getElementById('customerId').focus();
+                    return;
+                }
+            }
+            // COD doesn't need additional validation
 
             // Show processing
             const payBtn = document.getElementById('payBtn');

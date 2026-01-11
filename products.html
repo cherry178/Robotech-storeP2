@@ -1101,13 +1101,18 @@
                 existingItem.quantity += 1;
                 console.log('🛒 Increased quantity for existing item:', productName);
             } else {
+                // Get product image URL
+                const product = ALL_PRODUCTS.find(p => p.id === productId);
+                const imageUrl = product ? product.image_url : '/Robotech-storeP2/static/images/product-placeholder.jpg';
+
                 userCart.push({
                     id: productId,
                     name: productName,
                     price: price,
+                    image_url: imageUrl,
                     quantity: 1
                 });
-                console.log('🛒 Added new item to cart:', productName);
+                console.log('🛒 Added new item to cart:', productName, 'with image:', imageUrl);
             }
 
             localStorage.setItem(cartKey, JSON.stringify(userCart));
