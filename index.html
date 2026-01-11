@@ -651,37 +651,10 @@
         }
 
         function checkExistingLogin() {
-            // Check if user is already logged in and show status on landing page
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
-
-            if (userId && phone && loggedIn === 'true') {
-                console.log('🚀 User already logged in with ID:', userId);
-                // Show a message on the landing page that user is already logged in
-                const statusDiv = document.createElement('div');
-                statusDiv.id = 'loginStatus';
-                statusDiv.style.cssText = `
-                    position: absolute;
-                    top: 20px;
-                    right: 20px;
-                    background: #27ae60;
-                    color: white;
-                    padding: 10px 15px;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    z-index: 1000;
-                `;
-                statusDiv.innerHTML = `Already logged in as User ID: ${userId}<br><small>Enter different phone to switch accounts</small>`;
-
-                // Add to landing overlay
-                const landingOverlay = document.getElementById('landingOverlay');
-                if (landingOverlay) {
-                    landingOverlay.appendChild(statusDiv);
-                }
-            } else {
-                console.log('🚀 No existing login, fresh session');
-            }
+            // Always start fresh for demo purposes - allow login with any phone number
+            // Clear any existing session data to allow fresh login
+            sessionStorage.clear();
+            console.log('🚀 Fresh session - cleared old data, ready for new login');
         }
 
         function setupEventListeners() {
@@ -811,13 +784,13 @@
             sessionStorage.setItem('logged_in', 'true');
 
             currentUser = {
-                user_id: existingDemoId.toString(),
+                user_id: userId.toString(),
                 phone: demoPhone,
                 logged_in: true
             };
 
             // Use consistent format (same as products page)
-            document.getElementById('loginText').textContent = 'My User ID: ' + existingDemoId;
+            document.getElementById('loginText').textContent = 'My User ID: ' + userId;
 
             // Load products
             loadProducts();
@@ -1105,6 +1078,7 @@
             } else {
                 // User not logged in - landing page will be shown
                 console.log('❌ Home page: User not logged in, showing landing page');
+                loginTextElement.textContent = 'Not logged in';
             }
         }
     </script>
