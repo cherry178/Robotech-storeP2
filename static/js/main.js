@@ -1915,7 +1915,10 @@ function updateLoginStatus() {
             // Valid user ID - show it
             loginText.textContent = `User ${parsedUserId}`;
             console.log('updateLoginStatus - Set text to:', loginText.textContent);
-        loginTrigger.onclick = () => toggleAccountMenu();
+            // Only set onclick if not already set (to avoid overriding home page custom handler)
+            if (!loginTrigger.onclick || loginTrigger.onclick.toString().indexOf('toggleAccountMenuHome') === -1) {
+                loginTrigger.onclick = () => toggleAccountMenu();
+            }
         } else {
             // Invalid or no user ID - show login
             loginText.textContent = 'Login';

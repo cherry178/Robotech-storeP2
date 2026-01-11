@@ -708,6 +708,23 @@
                 menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
             }
         }
+
+        // Ensure proper navigation for account menu items
+        document.addEventListener('DOMContentLoaded', function() {
+            // Override any conflicting onclick handlers
+            const accountMenuItems = document.querySelectorAll('.account-menu-item');
+            accountMenuItems.forEach(item => {
+                if (item.textContent.includes('My Orders')) {
+                    item.onclick = function() {
+                        window.location.href = '/Robotech-storeP2/orders';
+                    };
+                } else if (item.textContent.includes('Logout')) {
+                    item.onclick = function() {
+                        logout();
+                    };
+                }
+            });
+        });
     </script>
 </body>
 </html>
