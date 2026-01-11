@@ -100,6 +100,7 @@
         let currentUser = null;
         let cartItems = [];
         let selectedPaymentMethod = null;
+        let totalAmount = 0;
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -128,20 +129,60 @@
         function showPaymentForm() {
             console.log('Showing payment form');
 
+            // Load cart data
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            let cartItems = [];
+            let totalAmount = 0;
+
+            if (userId) {
+                const cartKey = `cart_user_${userId}`;
+                const cartData = localStorage.getItem(cartKey);
+                if (cartData) {
+                    cartItems = JSON.parse(cartData);
+                    totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                }
+            }
+
+            console.log('Cart items for payment:', cartItems.length, 'Total:', totalAmount);
+
             const paymentContent = document.getElementById('paymentContent');
             if (!paymentContent) {
                 console.error('Payment content element not found');
                 return;
             }
 
-            paymentContent.innerHTML = `
+            // Generate order summary HTML
+            const orderSummaryHTML = cartItems.length > 0 ? `
+                <div class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    ${cartItems.map(item => `
+                        <div class="order-item">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">` : '<i class="fas fa-cube" style="font-size: 24px; color: #ccc;"></i>'}
+                                <div>
+                                    <div style="font-weight: 500;">${item.name}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">Quantity: ${item.quantity}</div>
+                                </div>
+                            </div>
+                            <span style="font-weight: 500;">₹${item.price * item.quantity}</span>
+                        </div>
+                    `).join('')}
+                    <div class="order-item order-total">
+                        <span><strong>Total (${cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</strong></span>
+                        <span><strong>₹${totalAmount}</strong></span>
+                    </div>
+                </div>
+            ` : `
                 <div class="order-summary">
                     <h3><i class="fas fa-receipt"></i> Order Summary</h3>
                     <div class="order-item order-total">
-                        <span><strong>Demo Order</strong></span>
-                        <span><strong>₹999</strong></span>
+                        <span><strong>No items in cart</strong></span>
+                        <span><strong>₹0</strong></span>
                     </div>
                 </div>
+            `;
+
+            paymentContent.innerHTML = orderSummaryHTML + `
 
                 <form class="payment-form" onsubmit="processPayment(event)">
                     <div class="form-section">
@@ -203,7 +244,7 @@
                     </div>
 
                     <button type="submit" class="pay-btn" id="payBtn">
-                        <i class="fas fa-lock"></i> Pay ₹999
+                        <i class="fas fa-lock"></i> Pay ₹${totalAmount}
                     </button>
                 </form>
             `;
@@ -211,128 +252,50 @@
             console.log('Payment form displayed');
         }
         
-        let orderItems = []; // Make it global for processPayment
-        
-        function displayPaymentForm() {
-            console.log('🛒 displayPaymentForm() called');
-            console.log('🛒 cartItems:', JSON.stringify(cartItems, null, 2));
+        function processPayment(event) {
+            event.preventDefault();
 
-            const paymentContent = document.getElementById('paymentContent');
-            if (!paymentContent) {
-                console.error('🛒 paymentContent element not found!');
+            // Basic validation
+            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
+            for (const field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill in ${field}`);
+                    element.focus();
+                    return;
+                }
+            }
+
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
                 return;
             }
 
-            // Calculate totals
-            let totalItems = 0;
-            let totalPrice = 0;
-            orderItems = cartItems.map(item => {
-                totalItems += item.quantity;
-                const subtotal = item.price * item.quantity;
-                totalPrice += subtotal;
-                console.log(`🛒 Item: ${item.name} x${item.quantity} = ₹${subtotal}`);
-                return {
-                    ...item,
-                    subtotal: subtotal
-                };
-            });
+            // Show processing
+            const payBtn = document.getElementById('payBtn');
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
 
-            console.log(`🛒 Total: ${totalItems} items, ₹${totalPrice}`);
-            console.log('🛒 orderItems:', JSON.stringify(orderItems, null, 2));
+            // Simulate payment processing
+            setTimeout(() => {
+                const orderId = 'ORD-' + Date.now();
 
-            const paymentHTML = `
-                <div class="order-summary">
-                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
-                    ${orderItems.map(item => `
-                        <div class="order-item">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">` : '<i class="fas fa-cube" style="font-size: 24px; color: #ccc;"></i>'}
-                                <div>
-                                    <div style="font-weight: 500;">${item.name || 'Unknown Product'}</div>
-                                    <div style="font-size: 0.9rem; color: #666;">Quantity: ${item.quantity}</div>
-                                </div>
-                            </div>
-                            <span style="font-weight: 500;">₹${item.subtotal}</span>
-                        </div>
-                    `).join('')}
-                    <div class="order-item order-total">
-                        <span><strong>Total (${totalItems} items)</strong></span>
-                        <span><strong>₹${totalPrice}</strong></span>
-                    </div>
-                </div>
-
-                <form class="payment-form" onsubmit="processPayment(event)">
-                    <div class="form-section">
-                        <h3><i class="fas fa-user"></i> Billing Information</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" value="${sessionStorage.getItem('phone') || localStorage.getItem('phone') || ''}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Shipping Address</label>
-                            <input type="text" id="address" placeholder="Street address" required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" id="city" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="zipCode">ZIP Code</label>
-                                <input type="text" id="zipCode" required>
-                            </div>
+                // Show success message
+                document.getElementById('paymentContent').innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
+                        <h2>Payment Successful!</h2>
+                        <p>Thank you for your order. Your payment has been processed successfully.</p>
+                        <p><strong>Order ID:</strong> #${orderId}</p>
+                        <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
+                        <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
+                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
                         </div>
                     </div>
-
-                    <div class="form-section">
-                        <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
-                        <div class="payment-methods">
-                            <div class="payment-method" onclick="selectPaymentMethod('card')">
-                                <i class="fas fa-credit-card"></i>
-                                <div>Credit/Debit Card</div>
-                            </div>
-                            <div class="payment-method" onclick="selectPaymentMethod('upi')">
-                                <i class="fas fa-mobile-alt"></i>
-                                <div>UPI</div>
-                            </div>
-                            <div class="payment-method" onclick="selectPaymentMethod('netbanking')">
-                                <i class="fas fa-university"></i>
-                                <div>Net Banking</div>
-                            </div>
-                            <div class="payment-method" onclick="selectPaymentMethod('cod')">
-                                <i class="fas fa-truck"></i>
-                                <div>Cash on Delivery</div>
-                            </div>
-                        </div>
-
-                        <div id="paymentDetails" class="payment-details" style="display: none;">
-                            <!-- Payment method specific fields will be inserted here -->
-                        </div>
-                    </div>
-
-                    <button type="submit" class="pay-btn" id="payBtn">
-                        <i class="fas fa-lock"></i> Pay ₹${totalPrice}
-                    </button>
-                </form>
-            `;
-
-            paymentContent.innerHTML = paymentHTML;
-            console.log('🛒 Payment form HTML set successfully');
-            console.log('🛒 Payment content innerHTML length:', paymentContent.innerHTML.length);
+                `;
+            }, 2000);
         }
 
 
@@ -541,7 +504,7 @@
                         <p>Thank you for your order. Your payment has been processed successfully.</p>
                         <p><strong>Order ID:</strong> #${orderId}</p>
                         <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                        <p><strong>Total Amount:</strong> ₹999</p>
+                        <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
                         <div style="margin-top: 2rem;">
                             <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
                             <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
