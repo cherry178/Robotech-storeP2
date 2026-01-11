@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Robotech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
+    <style>
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 599px) {
+            .products-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        .product-page {
+            display: none;
+        }
+
+        .product-page.active {
+            display: block;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Robotech Store</span>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Navigation -->
+                <nav class="nav" id="mainNav">
+                    <a href="/Robotech-storeP2/" class="nav-link">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="/Robotech-storeP2/products_static.html" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="#" onclick="filterByCategory('Resistors')">Resistors</a>
+                                <a href="#" onclick="filterByCategory('Capacitors')">Capacitors</a>
+                                <a href="#" onclick="filterByCategory('LEDs')">LEDs</a>
+                                <a href="#" onclick="filterByCategory('Diodes')">Diodes</a>
+                                <a href="#" onclick="filterByCategory('Transistors')">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="#" onclick="filterByCategory('Microcontrollers')">Microcontrollers</a>
+                                <a href="#" onclick="filterByCategory('Arduino')">Arduino</a>
+                                <a href="#" onclick="filterByCategory('Raspberry Pi')">Raspberry Pi</a>
+                                <a href="#" onclick="filterByCategory('ESP')">ESP Boards</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Sensors</h4>
+                                <a href="#" onclick="filterByCategory('Sensors')">All Sensors</a>
+                                <a href="#" onclick="filterByCategory('Temperature Sensors')">Temperature</a>
+                                <a href="#" onclick="filterByCategory('Motion Sensors')">Motion</a>
+                                <a href="#" onclick="filterByCategory('Distance Sensors')">Distance</a>
+                                <a href="#" onclick="filterByCategory('Light Sensors')">Light</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#categories" class="nav-link">Categories</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div class="login-dropdown">
+                            <button class="user-trigger">
+                                <i class="fas fa-user"></i>
+                                <span id="loginText">Demo User</span>
+                            </button>
+                        </div>
+
+                        <button class="btn-icon cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="/Robotech-storeP2/">Home</a> / <span>Products</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">All Products</h1>
+                <p class="page-subtitle">Browse our complete collection of electronics components</p>
+            </div>
+
+            <!-- Filters and Sorting -->
+            <div class="products-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('')">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('Microcontrollers')">Microcontrollers</button>
+                    <button class="filter-btn" onclick="filterByCategory('Actuators')">Actuators</button>
+                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
+                    <button class="filter-btn" onclick="filterByCategory('Displays')">Displays</button>
+                    <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
+                    <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
+                    <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
+                    <select id="sortSelect" class="sort-select" onchange="sortProducts()">
+                        <option value="name">Sort by Name</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Pages Container -->
+            <div id="productsContainer">
+                <!-- Page 1 -->
+                <div class="product-page active" id="page-1">
+                    <div class="products-grid">
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
+                                <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">Arduino Uno R3</h3>
+                                <p class="product-description">ATmega328P microcontroller board with USB interface</p>
+                                <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(11)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%)">
+                                <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">ESP32 Development Board</h3>
+                                <p class="product-description">WiFi & Bluetooth enabled microcontroller</p>
+                                <div class="product-price">Rs 350<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(12)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%)">
+                                <i class="fas fa-eye" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">DHT11 Temperature & Humidity Sensor</h3>
+                                <p class="product-description">Digital temperature and humidity sensor</p>
+                                <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(13)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ffa502 0%, #ff6b35 100%)">
+                                <i class="fas fa-eye" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">HC-SR04 Ultrasonic Sensor</h3>
+                                <p class="product-description">Ultrasonic ranging sensor for distance measurement</p>
+                                <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(14)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #2ed573 0%, #ff6b35 100%)">
+                                <i class="fas fa-cogs" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">SG90 Servo Motor</h3>
+                                <p class="product-description">9g micro servo motor for robotics</p>
+                                <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(15)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #2ed573 100%)">
+                                <i class="fas fa-cogs" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">DC Motor</h3>
+                                <p class="product-description">12V DC geared motor for robotics</p>
+                                <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(16)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2 -->
+                <div class="product-page" id="page-2">
+                    <div class="products-grid">
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff4757 0%, #ff6b35 100%)">
+                                <i class="fas fa-cogs" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">Stepper Motor</h3>
+                                <p class="product-description">NEMA 17 stepper motor with 1.8° step angle</p>
+                                <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(17)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ffa502 0%, #2ed573 100%)">
+                                <i class="fas fa-tv" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">16x2 LCD Display</h3>
+                                <p class="product-description">Character LCD display with I2C interface</p>
+                                <div class="product-price">Rs 120<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(18)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #2ed573 0%, #ffa502 100%)">
+                                <i class="fas fa-tv" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">OLED Display</h3>
+                                <p class="product-description">0.96 inch I2C OLED display module</p>
+                                <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(19)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #ff4757 100%)">
+                                <i class="fas fa-tv" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                                <div class="product-badge">Sale</div>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">TFT Screen</h3>
+                                <p class="product-description">2.8 inch TFT LCD color touch screen display</p>
+                                <div class="product-price">Rs 850<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(20)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #f7931e 0%, #2ed573 100%)">
+                                <i class="fas fa-tv" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">7-Segment Display</h3>
+                                <p class="product-description">4-digit 7-segment LED display module</p>
+                                <div class="product-price">Rs 65<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(21)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image" style="background: linear-gradient(135deg, #ff3838 0%, #f7931e 100%)">
+                                <i class="fas fa-tv" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-title">LED Matrix Display</h3>
+                                <p class="product-description">8x8 LED matrix display with MAX7219 driver</p>
+                                <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart(23)">
+                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" id="prevBtn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <div class="page-numbers">
+                    <button class="page-btn active" onclick="goToPage(1)">1</button>
+                    <button class="page-btn" onclick="goToPage(2)">2</button>
+                    <button class="page-btn" onclick="goToPage(3)">3</button>
+                    <span>...</span>
+                    <button class="page-btn" onclick="goToPage(11)">11</button>
+                </div>
+                <button class="page-btn" id="nextBtn" onclick="goToPage(2)"><i class="fas fa-chevron-right"></i> Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        let currentPage = 1;
+        const totalPages = 11;
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                // Hide current page
+                document.getElementById(`page-${currentPage}`).classList.remove('active');
+
+                // Show new page
+                currentPage = page;
+                document.getElementById(`page-${currentPage}`).classList.add('active');
+
+                // Update pagination buttons
+                updatePaginationButtons();
+
+                // Scroll to top of products
+                document.querySelector('.products-page').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function updatePaginationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+
+            // Update next button
+            if (currentPage < totalPages) {
+                nextBtn.onclick = () => goToPage(currentPage + 1);
+            }
+        }
+
+        function addToCart(productId) {
+            alert(`Added product ${productId} to cart! (Demo - not functional on static page)`);
+        }
+
+        function filterByCategory(category) {
+            alert(`Filtering by ${category} (Demo - not functional on static page)`);
+        }
+
+        function sortProducts() {
+            alert('Sorting (Demo - not functional on static page)');
+        }
+
+        // Initialize pagination
+        updatePaginationButtons();
+    </script>
+</body>
+</html>
