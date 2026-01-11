@@ -1094,6 +1094,16 @@
             console.log('🛒 sessionStorage cleared for consistency');
             console.log('🛒 All localStorage keys:', Object.keys(localStorage));
 
+            // If user is logged in, ensure phone mapping consistency
+            if (userId && phone && loggedIn) {
+                const mappedPhone = localStorage.getItem('phone_' + userId);
+                if (mappedPhone && mappedPhone !== phone) {
+                    console.log('🛒 ⚠️ Phone mismatch detected, using stored mapping');
+                    phone = mappedPhone;
+                    localStorage.setItem('phone', phone);
+                }
+            }
+
             const loginTextElement = document.getElementById('loginText');
 
             if (userId && phone && loggedIn) {

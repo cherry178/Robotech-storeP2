@@ -1134,6 +1134,16 @@
             console.log('products_static.html: sessionStorage cleared and re-reading from localStorage');
             console.log('products_static.html: All localStorage keys:', Object.keys(localStorage));
 
+            // If user is logged in but we want to ensure consistency, check phone mapping
+            if (userId && phone && isLoggedIn) {
+                const mappedPhone = localStorage.getItem('phone_' + userId);
+                if (mappedPhone && mappedPhone !== phone) {
+                    console.log('products_static.html: ⚠️ Phone mismatch detected, using stored mapping');
+                    phone = mappedPhone;
+                    localStorage.setItem('phone', phone);
+                }
+            }
+
             const loginTextElement = document.getElementById('loginText');
             if (loginTextElement) {
                 if (userId && phone && isLoggedIn) {

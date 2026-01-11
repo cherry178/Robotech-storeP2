@@ -654,7 +654,7 @@
         }
 
         function clearOldData() {
-            // Clear old demo user IDs and cart data to start fresh
+            // Clear old demo user IDs and inconsistent cart data
             if (localStorage.getItem('demo_user_id')) {
                 localStorage.removeItem('demo_user_id');
                 console.log('🧹 Cleared old demo user ID');
@@ -667,7 +667,18 @@
                 console.log('🧹 Cleared old cart data:', key);
             });
 
-            console.log('🧹 Fresh start - cleared old demo data');
+            // Clear any inconsistent user data (multiple user_ids without proper mapping)
+            const allKeys = Object.keys(localStorage);
+            const userIdKeys = allKeys.filter(key => key.startsWith('user_id'));
+            if (userIdKeys.length > 1) {
+                console.log('🧹 Multiple user_id keys found, keeping only current session');
+                // Keep only the most recent user_id
+                for (let i = 0; i < userIdKeys.length - 1; i++) {
+                    localStorage.removeItem(userIdKeys[i]);
+                }
+            }
+
+            console.log('🧹 Fresh start - cleared inconsistent data');
         }
 
         function checkExistingLogin() {
@@ -804,29 +815,45 @@
             if (loginModal) loginModal.style.display = 'none';
             if (mainContent) mainContent.style.display = 'block';
 
-            // Generate unique user ID based on phone number (ensures data isolation)
+            // Check if user already exists (return visitor with same phone)
             const phoneInput = document.getElementById('landingPhoneNumber');
             const enteredPhone = phoneInput.value.trim();
 
-            // Create consistent user ID from phone number (last 3 digits + offset for uniqueness)
-            const phoneLast3 = enteredPhone.slice(-3); // Get last 3 digits
-            const userId = 100 + parseInt(phoneLast3); // 100-999 range
+            // First check if this phone number already has a user ID
+            let existingUserId = null;
+            for (let key in localStorage) {
+                if (key.startsWith('phone_') && localStorage.getItem(key) === enteredPhone) {
+                    existingUserId = key.replace('phone_', '');
+                    break;
+                }
+            }
 
-            console.log('🎭 Login: Phone', enteredPhone, '-> User ID:', userId);
+            let userId;
+            if (existingUserId) {
+                // Return visitor - use existing user ID
+                userId = existingUserId;
+                console.log('🎭 Return visitor - Phone', enteredPhone, '-> Existing User ID:', userId);
+            } else {
+                // New user - generate user ID from phone number
+                const phoneLast3 = enteredPhone.slice(-3);
+                userId = String(100 + parseInt(phoneLast3));
+                console.log('🎭 New user - Phone', enteredPhone, '-> Generated User ID:', userId);
+            }
 
             const demoPhone = enteredPhone;
 
             // Store user data consistently (same as initializeUserDisplay)
-            localStorage.setItem('user_id', userId.toString());
+            localStorage.setItem('user_id', userId);
             localStorage.setItem('phone', demoPhone);
             localStorage.setItem('logged_in', 'true');
+            localStorage.setItem('phone_' + userId, demoPhone); // Map phone to user ID for return visits
 
-            sessionStorage.setItem('user_id', userId.toString());
+            sessionStorage.setItem('user_id', userId);
             sessionStorage.setItem('phone', demoPhone);
             sessionStorage.setItem('logged_in', 'true');
 
             currentUser = {
-                user_id: userId.toString(),
+                user_id: userId,
                 phone: demoPhone,
                 logged_in: true
             };
