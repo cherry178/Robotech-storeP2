@@ -1907,11 +1907,15 @@ function updateLoginStatus() {
     console.log('updateLoginStatus - loginText:', loginText, 'loginTrigger:', loginTrigger);
 
     if (loginText && loginTrigger) {
+        // Skip login trigger setup for home page to prevent navigation conflicts
+        const currentPath = window.location.pathname;
+        const isHomePage = currentPath === '/' || currentPath === '/Robotech-storeP2/' || currentPath === '/Robotech-storeP2/index.html';
+
         // Get and validate user ID
         const storedUserId = sessionStorage.getItem('user_id');
         const parsedUserId = storedUserId ? parseInt(storedUserId) : null;
 
-        if (parsedUserId && !isNaN(parsedUserId) && parsedUserId > 0) {
+        if (parsedUserId && !isNaN(parsedUserId) && parsedUserId > 0 && !isHomePage) {
             // Valid user ID - show it
             loginText.textContent = `User ${parsedUserId}`;
             console.log('updateLoginStatus - Set text to:', loginText.textContent);
@@ -1923,8 +1927,8 @@ function updateLoginStatus() {
                     loginTrigger.onclick = () => toggleAccountMenu();
                 }
             }
-        } else {
-            // Invalid or no user ID - show login
+        } else if (!isHomePage) {
+            // Invalid or no user ID - show login (only for non-home pages)
             loginText.textContent = 'Login';
             console.log('updateLoginStatus - Invalid user ID, set to Login');
             loginTrigger.onclick = () => toggleLoginDropdown();

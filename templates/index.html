@@ -173,10 +173,10 @@
                             </button>
 
                             <div class="account-menu" id="accountMenu" style="display: none;">
-                                <div class="account-menu-item" onclick="window.location.href = '/Robotech-storeP2/orders'">
+                                <div class="account-menu-item" id="myOrdersItem">
                                     <i class="fas fa-shopping-bag"></i> My Orders
                                 </div>
-                                <div class="account-menu-item" onclick="logout()">
+                                <div class="account-menu-item" id="logoutItem">
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </div>
                             </div>
@@ -711,19 +711,24 @@
 
         // Ensure proper navigation for account menu items
         document.addEventListener('DOMContentLoaded', function() {
-            // Override any conflicting onclick handlers
-            const accountMenuItems = document.querySelectorAll('.account-menu-item');
-            accountMenuItems.forEach(item => {
-                if (item.textContent.includes('My Orders')) {
-                    item.onclick = function() {
+            // Set onclick handlers with delay to ensure they override any main.js interference
+            setTimeout(function() {
+                const myOrdersItem = document.getElementById('myOrdersItem');
+                const logoutItem = document.getElementById('logoutItem');
+
+                if (myOrdersItem) {
+                    myOrdersItem.onclick = function() {
+                        console.log('Home page: My Orders clicked - navigating to GitHub Pages');
                         window.location.href = '/Robotech-storeP2/orders';
                     };
-                } else if (item.textContent.includes('Logout')) {
-                    item.onclick = function() {
+                }
+
+                if (logoutItem) {
+                    logoutItem.onclick = function() {
                         logout();
                     };
                 }
-            });
+            }, 100); // Small delay to ensure this runs after main.js
         });
     </script>
 </body>
