@@ -641,6 +641,12 @@
         });
 
         function initializeApp() {
+            console.log('🚀 initializeApp called');
+
+            // Test localStorage
+            localStorage.setItem('test_init', 'working_' + Date.now());
+            console.log('🧪 localStorage test in init:', localStorage.getItem('test_init'));
+
             // Clear any old demo data and start fresh
             clearOldData();
 
@@ -654,6 +660,10 @@
         }
 
         function clearOldData() {
+            console.log('🧹 clearOldData called - checking localStorage state');
+            const allKeysBefore = Object.keys(localStorage);
+            console.log('🧹 localStorage keys before cleanup:', allKeysBefore);
+
             // Clear old demo user IDs and inconsistent cart data
             if (localStorage.getItem('demo_user_id')) {
                 localStorage.removeItem('demo_user_id');
@@ -667,18 +677,11 @@
                 console.log('🧹 Cleared old cart data:', key);
             });
 
-            // Clear any inconsistent user data (multiple user_ids without proper mapping)
-            const allKeys = Object.keys(localStorage);
-            const userIdKeys = allKeys.filter(key => key.startsWith('user_id'));
-            if (userIdKeys.length > 1) {
-                console.log('🧹 Multiple user_id keys found, keeping only current session');
-                // Keep only the most recent user_id
-                for (let i = 0; i < userIdKeys.length - 1; i++) {
-                    localStorage.removeItem(userIdKeys[i]);
-                }
-            }
+            // DON'T clear user data - this might be causing the login persistence issue
+            // The multiple user_id check was clearing valid user data
 
-            console.log('🧹 Fresh start - cleared inconsistent data');
+            console.log('🧹 localStorage keys after cleanup:', Object.keys(localStorage));
+            console.log('🧹 Fresh start - cleared old demo data only');
         }
 
         function checkExistingLogin() {
@@ -843,10 +846,14 @@
             const demoPhone = enteredPhone;
 
             // Store user data consistently (same as initializeUserDisplay)
+            console.log('💾 Login: Saving user data - ID:', userId, 'Phone:', demoPhone);
             localStorage.setItem('user_id', userId);
             localStorage.setItem('phone', demoPhone);
             localStorage.setItem('logged_in', 'true');
             localStorage.setItem('phone_' + userId, demoPhone); // Map phone to user ID for return visits
+
+            // Verify data was saved
+            console.log('💾 Login: Verification - user_id:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'logged_in:', localStorage.getItem('logged_in'));
 
             sessionStorage.setItem('user_id', userId);
             sessionStorage.setItem('phone', demoPhone);
