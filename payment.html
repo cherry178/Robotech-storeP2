@@ -86,7 +86,11 @@
         <h1><i class="fas fa-credit-card"></i> Payment</h1>
 
         <div id="paymentContent">
-            <!-- Payment form or login required message will be loaded here -->
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                <h3>Loading Payment Page...</h3>
+                <p>Please wait while we prepare your checkout.</p>
+            </div>
         </div>
     </div>
 
@@ -96,7 +100,6 @@
         let currentUser = null;
         let cartItems = [];
         let selectedPaymentMethod = null;
-        let cartItems = [];
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
