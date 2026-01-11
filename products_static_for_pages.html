@@ -74,7 +74,7 @@
                             </button>
                         </div>
 
-                        <button class="btn-icon cart-btn">
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart_static.html'">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
@@ -1072,14 +1072,21 @@
 
         function addToUserCart(productId, productName, price) {
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            if (!userId) return;
+            console.log('🛒 addToUserCart called - userId:', userId, 'product:', productName);
+
+            if (!userId) {
+                console.log('❌ No user ID found, cannot add to cart');
+                return;
+            }
 
             const cartKey = `cart_user_${userId}`;
             let userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            console.log('🛒 Current cart for user', userId, ':', userCart);
 
             const existingItem = userCart.find(item => item.id === productId);
             if (existingItem) {
                 existingItem.quantity += 1;
+                console.log('🛒 Increased quantity for existing item:', productName);
             } else {
                 userCart.push({
                     id: productId,
@@ -1087,11 +1094,12 @@
                     price: price,
                     quantity: 1
                 });
+                console.log('🛒 Added new item to cart:', productName);
             }
 
             localStorage.setItem(cartKey, JSON.stringify(userCart));
             updateCartCount();
-            console.log('🛒 Added to user cart:', userId, productName);
+            console.log('💾 Saved cart for user', userId, '- total items:', userCart.length);
         }
 
         function updateCartCount() {

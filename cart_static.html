@@ -885,7 +885,10 @@
 
         function loadCart() {
             const cartKey = getUserCartKey();
+            console.log('🛒 loadCart called - cartKey:', cartKey);
+
             if (!cartKey) {
+                console.log('❌ No cart key (user not logged in)');
                 document.getElementById('cartContent').innerHTML = `
                     <div class="empty-cart">
                         <i class="fas fa-shopping-cart"></i>
@@ -898,6 +901,7 @@
             }
 
             const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            console.log('🛒 Loaded cart data:', cart);
             const cartContent = document.getElementById('cartContent');
 
             if (cart.length === 0) {
