@@ -641,13 +641,33 @@
         });
 
         function initializeApp() {
+            // Clear any old demo data and start fresh
+            clearOldData();
+
             // Check if user is already logged in BEFORE setting up other things
             checkExistingLogin();
 
             setupEventListeners();
-            updateCartCount();
+            loadUserCart(); // Load user's cart data
             initializeCarousel();
             initializeUserDisplay();
+        }
+
+        function clearOldData() {
+            // Clear old demo user IDs and cart data to start fresh
+            if (localStorage.getItem('demo_user_id')) {
+                localStorage.removeItem('demo_user_id');
+                console.log('🧹 Cleared old demo user ID');
+            }
+
+            // Clear old cart data that's not user-specific
+            const oldCartKeys = Object.keys(localStorage).filter(key => key.startsWith('cart_') && !key.includes('_user_'));
+            oldCartKeys.forEach(key => {
+                localStorage.removeItem(key);
+                console.log('🧹 Cleared old cart data:', key);
+            });
+
+            console.log('🧹 Fresh start - cleared old demo data');
         }
 
         function checkExistingLogin() {
@@ -669,6 +689,9 @@
                 sessionStorage.setItem('user_id', userId);
                 sessionStorage.setItem('phone', phone);
                 sessionStorage.setItem('logged_in', 'true');
+
+                // Load user's cart data
+                loadUserCart();
             } else {
                 console.log('🚀 No existing login, showing landing page');
                 // Clear any stale session data
@@ -811,6 +834,9 @@
             // Use consistent format (same as products page)
             document.getElementById('loginText').textContent = 'My User ID: ' + userId;
 
+            // Load user's cart data
+            loadUserCart();
+
             // Load products
             loadProducts();
         }
@@ -867,6 +893,13 @@
             if (mainContent) mainContent.style.display = 'none';
 
             currentUser = null;
+            // Clear user's cart data
+            const userId = localStorage.getItem('user_id');
+            if (userId) {
+                const cartKey = `cart_user_${userId}`;
+                localStorage.removeItem(cartKey);
+                console.log('🗑️ Cleared cart data for user ID:', userId);
+            }
             cart = [];
             updateCartCount();
 
@@ -958,6 +991,13 @@
         }
 
         function addToCart(productId, productName, price) {
+            // Only allow adding to cart if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                showNotification('Please login first to add items to cart', 'error');
+                return;
+            }
+
             const existingItem = cart.find(item => item.id === productId);
             if (existingItem) {
                 existingItem.quantity += 1;
@@ -969,6 +1009,7 @@
                     quantity: 1
                 });
             }
+            saveUserCart();
             updateCartCount();
             showNotification(`${productName} added to cart!`);
         }
@@ -978,6 +1019,34 @@
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             if (cartCountElement) {
                 cartCountElement.textContent = totalItems;
+            }
+        }
+
+        function loadUserCart() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (userId) {
+                const cartKey = `cart_user_${userId}`;
+                const savedCart = localStorage.getItem(cartKey);
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                    console.log('🛒 Loaded user cart for ID:', userId, 'Items:', cart.length);
+                } else {
+                    cart = [];
+                    console.log('🛒 No saved cart for user ID:', userId, '- starting empty');
+                }
+            } else {
+                cart = [];
+                console.log('🛒 No user logged in - cart empty');
+            }
+            updateCartCount();
+        }
+
+        function saveUserCart() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (userId) {
+                const cartKey = `cart_user_${userId}`;
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                console.log('💾 Saved user cart for ID:', userId, 'Items:', cart.length);
             }
         }
 

@@ -774,7 +774,7 @@
             initializeUserDisplay();
             loadProducts();
             setupSearchEventListeners();
-            updateCartCount();
+            updateCartCount(); // Update cart count for current user
         });
 
         function setupSearchEventListeners() {
@@ -1051,7 +1051,60 @@
         }
 
         function addToCart(productId) {
-            alert('Added product ' + productId + ' to cart! (Demo - not functional on static page)');
+            // Only allow adding to cart if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                alert('Please login from the home page first to add items to cart!');
+                return;
+            }
+
+            // Find product details
+            const product = ALL_PRODUCTS.find(p => p.id === productId);
+            if (!product) {
+                alert('Product not found!');
+                return;
+            }
+
+            // Add to user-specific cart
+            addToUserCart(productId, product.name, product.price);
+            showNotification(`${product.name} added to cart!`, 'success');
+        }
+
+        function addToUserCart(productId, productName, price) {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) return;
+
+            const cartKey = `cart_user_${userId}`;
+            let userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+
+            const existingItem = userCart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                userCart.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem(cartKey, JSON.stringify(userCart));
+            updateCartCount();
+            console.log('🛒 Added to user cart:', userId, productName);
+        }
+
+        function updateCartCount() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                document.getElementById('cartCount').textContent = '0';
+                return;
+            }
+
+            const cartKey = `cart_user_${userId}`;
+            const userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const totalItems = userCart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
         }
 
         function updateResultsCount(count) {

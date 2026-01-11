@@ -869,7 +869,13 @@
 ];
 
         function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getUserCartKey();
+            if (!cartKey) {
+                document.getElementById('cartCount').textContent = '0';
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const cartCountElement = document.getElementById('cartCount');
             if (cartCountElement) {
@@ -878,7 +884,20 @@
         }
 
         function loadCart() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getUserCartKey();
+            if (!cartKey) {
+                document.getElementById('cartContent').innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Please login first</h3>
+                        <p>You need to login to view your cart</p>
+                        <a href="/Robotech-storeP2/" class="btn btn-primary">Go to Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             const cartContent = document.getElementById('cartContent');
 
             if (cart.length === 0) {
@@ -887,7 +906,7 @@
                         <i class="fas fa-shopping-cart"></i>
                         <h3>Your cart is empty</h3>
                         <p>Add some amazing products to your cart and start shopping!</p>
-                        <a href="/Robotech-storeP2/products.html" class="shop-btn">
+                        <a href="/Robotech-storeP2/products" class="shop-btn">
                             <i class="fas fa-arrow-left"></i> Continue Shopping
                         </a>
                     </div>
@@ -959,18 +978,24 @@
                 return;
             }
 
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getUserCartKey();
+            if (!cartKey) return;
+
+            let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             cart[index].quantity = newQuantity;
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem(cartKey, JSON.stringify(cart));
 
             updateCartCount();
             loadCart();
         }
 
         function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getUserCartKey();
+            if (!cartKey) return;
+
+            let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem(cartKey, JSON.stringify(cart));
 
             updateCartCount();
             loadCart();
@@ -983,7 +1008,10 @@
         }
 
         function calculateTotal() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getUserCartKey();
+            if (!cartKey) return 0;
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         }
 
@@ -1042,6 +1070,11 @@
             updateCartCount();
             loadCart();
         });
+
+        function getUserCartKey() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            return userId ? `cart_user_${userId}` : null;
+        }
 
         function initializeUserDisplay() {
             console.log('🛒 Cart page initializeUserDisplay called');
