@@ -45,9 +45,6 @@
     </style>
 </head>
 <body>
-        <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -203,6 +200,13 @@
             sessionStorage.setItem('user_id', userId);
             sessionStorage.setItem('phone', phone);
             sessionStorage.setItem('logged_in', 'true');
+
+            // Update user display
+            const loginTextElement = document.getElementById('loginText');
+            if (loginTextElement) {
+                loginTextElement.textContent = 'My User ID: ' + userId;
+                console.log('✅ Orders page: User display updated:', userId);
+            }
 
             console.log('User authenticated for orders:', userId);
             loadOrders();
