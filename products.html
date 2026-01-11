@@ -27,7 +27,7 @@
                 <nav class="nav" id="mainNav">
                     <a href="/Robotech-storeP2/" class="nav-link">Home</a>
                     <div class="nav-dropdown">
-                        <a href="/Robotech-storeP2/products.html" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <a href="/Robotech-storeP2/products" class="nav-link dropdown-toggle active">Products ▼</a>
                         <div class="dropdown-menu">
                             <div class="dropdown-column">
                                 <h4>Components</h4>
@@ -70,11 +70,11 @@
                         <div class="login-dropdown">
                             <button class="user-trigger">
                                 <i class="fas fa-user"></i>
-                                <span id="loginText">Demo User</span>
+                                <span id="loginText">My User ID: Loading...</span>
                             </button>
                         </div>
 
-                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart_static.html'">
+                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart'">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
@@ -133,7 +133,7 @@
                 <i class="fas fa-search"></i>
                 <h3>No products found</h3>
                 <p>Try adjusting your search or browse our categories</p>
-                <button class="btn btn-primary" onclick="window.location.href='/Robotech-storeP2/products_static_for_pages.html'">View All Products</button>
+                <button class="btn btn-primary" onclick="window.location.href='/Robotech-storeP2/products'">View All Products</button>
             </div>
 
             <!-- Pagination -->
@@ -761,98 +761,26 @@
     }
 ];
 
-        // Global variables for filtering and sorting (products page specific)
-        let productsCurrentCategory = '';
-        let productsCurrentSort = 'name';
-        let productsCurrentSearch = '';
-        let productsCurrentPage = 1;
-        let productsTotalPages = 1;
+        // Global variables for filtering and sorting
+        let currentCategory = '';
+        let currentSort = 'name';
+        let currentSearch = '';
+        let currentPage = 1;
+        let totalPages = 1;
 
-        // Initialize user display and cart on page load
+        // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Static products page loaded');
+            console.log('Static products page loaded at:', window.location.href);
+
+            // Test localStorage
+            localStorage.setItem('test_key', 'test_value_' + Date.now());
+            console.log('🧪 localStorage test - set test_key, retrieved:', localStorage.getItem('test_key'));
+
             initializeUserDisplay();
             loadProducts();
             setupSearchEventListeners();
-            updateCartCount();
+            updateCartCount(); // Update cart count for current user
         });
-
-        // Global variables (matching main.js)
-        let currentUser = null;
-
-        function initializeUserDisplay() {
-            console.log('initializeUserDisplay called');
-
-            // Check ALL possible storage locations (same as main.js)
-            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
-
-            console.log('🔍 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
-            console.log('🔍 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
-            console.log('🔍 Combined values - userId:', userId, 'phone:', phone, 'loggedIn:', loggedIn);
-
-            const loginTextElement = document.getElementById('loginText');
-
-            if (userId && phone && loggedIn === 'true') {
-                // Set currentUser (like main.js does)
-                currentUser = {
-                    id: userId,
-                    phone: phone,
-                    logged_in: true
-                };
-
-                // Show actual user ID (matching main.js format)
-                loginTextElement.textContent = 'My User ID: ' + userId;
-                console.log('✅ REAL USER FOUND:', userId, phone);
-                console.log('Current currentUser state:', currentUser);
-            } else {
-                // Check if there are any user-related keys at all
-                let allKeys = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    allKeys.push(localStorage.key(i));
-                }
-                for (let i = 0; i < sessionStorage.length; i++) {
-                    allKeys.push(sessionStorage.key(i));
-                }
-                console.log('📋 All storage keys found:', allKeys);
-                console.log('❌ No valid user session found - checking for existing demo user');
-
-                // Check if home page already set a demo user ID
-                let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
-
-                if (!existingDemoId) {
-                    // Generate a consistent demo user ID and store it permanently
-                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
-                    localStorage.setItem('demo_user_id', existingDemoId.toString());
-                    console.log('🎭 Generated new demo user ID:', existingDemoId);
-                } else {
-                    console.log('🎭 Using existing demo user ID:', existingDemoId);
-                }
-
-                const demoPhone = '9876543210';
-
-                // Store user data in both localStorage and sessionStorage for consistency
-                localStorage.setItem('user_id', existingDemoId.toString());
-                localStorage.setItem('phone', demoPhone);
-                localStorage.setItem('logged_in', 'true');
-
-                sessionStorage.setItem('user_id', existingDemoId.toString());
-                sessionStorage.setItem('phone', demoPhone);
-                sessionStorage.setItem('logged_in', 'true');
-
-                // Set currentUser
-                currentUser = {
-                    id: existingDemoId.toString(),
-                    phone: demoPhone,
-                    logged_in: true
-                };
-
-                // Show demo user ID
-                loginTextElement.textContent = 'My User ID: ' + existingDemoId;
-                console.log('✅ Demo user set:', existingDemoId, '(consistent across pages)');
-            }
-        }
 
         function setupSearchEventListeners() {
             const searchInput = document.getElementById('searchInput');
@@ -874,44 +802,38 @@
         function performSearch(query) {
             if (!query.trim()) return;
 
-            productsCurrentSearch = query.trim();
-            productsCurrentCategory = '';
-            productsCurrentPage = 1;
+            currentSearch = query.trim();
+            currentCategory = '';
+            currentPage = 1;
 
             loadProducts();
         }
 
         function loadProducts(page = 1) {
-            console.log('Loading products for page:', page, 'Total products:', ALL_PRODUCTS.length);
-            productsCurrentPage = page;
-
+            console.log('Loading products for page:', page);
+            currentPage = page;
 
             // Apply filters
             let filteredProducts = [...ALL_PRODUCTS];
-            console.log('After copy:', filteredProducts.length);
 
             // Apply category filter
-            if (productsCurrentCategory && productsCurrentCategory !== '') {
-                console.log('Filtering by category:', productsCurrentCategory);
+            if (currentCategory && currentCategory !== '') {
                 filteredProducts = filteredProducts.filter(product =>
-                    product.category.toLowerCase().includes(productsCurrentCategory.toLowerCase()) ||
-                    product.category === productsCurrentCategory
+                    product.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
+                    product.category === currentCategory
                 );
-                console.log('After category filter:', filteredProducts.length);
             }
 
             // Apply search filter
-            if (productsCurrentSearch) {
-                console.log('Filtering by search:', productsCurrentSearch);
+            if (currentSearch) {
                 filteredProducts = filteredProducts.filter(product =>
-                    product.name.toLowerCase().includes(productsCurrentSearch.toLowerCase()) ||
-                    product.description.toLowerCase().includes(productsCurrentSearch.toLowerCase())
+                    product.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    product.description.toLowerCase().includes(currentSearch.toLowerCase())
                 );
-                console.log('After search filter:', filteredProducts.length);
             }
 
             // Apply sorting
-            switch (productsCurrentSort) {
+            switch (currentSort) {
                 case 'price_low':
                 case 'price-low':
                     filteredProducts.sort((a, b) => a.price - b.price);
@@ -930,7 +852,7 @@
 
             // Calculate pagination
             const productsPerPage = 6;
-            productsTotalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            totalPages = Math.ceil(filteredProducts.length / productsPerPage);
             const startIdx = (page - 1) * productsPerPage;
             const endIdx = startIdx + productsPerPage;
             const pageProducts = filteredProducts.slice(startIdx, endIdx);
@@ -947,7 +869,6 @@
 
         function displayProducts(products) {
             console.log('Displaying', products.length, 'products');
-
             const grid = document.getElementById('productsGrid');
             const loading = document.getElementById('loadingContainer');
             const noResults = document.getElementById('noResults');
@@ -1035,7 +956,7 @@
 
         function filterByCategory(category) {
             console.log('Filtering by category:', category);
-            productsCurrentCategory = category;
+            currentCategory = category;
 
             // Update active button
             const buttons = document.querySelectorAll('.filter-btn');
@@ -1048,39 +969,39 @@
             clickedBtn.classList.add('active');
 
             // Reload products
-            productsCurrentPage = 1;
+            currentPage = 1;
             loadProducts(1);
         }
 
         function sortProducts() {
             const sortSelect = document.getElementById('sortSelect');
-            productsCurrentSort = sortSelect.value;
-            console.log('Sorting by:', productsCurrentSort);
-            productsCurrentPage = 1;
+            currentSort = sortSelect.value;
+            console.log('Sorting by:', currentSort);
+            currentPage = 1;
             loadProducts(1);
         }
 
         function updatePagination() {
-            console.log('Updating pagination - totalPages:', productsTotalPages, 'currentPage:', productsCurrentPage);
+            console.log('Updating pagination - totalPages:', totalPages, 'currentPage:', currentPage);
             const pagination = document.getElementById('pagination');
             const pageNumbers = document.getElementById('pageNumbers');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
 
-            if (productsTotalPages > 1) {
+            if (totalPages > 1) {
                 if (pagination) pagination.style.display = 'flex';
-                if (prevBtn) prevBtn.disabled = productsCurrentPage <= 1;
+                if (prevBtn) prevBtn.disabled = currentPage <= 1;
                 if (nextBtn) {
-                    nextBtn.disabled = productsCurrentPage >= productsTotalPages;
-                    nextBtn.onclick = () => productsCurrentPage < productsTotalPages ? goToPage(productsCurrentPage + 1) : null;
+                    nextBtn.disabled = currentPage >= totalPages;
+                    nextBtn.onclick = () => currentPage < totalPages ? goToPage(currentPage + 1) : null;
                 }
 
                 if (pageNumbers) {
                     pageNumbers.innerHTML = '';
 
                     // Show up to 5 pages around current page
-                    const startPage = Math.max(1, productsCurrentPage - 2);
-                    const endPage = Math.min(productsTotalPages, productsCurrentPage + 2);
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(totalPages, currentPage + 2);
 
                     // Add first page if not in range
                     if (startPage > 1) {
@@ -1100,26 +1021,26 @@
 
                     // Add pages around current page
                     for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === productsCurrentPage ? 'active' : ''}`;
+                        const pageBtn = document.createElement('button');
+                        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
                         pageBtn.textContent = i;
                         pageBtn.onclick = () => goToPage(i);
                         pageNumbers.appendChild(pageBtn);
-            }
+                    }
 
                     // Add last page if not in range
-                    if (endPage < productsTotalPages) {
-                        if (endPage < productsTotalPages - 1) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.textContent = '...';
-                    ellipsis.className = 'page-ellipsis';
-                    pageNumbers.appendChild(ellipsis);
-                }
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
 
                         const lastBtn = document.createElement('button');
                         lastBtn.className = 'page-btn';
-                        lastBtn.textContent = productsTotalPages;
-                        lastBtn.onclick = () => goToPage(productsTotalPages);
+                        lastBtn.textContent = totalPages;
+                        lastBtn.onclick = () => goToPage(totalPages);
                         pageNumbers.appendChild(lastBtn);
                     }
                 }
@@ -1129,149 +1050,162 @@
         }
 
         function goToPage(page) {
-            if (page >= 1 && page <= productsTotalPages) {
+            if (page >= 1 && page <= totalPages) {
                 loadProducts(page);
             }
         }
 
         function addToCart(productId) {
-            console.log('🛒 addToCart called with productId:', productId);
-            console.log('🛒 currentUser:', currentUser);
-
-            // Find the product name for debugging
-            console.log('🛒 DEBUG: Looking up product name for ID', productId);
-
-            // For GitHub Pages - allow guest users to add to cart (since no real login system)
-            // Check if we have any user session (demo or real)
+            // Only allow adding to cart if user is logged in
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
-                              (localStorage.getItem('logged_in') === 'true');
-
-            console.log('addToCart check - currentUser:', currentUser, 'userId:', userId, 'isLoggedIn:', isLoggedIn);
-
-            // If no user session at all, initialize demo user first
-            if (!currentUser && (!userId || !isLoggedIn)) {
-                console.log('No user session found, initializing demo user for cart functionality');
-                initializeUserDisplay(); // This will set demo user
-
-                // Wait a bit for initialization, then retry
-                setTimeout(() => {
-                    addToCart(productId);
-                }, 100);
+            if (!userId) {
+                alert('Please login from the home page first to add items to cart!');
                 return;
             }
 
-            // User is available (demo or real) - add to cart
-            console.log('User available, adding to cart');
-            addToAuthenticatedCart(productId);
+            // Find product details
+            const product = ALL_PRODUCTS.find(p => p.id === productId);
+            if (!product) {
+                alert('Product not found!');
+                return;
+            }
+
+            // Add to user-specific cart
+            addToUserCart(productId, product.name, product.price);
+            showNotification(`${product.name} added to cart!`, 'success');
         }
 
-        function addToAuthenticatedCart(productId) {
-            console.log('🛒 addToAuthenticatedCart called with productId:', productId, typeof productId);
+        function addToUserCart(productId, productName, price) {
+            // Get user ID - prioritize sessionStorage, fallback to localStorage
+            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            console.log('🛒 addToUserCart called - sessionStorage userId:', sessionStorage.getItem('user_id'), 'localStorage userId:', localStorage.getItem('user_id'), 'product:', productName);
 
-            // For GitHub Pages - no need to check user authentication since we allow guests
-            // Just add the product to cart directly
-
-            // Find the product
-            const product = ALL_PRODUCTS.find(p => p.id === parseInt(productId));
-            if (!product) {
-                console.error('❌ Product not found:', productId);
-                showCartNotification('Product not found', 'error');
+            if (!userId) {
+                console.log('❌ No user ID found, cannot add to cart');
+                alert('Please login first to add items to cart!');
+                window.location.href = '/Robotech-storeP2/';
                 return;
             }
 
-            console.log('📦 Adding product to cart:', product.name);
+            const cartKey = `cart_user_${userId}`;
+            let userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            console.log('🛒 Current cart for user', userId, ':', userCart);
 
-            // Get current cart from localStorage
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-            // Check if product already in cart
-            const existingItem = cart.find(item => item.id === product.id);
+            const existingItem = userCart.find(item => item.id === productId);
             if (existingItem) {
                 existingItem.quantity += 1;
-                console.log('📦 Increased quantity of existing item:', product.name, 'to', existingItem.quantity);
+                console.log('🛒 Increased quantity for existing item:', productName);
             } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    image_url: product.image_url,
+                userCart.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
                     quantity: 1
                 });
-                console.log('📦 Added new item to cart:', product.name);
+                console.log('🛒 Added new item to cart:', productName);
             }
 
-            // Save cart to localStorage
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem(cartKey, JSON.stringify(userCart));
+            console.log('💾 Saved cart data to localStorage key:', cartKey, 'Data:', JSON.stringify(userCart));
 
-            // Update cart count in header
+            // Verify the data was saved
+            const verifyData = localStorage.getItem(cartKey);
+            console.log('💾 Verification - saved to key:', cartKey, 'Data length:', JSON.stringify(userCart).length);
+            console.log('💾 Verification - retrieved data:', verifyData);
+            console.log('💾 Verification - data matches:', verifyData === JSON.stringify(userCart));
+
+            const allKeys = Object.keys(localStorage);
+            console.log('💾 All localStorage keys after save:', allKeys);
+
+            // Check all cart-related keys
+            const cartKeys = allKeys.filter(key => key.includes('cart'));
+            console.log('💾 Cart-related keys after save:', cartKeys);
+
             updateCartCount();
-
-            // Show success message (matching main.js style)
-            showCartNotification(product.name + ' added to cart successfully!', 'success');
-
-            console.log('✅ Product added to cart. Total cart items:', cart.reduce((sum, item) => sum + item.quantity, 0));
+            console.log('💾 Saved cart for user', userId, '- total items:', userCart.length);
         }
 
         function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountElement = document.getElementById('cartCount');
-            if (cartCountElement) {
-                cartCountElement.textContent = totalItems;
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                document.getElementById('cartCount').textContent = '0';
+                return;
             }
-        }
 
-        function showCartNotification(message, type = 'info') {
-            // Create notification element (matching main.js showNotification)
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-
-            const icon = type === 'success' ? 'check-circle' :
-                         type === 'error' ? 'exclamation-circle' :
-                         type === 'warning' ? 'exclamation-triangle' : 'info-circle';
-
-            notification.innerHTML = `
-                <i class="fas fa-${icon}"></i>
-                <span>${message}</span>
-                <button class="notification-close" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-
-            // Add notification styles (matching main.js)
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 0.5rem;
-                box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                z-index: 9999;
-                font-size: 0.875rem;
-                font-weight: 500;
-                max-width: 400px;
-                animation: slideInRight 0.3s ease-out;
-            `;
-
-            document.body.appendChild(notification);
-
-            // Auto remove after 4 seconds (matching main.js timing)
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 4000);
+            const cartKey = `cart_user_${userId}`;
+            const userCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const totalItems = userCart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
         }
 
         function updateResultsCount(count) {
             // Update any results count display if needed
             console.log('Total filtered results:', count);
+        }
+
+        function initializeUserDisplay() {
+            console.log('products_static.html: initializeUserDisplay called at URL:', window.location.href);
+
+            // Clear any existing session data first to ensure fresh read
+            sessionStorage.clear();
+
+            let userId = localStorage.getItem('user_id');
+            let phone = localStorage.getItem('phone');
+            let isLoggedIn = localStorage.getItem('logged_in') === 'true';
+
+            console.log('products_static.html: localStorage check - userId:', userId, 'phone:', phone, 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('products_static.html: sessionStorage cleared and re-reading from localStorage');
+            console.log('products_static.html: All localStorage keys:', Object.keys(localStorage));
+
+            // If user is logged in but we want to ensure consistency, check phone mapping
+            if (userId && phone && isLoggedIn) {
+                const mappedPhone = localStorage.getItem('phone_' + userId);
+                if (mappedPhone && mappedPhone !== phone) {
+                    console.log('products_static.html: ⚠️ Phone mismatch detected, using stored mapping');
+                    phone = mappedPhone;
+                    localStorage.setItem('phone', phone);
+                }
+            }
+
+            const loginTextElement = document.getElementById('loginText');
+            if (loginTextElement) {
+                if (userId && phone && isLoggedIn) {
+                    loginTextElement.textContent = 'My User ID: ' + userId;
+                    console.log('products_static.html: ✅ User found in storage:', userId, 'Phone:', phone);
+
+            // Clean up any old cart data that doesn't belong to this user
+            cleanupOldCartData(userId);
+
+            // Sync to sessionStorage for current session
+            sessionStorage.setItem('user_id', userId);
+            sessionStorage.setItem('phone', phone);
+            sessionStorage.setItem('logged_in', 'true');
+                } else {
+                    // For GitHub Pages, if no user is logged in, redirect to home
+                    console.log('products_static.html: ❌ No user logged in, redirecting to home');
+                    alert('Please login first from the home page!');
+                    window.location.href = '/Robotech-storeP2/';
+                    return;
+                }
+            } else {
+                console.error('products_static.html: loginText element not found!');
+            }
+        }
+
+        function cleanupOldCartData(currentUserId) {
+            const allKeys = Object.keys(localStorage);
+            const oldCartKeys = allKeys.filter(key => {
+                return key.startsWith('cart') && key !== `cart_user_${currentUserId}`;
+            });
+
+            oldCartKeys.forEach(key => {
+                console.log('🧹 Cleaning up old cart data:', key);
+                localStorage.removeItem(key);
+            });
+
+            if (oldCartKeys.length > 0) {
+                console.log('🧹 Cleaned up', oldCartKeys.length, 'old cart entries');
+            }
         }
     </script>
 </body>
