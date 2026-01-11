@@ -783,13 +783,14 @@
         function initializeUserDisplay() {
             console.log('initializeUserDisplay called');
 
-            // Try to get user info from localStorage/sessionStorage (same as main.js)
+            // Check ALL possible storage locations (same as main.js)
             let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
             let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
 
-            console.log('sessionStorage check - userId:', userId, 'phone:', phone, 'loggedIn:', loggedIn);
-            console.log('localStorage check - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('🔍 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
+            console.log('🔍 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('🔍 Combined values - userId:', userId, 'phone:', phone, 'loggedIn:', loggedIn);
 
             const loginTextElement = document.getElementById('loginText');
 
@@ -803,32 +804,43 @@
 
                 // Show actual user ID (matching main.js format)
                 loginTextElement.textContent = 'My User ID: ' + userId;
-                console.log('✅ User found and set:', userId, phone);
+                console.log('✅ REAL USER FOUND:', userId, phone);
                 console.log('Current currentUser state:', currentUser);
             } else {
-                // For GitHub Pages demo - set demo user data so Add to Cart works
-                console.log('❌ No valid user found, setting demo user for GitHub Pages');
+                // Check if user was logged in on home page but data got lost
+                console.log('❌ No valid user session found');
 
-                // Set demo user data
-                const demoUserId = '12345678'; // Demo user ID
-                const demoPhone = '9876543210'; // Demo phone
+                // Check if there are any user-related keys at all
+                let allKeys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    allKeys.push(localStorage.key(i));
+                }
+                for (let i = 0; i < sessionStorage.length; i++) {
+                    allKeys.push(sessionStorage.key(i));
+                }
+                console.log('📋 All storage keys found:', allKeys);
 
-                // Store in localStorage for persistence
-                localStorage.setItem('user_id', demoUserId);
-                localStorage.setItem('phone', demoPhone);
-                localStorage.setItem('logged_in', 'true');
+                // For GitHub Pages - if no user data, set a demo user that looks like real 3-digit IDs
+                const demoUserId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
+                const demoPhone = '9876543210';
+
+                console.log('🎭 Setting demo user ID:', demoUserId, '(3 digits like localhost)');
+
+                // Store in sessionStorage (like main.js does)
+                sessionStorage.setItem('user_id', demoUserId.toString());
+                sessionStorage.setItem('phone', demoPhone);
+                sessionStorage.setItem('logged_in', 'true');
 
                 // Set currentUser
                 currentUser = {
-                    id: demoUserId,
+                    id: demoUserId.toString(),
                     phone: demoPhone,
                     logged_in: true
                 };
 
-                // Show demo user ID (but make it look real)
+                // Show demo user ID
                 loginTextElement.textContent = 'My User ID: ' + demoUserId;
-                console.log('✅ Demo user set for GitHub Pages:', demoUserId);
-                console.log('Current currentUser state:', currentUser);
+                console.log('✅ Demo user set:', demoUserId, '(3-digit like your localhost IDs)');
             }
         }
 
