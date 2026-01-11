@@ -1056,6 +1056,8 @@
         }
 
         function addToCart(productId) {
+            console.log('🛒 addToCart called with productId:', productId, 'currentCategory:', currentCategory);
+
             // Only allow adding to cart if user is logged in
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             if (!userId) {

@@ -49,7 +49,6 @@
 </head>
 <body>
     <div class="demo-banner">
-        🚀 DEMO MODE - <a href="static_index.html" style="color: white; text-decoration: underline;">Back to Home</a> |
         <button id="clearDataBtn" style="margin-left: 10px; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">🔴 Clear Login Data</button>
     </div>
 
@@ -209,30 +208,9 @@
             console.log('💳 Cart loaded:', cartItems.length, 'items');
             console.log('💳 Cart items details:', JSON.stringify(cartItems, null, 2));
 
-                        console.log('🛒 Calling displayPaymentForm()...');
-                        displayPaymentForm();
-                    } else {
-                        console.error('🛒 Cart API returned error:', data.error);
-                        paymentContent.innerHTML = `
-                            <div class="login-required">
-                                <h3><i class="fas fa-exclamation-triangle"></i> Error Loading Cart</h3>
-                                <p>Could not load your cart items. Error: ${data.error || 'Unknown error'}</p>
-                                <p>Please try again or contact support.</p>
-                                <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
-                            </div>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ Error loading cart:', error);
-                    paymentContent.innerHTML = `
-                        <div class="login-required">
-                            <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
-                            <p>Failed to load cart: ${error.message}</p>
-                            <a href="cart.html" class="btn">Back to Cart</a>
-                        </div>
-                    `;
-                });
+            // Display the payment form
+            console.log('💳 Calling displayPaymentForm()...');
+            displayPaymentForm();
         }
         
         let orderItems = []; // Make it global for processPayment
