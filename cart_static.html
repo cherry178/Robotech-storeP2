@@ -1036,11 +1036,59 @@
             }, 3000);
         }
 
-        // Initialize cart on page load
+        // Initialize cart and user display on page load
         document.addEventListener('DOMContentLoaded', function() {
+            initializeUserDisplay();
             updateCartCount();
             loadCart();
         });
+
+        function initializeUserDisplay() {
+            console.log('🛒 Cart page initializeUserDisplay called');
+
+            // Check for existing user session (same as other pages)
+            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            console.log('🛒 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
+            console.log('🛒 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+
+            const loginTextElement = document.getElementById('loginText');
+
+            if (userId && phone && loggedIn === 'true') {
+                // Show existing user ID
+                loginTextElement.textContent = 'My User ID: ' + userId;
+                console.log('✅ Cart page: Using existing user ID:', userId);
+            } else {
+                // Check for existing demo user ID
+                let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
+
+                if (!existingDemoId) {
+                    // Generate new consistent demo user ID (3 digits)
+                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999
+                    localStorage.setItem('demo_user_id', existingDemoId.toString());
+                    console.log('🎭 Cart page: Generated new demo user ID:', existingDemoId);
+                } else {
+                    console.log('🎭 Cart page: Using existing demo user ID:', existingDemoId);
+                }
+
+                const demoPhone = '9876543210';
+
+                // Store user data
+                localStorage.setItem('user_id', existingDemoId.toString());
+                localStorage.setItem('phone', demoPhone);
+                localStorage.setItem('logged_in', 'true');
+
+                sessionStorage.setItem('user_id', existingDemoId.toString());
+                sessionStorage.setItem('phone', demoPhone);
+                sessionStorage.setItem('logged_in', 'true');
+
+                // Show demo user ID
+                loginTextElement.textContent = 'My User ID: ' + existingDemoId;
+                console.log('✅ Cart page: Demo user set:', existingDemoId);
+            }
+        }
     </script>
 </body>
 </html>

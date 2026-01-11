@@ -641,10 +641,31 @@
         });
 
         function initializeApp() {
+            // Check if user is already logged in BEFORE setting up other things
+            checkExistingLogin();
+
             setupEventListeners();
             updateCartCount();
             initializeCarousel();
             initializeUserDisplay();
+        }
+
+        function checkExistingLogin() {
+            // Immediately check if user is logged in and skip landing page if so
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            if (userId && phone && loggedIn === 'true') {
+                console.log('🚀 User already logged in, skipping landing page');
+                const landingOverlay = document.getElementById('landingOverlay');
+                const mainContent = document.getElementById('mainContent');
+
+                if (landingOverlay) landingOverlay.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+            } else {
+                console.log('🚀 No existing login, showing landing page');
+            }
         }
 
         function setupEventListeners() {
@@ -1053,18 +1074,28 @@
             console.log('🏠 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
 
             const loginTextElement = document.getElementById('loginText');
+            const landingOverlay = document.getElementById('landingOverlay');
+            const mainContent = document.getElementById('mainContent');
 
             if (userId && phone && loggedIn === 'true') {
+                // User is already logged in - skip landing page
+                console.log('✅ Home page: User already logged in, skipping landing page');
+                if (landingOverlay) landingOverlay.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+
                 // Show existing user ID
                 loginTextElement.textContent = 'My User ID: ' + userId;
                 console.log('✅ Home page: Using existing user ID:', userId);
             } else {
-                // Check for existing demo user ID (set by products page)
+                // User not logged in - show landing page
+                console.log('❌ Home page: User not logged in, showing landing page');
+
+                // Check for existing demo user ID (set by other pages)
                 let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
 
                 if (!existingDemoId) {
-                    // Generate new consistent demo user ID
-                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
+                    // Generate new consistent demo user ID (3 digits)
+                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999
                     localStorage.setItem('demo_user_id', existingDemoId.toString());
                     console.log('🎭 Home page: Generated new demo user ID:', existingDemoId);
                 } else {
@@ -1073,7 +1104,7 @@
 
                 const demoPhone = '9876543210';
 
-                // Store user data (same as products page)
+                // Pre-store user data for when login happens
                 localStorage.setItem('user_id', existingDemoId.toString());
                 localStorage.setItem('phone', demoPhone);
                 localStorage.setItem('logged_in', 'true');
@@ -1082,9 +1113,7 @@
                 sessionStorage.setItem('phone', demoPhone);
                 sessionStorage.setItem('logged_in', 'true');
 
-                // Show demo user ID
-                loginTextElement.textContent = 'My User ID: ' + existingDemoId;
-                console.log('✅ Home page: Demo user set:', existingDemoId);
+                console.log('✅ Home page: Demo user pre-configured:', existingDemoId);
             }
         }
     </script>
