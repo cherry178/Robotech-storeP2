@@ -787,6 +787,16 @@
             console.log('🧪 localStorage test - set test_key, retrieved:', localStorage.getItem('test_key'));
 
             initializeUserDisplay();
+
+            // Check for category parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            if (categoryParam) {
+                console.log('URL category parameter found:', categoryParam);
+                currentCategory = categoryParam;
+                updatePageTitle(categoryParam);
+            }
+
             loadProducts();
             setupSearchEventListeners();
             updateCartCount(); // Update cart count for current user
@@ -964,19 +974,46 @@
             return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16);
         }
 
+        function updatePageTitle(category) {
+            const pageTitle = document.querySelector('.page-title');
+            const breadcrumb = document.querySelector('.breadcrumb');
+
+            if (category && category !== '') {
+                // Update page title
+                const categoryName = category.replace(' & ', ' &amp; ');
+                pageTitle.textContent = categoryName + ' Products';
+
+                // Update breadcrumb
+                breadcrumb.innerHTML = '<a href="/Robotech-storeP2/">Home</a> / <a href="/Robotech-storeP2/products">Products</a> / <span>' + categoryName + '</span>';
+
+                console.log('Updated page title and breadcrumb for category:', category);
+            } else {
+                // Reset to default
+                pageTitle.textContent = 'All Products';
+                breadcrumb.innerHTML = '<a href="/Robotech-storeP2/">Home</a> / <span>Products</span>';
+            }
+        }
+
         function filterByCategory(category) {
             console.log('Filtering by category:', category);
             currentCategory = category;
+
+            // Update page title and breadcrumb
+            updatePageTitle(category);
 
             // Update active button
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('active');
+                // Set active based on category value
+                if ((category === '' && btn.textContent === 'All') ||
+                    btn.textContent === category ||
+                    (category === 'Power Supply' && btn.textContent === 'Power Supply') ||
+                    (category === 'Tools & Accessories' && btn.textContent === 'Tools & Accessories') ||
+                    (category === 'Audio Components' && btn.textContent === 'Audio Components')) {
+                    btn.classList.add('active');
+                }
             });
-
-            // Find and activate the clicked button
-            const clickedBtn = event.target;
-            clickedBtn.classList.add('active');
 
             // Reload products
             currentPage = 1;
