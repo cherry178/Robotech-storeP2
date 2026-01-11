@@ -1110,8 +1110,16 @@
 
             // Verify the data was saved
             const verifyData = localStorage.getItem(cartKey);
+            console.log('💾 Verification - saved to key:', cartKey, 'Data length:', JSON.stringify(userCart).length);
             console.log('💾 Verification - retrieved data:', verifyData);
-            console.log('💾 All localStorage keys after save:', Object.keys(localStorage));
+            console.log('💾 Verification - data matches:', verifyData === JSON.stringify(userCart));
+
+            const allKeys = Object.keys(localStorage);
+            console.log('💾 All localStorage keys after save:', allKeys);
+
+            // Check all cart-related keys
+            const cartKeys = allKeys.filter(key => key.includes('cart'));
+            console.log('💾 Cart-related keys after save:', cartKeys);
 
             updateCartCount();
             console.log('💾 Saved cart for user', userId, '- total items:', userCart.length);
