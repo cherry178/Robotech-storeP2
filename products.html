@@ -777,22 +777,40 @@
             updateCartCount();
         });
 
+        // Global variables (matching main.js)
+        let currentUser = null;
+
         function initializeUserDisplay() {
-            // Try to get user info from localStorage/sessionStorage
+            console.log('initializeUserDisplay called');
+
+            // Try to get user info from localStorage/sessionStorage (same as main.js)
             let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
             let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
 
+            console.log('sessionStorage check - userId:', userId, 'phone:', phone, 'loggedIn:', loggedIn);
+            console.log('localStorage check - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+
             const loginTextElement = document.getElementById('loginText');
 
             if (userId && phone && loggedIn === 'true') {
-                // Show actual user ID
+                // Set currentUser (like main.js does)
+                currentUser = {
+                    id: userId,
+                    phone: phone,
+                    logged_in: true
+                };
+
+                // Show actual user ID (matching main.js format)
                 loginTextElement.textContent = 'My User ID: ' + userId;
-                console.log('User found:', userId, phone);
+                console.log('✅ User found and set:', userId, phone);
+                console.log('Current currentUser state:', currentUser);
             } else {
-                // Show demo user
+                // Show demo user (fallback)
+                currentUser = null;
                 loginTextElement.textContent = 'Demo User';
-                console.log('No valid user found, showing demo');
+                console.log('❌ No valid user found, showing demo');
+                console.log('Current currentUser state:', currentUser);
             }
         }
 
@@ -1077,23 +1095,67 @@
         }
 
         function addToCart(productId) {
-            console.log('addToCart called with productId:', productId);
-            console.log('ALL_PRODUCTS length:', ALL_PRODUCTS.length);
+            console.log('🛒 addToCart called with productId:', productId);
+            console.log('🛒 currentUser:', currentUser);
 
-            // Find the product
-            const product = ALL_PRODUCTS.find(p => p.id === productId);
-            console.log('Found product:', product);
+            // Find the product name for debugging
+            console.log('🛒 DEBUG: Looking up product name for ID', productId);
 
-            if (!product) {
-                alert('Product not found! ID: ' + productId);
+            // Check if user is logged in by checking storage and currentUser (same as main.js)
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
+                              (localStorage.getItem('logged_in') === 'true');
+
+            console.log('addToCart check - currentUser:', currentUser, 'userId:', userId, 'isLoggedIn:', isLoggedIn);
+
+            if (!currentUser && (!isLoggedIn || !userId)) {
+                console.log('User not logged in, redirecting to landing page');
+                showCartNotification('Please login to add items to your cart', 'warning');
+                // Redirect to home page since that's our entry point
+                setTimeout(() => {
+                    window.location.href = '/Robotech-storeP2/';
+                }, 1000);
                 return;
             }
+
+            // User is logged in - add to authenticated cart (simulate API call)
+            console.log('User is logged in, adding to authenticated cart');
+            addToAuthenticatedCart(productId);
+        }
+
+        function addToAuthenticatedCart(productId) {
+            console.log('🛒 addToAuthenticatedCart called with productId:', productId, typeof productId);
+
+            // Get user ID from storage (same as main.js)
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') ||
+                              (localStorage.getItem('logged_in') === 'true');
+
+            console.log('🛒 addToAuthenticatedCart - userId:', userId, 'phone:', phone, 'isLoggedIn:', isLoggedIn);
+
+            if (!userId || !isLoggedIn) {
+                console.error('❌ No authenticated user session for cart');
+                showCartNotification('Please login to add items to cart', 'error');
+                return;
+            }
+
+            // Find the product
+            const product = ALL_PRODUCTS.find(p => p.id === parseInt(productId));
+            if (!product) {
+                console.error('❌ Product not found:', productId);
+                showCartNotification('Product not found', 'error');
+                return;
+            }
+
+            // Simulate API call success (since we can't make real API calls on GitHub Pages)
+            console.log('📤 Simulating API call success for product:', product.name);
 
             // Get current cart from localStorage
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
             // Check if product already in cart
-            const existingItem = cart.find(item => item.id === productId);
+            const existingItem = cart.find(item => item.id === product.id);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
@@ -1111,11 +1173,11 @@
 
             // Update cart count in header
             updateCartCount();
-            console.log('Cart updated, new cart:', cart);
 
-            // Show success message
-            showCartNotification(product.name + ' added to cart successfully!');
-            console.log('Notification shown for:', product.name);
+            // Show success message (same as main.js)
+            showCartNotification(product.name + ' added to cart successfully!', 'success');
+
+            console.log('✅ Product added to cart:', product.name, 'Cart now has', cart.length, 'items');
         }
 
         function updateCartCount() {
@@ -1127,53 +1189,51 @@
             }
         }
 
-        function showCartNotification(message) {
-            // Create notification element
+        function showCartNotification(message, type = 'info') {
+            // Create notification element (matching main.js showNotification)
             const notification = document.createElement('div');
-            notification.className = 'cart-notification';
+            notification.className = `notification notification-${type}`;
+
+            const icon = type === 'success' ? 'check-circle' :
+                         type === 'error' ? 'exclamation-circle' :
+                         type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+
             notification.innerHTML = `
-                <div class="cart-notification-content">
-                    <i class="fas fa-check-circle"></i>
-                    <span>${message}</span>
-                </div>
+                <i class="fas fa-${icon}"></i>
+                <span>${message}</span>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
             `;
 
-            // Style the notification
-            Object.assign(notification.style, {
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                background: '#4CAF50',
-                color: 'white',
-                padding: '12px 20px',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                zIndex: '10000',
-                fontSize: '14px',
-                fontWeight: '500',
-                opacity: '0',
-                transform: 'translateY(-20px)',
-                transition: 'all 0.3s ease'
-            });
+            // Add notification styles (matching main.js)
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                z-index: 9999;
+                font-size: 0.875rem;
+                font-weight: 500;
+                max-width: 400px;
+                animation: slideInRight 0.3s ease-out;
+            `;
 
             document.body.appendChild(notification);
 
-            // Animate in
+            // Auto remove after 4 seconds (matching main.js timing)
             setTimeout(() => {
-                notification.style.opacity = '1';
-                notification.style.transform = 'translateY(0)';
-            }, 10);
-
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 4000);
         }
 
         function updateResultsCount(count) {
