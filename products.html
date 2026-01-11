@@ -27,7 +27,7 @@
                 <nav class="nav" id="mainNav">
                     <a href="/Robotech-storeP2/" class="nav-link">Home</a>
                     <div class="nav-dropdown">
-                        <a href="/Robotech-storeP2/products_static_for_pages.html" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <a href="/Robotech-storeP2/products.html" class="nav-link dropdown-toggle active">Products ▼</a>
                         <div class="dropdown-menu">
                             <div class="dropdown-column">
                                 <h4>Components</h4>
@@ -803,26 +803,34 @@
         }
 
         function loadProducts(page = 1) {
-            console.log('Loading products for page:', page);
+            console.log('Loading products for page:', page, 'Total products:', ALL_PRODUCTS.length);
             currentPage = page;
+
+            // TEMPORARY: Show debug info
+            alert('Loading products... Total: ' + ALL_PRODUCTS.length + ', Page: ' + page);
 
             // Apply filters
             let filteredProducts = [...ALL_PRODUCTS];
+            console.log('After copy:', filteredProducts.length);
 
             // Apply category filter
             if (currentCategory && currentCategory !== '') {
+                console.log('Filtering by category:', currentCategory);
                 filteredProducts = filteredProducts.filter(product =>
                     product.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
                     product.category === currentCategory
                 );
+                console.log('After category filter:', filteredProducts.length);
             }
 
             // Apply search filter
             if (currentSearch) {
+                console.log('Filtering by search:', currentSearch);
                 filteredProducts = filteredProducts.filter(product =>
                     product.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
                     product.description.toLowerCase().includes(currentSearch.toLowerCase())
                 );
+                console.log('After search filter:', filteredProducts.length);
             }
 
             // Apply sorting
@@ -862,12 +870,15 @@
 
         function displayProducts(products) {
             console.log('Displaying', products.length, 'products');
+            alert('displayProducts called with ' + products.length + ' products');
+
             const grid = document.getElementById('productsGrid');
             const loading = document.getElementById('loadingContainer');
             const noResults = document.getElementById('noResults');
 
             if (!grid) {
                 console.error('productsGrid element not found!');
+                alert('ERROR: productsGrid element not found!');
                 return;
             }
 
