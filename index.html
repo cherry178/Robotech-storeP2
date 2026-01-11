@@ -644,6 +644,7 @@
             setupEventListeners();
             updateCartCount();
             initializeCarousel();
+            initializeUserDisplay();
         }
 
         function setupEventListeners() {
@@ -1012,6 +1013,52 @@
             }
         `;
         document.head.appendChild(style);
+
+        function initializeUserDisplay() {
+            console.log('Home page initializeUserDisplay called');
+
+            // Check for existing user session (same as products page)
+            let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            console.log('Home page - sessionStorage userId:', sessionStorage.getItem('user_id'), 'localStorage userId:', localStorage.getItem('user_id'));
+
+            const loginTextElement = document.getElementById('loginText');
+
+            if (userId && phone && loggedIn === 'true') {
+                // Show existing user ID
+                loginTextElement.textContent = 'My User ID: ' + userId;
+                console.log('✅ Home page: Using existing user ID:', userId);
+            } else {
+                // Check for existing demo user ID (set by products page)
+                let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
+
+                if (!existingDemoId) {
+                    // Generate new consistent demo user ID
+                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
+                    localStorage.setItem('demo_user_id', existingDemoId.toString());
+                    console.log('🎭 Home page: Generated new demo user ID:', existingDemoId);
+                } else {
+                    console.log('🎭 Home page: Using existing demo user ID:', existingDemoId);
+                }
+
+                const demoPhone = '9876543210';
+
+                // Store user data (same as products page)
+                localStorage.setItem('user_id', existingDemoId.toString());
+                localStorage.setItem('phone', demoPhone);
+                localStorage.setItem('logged_in', 'true');
+
+                sessionStorage.setItem('user_id', existingDemoId.toString());
+                sessionStorage.setItem('phone', demoPhone);
+                sessionStorage.setItem('logged_in', 'true');
+
+                // Show demo user ID
+                loginTextElement.textContent = 'My User ID: ' + existingDemoId;
+                console.log('✅ Home page: Demo user set:', existingDemoId);
+            }
+        }
     </script>
 </body>
 </html>

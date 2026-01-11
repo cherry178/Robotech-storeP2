@@ -807,9 +807,6 @@
                 console.log('✅ REAL USER FOUND:', userId, phone);
                 console.log('Current currentUser state:', currentUser);
             } else {
-                // Check if user was logged in on home page but data got lost
-                console.log('❌ No valid user session found');
-
                 // Check if there are any user-related keys at all
                 let allKeys = [];
                 for (let i = 0; i < localStorage.length; i++) {
@@ -819,28 +816,41 @@
                     allKeys.push(sessionStorage.key(i));
                 }
                 console.log('📋 All storage keys found:', allKeys);
+                console.log('❌ No valid user session found - checking for existing demo user');
 
-                // For GitHub Pages - if no user data, set a demo user that looks like real 3-digit IDs
-                const demoUserId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
+                // Check if home page already set a demo user ID
+                let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
+
+                if (!existingDemoId) {
+                    // Generate a consistent demo user ID and store it permanently
+                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999 (3 digits)
+                    localStorage.setItem('demo_user_id', existingDemoId.toString());
+                    console.log('🎭 Generated new demo user ID:', existingDemoId);
+                } else {
+                    console.log('🎭 Using existing demo user ID:', existingDemoId);
+                }
+
                 const demoPhone = '9876543210';
 
-                console.log('🎭 Setting demo user ID:', demoUserId, '(3 digits like localhost)');
+                // Store user data in both localStorage and sessionStorage for consistency
+                localStorage.setItem('user_id', existingDemoId.toString());
+                localStorage.setItem('phone', demoPhone);
+                localStorage.setItem('logged_in', 'true');
 
-                // Store in sessionStorage (like main.js does)
-                sessionStorage.setItem('user_id', demoUserId.toString());
+                sessionStorage.setItem('user_id', existingDemoId.toString());
                 sessionStorage.setItem('phone', demoPhone);
                 sessionStorage.setItem('logged_in', 'true');
 
                 // Set currentUser
                 currentUser = {
-                    id: demoUserId.toString(),
+                    id: existingDemoId.toString(),
                     phone: demoPhone,
                     logged_in: true
                 };
 
                 // Show demo user ID
-                loginTextElement.textContent = 'My User ID: ' + demoUserId;
-                console.log('✅ Demo user set:', demoUserId, '(3-digit like your localhost IDs)');
+                loginTextElement.textContent = 'My User ID: ' + existingDemoId;
+                console.log('✅ Demo user set:', existingDemoId, '(consistent across pages)');
             }
         }
 
