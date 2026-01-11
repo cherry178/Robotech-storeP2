@@ -746,10 +746,37 @@
             if (loginModal) loginModal.style.display = 'none';
             if (mainContent) mainContent.style.display = 'block';
 
-            // Generate a proper user ID like the Flask app does
-            const userId = 1000 + Math.floor(Math.random() * 9000);
-            currentUser = { user_id: userId, phone: '9876543210' };
-            document.getElementById('loginText').textContent = 'User ' + userId;
+            // Use the same demo user ID system as products page
+            let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
+
+            if (!existingDemoId) {
+                // Generate new consistent demo user ID (3 digits like localhost)
+                existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999
+                localStorage.setItem('demo_user_id', existingDemoId.toString());
+                console.log('🎭 Login generated demo user ID:', existingDemoId);
+            } else {
+                console.log('🎭 Login using existing demo user ID:', existingDemoId);
+            }
+
+            const demoPhone = '9876543210';
+
+            // Store user data consistently (same as initializeUserDisplay)
+            localStorage.setItem('user_id', existingDemoId.toString());
+            localStorage.setItem('phone', demoPhone);
+            localStorage.setItem('logged_in', 'true');
+
+            sessionStorage.setItem('user_id', existingDemoId.toString());
+            sessionStorage.setItem('phone', demoPhone);
+            sessionStorage.setItem('logged_in', 'true');
+
+            currentUser = {
+                user_id: existingDemoId.toString(),
+                phone: demoPhone,
+                logged_in: true
+            };
+
+            // Use consistent format (same as products page)
+            document.getElementById('loginText').textContent = 'My User ID: ' + existingDemoId;
 
             // Load products
             loadProducts();
@@ -1015,14 +1042,15 @@
         document.head.appendChild(style);
 
         function initializeUserDisplay() {
-            console.log('Home page initializeUserDisplay called');
+            console.log('🏠 Home page initializeUserDisplay called');
 
             // Check for existing user session (same as products page)
             let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
             let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
 
-            console.log('Home page - sessionStorage userId:', sessionStorage.getItem('user_id'), 'localStorage userId:', localStorage.getItem('user_id'));
+            console.log('🏠 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
+            console.log('🏠 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
 
             const loginTextElement = document.getElementById('loginText');
 
