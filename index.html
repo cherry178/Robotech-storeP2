@@ -773,19 +773,17 @@
             if (loginModal) loginModal.style.display = 'none';
             if (mainContent) mainContent.style.display = 'block';
 
-            // Use the same demo user ID system as products page
-            let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
+            // Generate unique user ID based on phone number (ensures data isolation)
+            const phoneInput = document.getElementById('landingPhoneNumber');
+            const enteredPhone = phoneInput.value.trim();
 
-            if (!existingDemoId) {
-                // Generate new consistent demo user ID (3 digits like localhost)
-                existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999
-                localStorage.setItem('demo_user_id', existingDemoId.toString());
-                console.log('🎭 Login generated demo user ID:', existingDemoId);
-            } else {
-                console.log('🎭 Login using existing demo user ID:', existingDemoId);
-            }
+            // Create consistent user ID from phone number (last 3 digits + offset for uniqueness)
+            const phoneLast3 = enteredPhone.slice(-3); // Get last 3 digits
+            const userId = 100 + parseInt(phoneLast3); // 100-999 range
 
-            const demoPhone = '9876543210';
+            console.log('🎭 Login: Phone', enteredPhone, '-> User ID:', userId);
+
+            const demoPhone = enteredPhone;
 
             // Store user data consistently (same as initializeUserDisplay)
             localStorage.setItem('user_id', existingDemoId.toString());
@@ -1095,31 +1093,7 @@
             } else {
                 // User not logged in - show landing page
                 console.log('❌ Home page: User not logged in, showing landing page');
-
-                // Check for existing demo user ID (set by other pages)
-                let existingDemoId = localStorage.getItem('demo_user_id') || sessionStorage.getItem('demo_user_id');
-
-                if (!existingDemoId) {
-                    // Generate new consistent demo user ID (3 digits)
-                    existingDemoId = Math.floor(Math.random() * 900) + 100; // 100-999
-                    localStorage.setItem('demo_user_id', existingDemoId.toString());
-                    console.log('🎭 Home page: Generated new demo user ID:', existingDemoId);
-                } else {
-                    console.log('🎭 Home page: Using existing demo user ID:', existingDemoId);
-                }
-
-                const demoPhone = '9876543210';
-
-                // Pre-store user data for when login happens
-                localStorage.setItem('user_id', existingDemoId.toString());
-                localStorage.setItem('phone', demoPhone);
-                localStorage.setItem('logged_in', 'true');
-
-                sessionStorage.setItem('user_id', existingDemoId.toString());
-                sessionStorage.setItem('phone', demoPhone);
-                sessionStorage.setItem('logged_in', 'true');
-
-                console.log('✅ Home page: Demo user pre-configured:', existingDemoId);
+                // Don't pre-configure - wait for actual login with phone number
             }
         }
     </script>

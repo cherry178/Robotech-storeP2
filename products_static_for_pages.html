@@ -3,204 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Robotech Store</title>
+    <title>Products - Robotech Store</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
-    <style>
-        .cart-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .cart-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .cart-items {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-image {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-        }
-
-        .item-image i {
-            color: white;
-            font-size: 2rem;
-        }
-
-        .item-details {
-            flex: 1;
-        }
-
-        .item-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-        }
-
-        .item-price {
-            color: #ff6b35;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0 1rem;
-        }
-
-        .quantity-btn {
-            width: 32px;
-            height: 32px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .quantity-btn:hover {
-            background: #f7fafc;
-            border-color: #cbd5e0;
-        }
-
-        .quantity-display {
-            min-width: 40px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .item-total {
-            font-weight: 600;
-            color: #2d3748;
-            margin-right: 1rem;
-            min-width: 80px;
-            text-align: right;
-        }
-
-        .remove-btn {
-            color: #e53e3e;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-        }
-
-        .remove-btn:hover {
-            background: #fed7d7;
-        }
-
-        .cart-summary {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .summary-row.total {
-            border-top: 2px solid #e2e8f0;
-            padding-top: 1rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #2d3748;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            margin-top: 1rem;
-        }
-
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .empty-cart i {
-            font-size: 4rem;
-            color: #cbd5e0;
-            margin-bottom: 1rem;
-        }
-
-        .empty-cart h3 {
-            color: #4a5568;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-cart p {
-            color: #718096;
-            margin-bottom: 2rem;
-        }
-
-        .shop-btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s ease;
-        }
-
-        .shop-btn:hover {
-            transform: translateY(-2px);
-        }
-    </style>
 </head>
 <body>
     <!-- Header -->
@@ -220,7 +26,34 @@
                 <!-- Navigation -->
                 <nav class="nav" id="mainNav">
                     <a href="/Robotech-storeP2/" class="nav-link">Home</a>
-                    <a href="/Robotech-storeP2/products.html" class="nav-link">Products</a>
+                    <div class="nav-dropdown">
+                        <a href="/Robotech-storeP2/products_static_for_pages.html" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="#" onclick="filterByCategory('Resistors')">Resistors</a>
+                                <a href="#" onclick="filterByCategory('Capacitors')">Capacitors</a>
+                                <a href="#" onclick="filterByCategory('LEDs')">LEDs</a>
+                                <a href="#" onclick="filterByCategory('Diodes')">Diodes</a>
+                                <a href="#" onclick="filterByCategory('Transistors')">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="#" onclick="filterByCategory('Microcontrollers')">Microcontrollers</a>
+                                <a href="#" onclick="filterByCategory('Arduino')">Arduino</a>
+                                <a href="#" onclick="filterByCategory('Raspberry Pi')">Raspberry Pi</a>
+                                <a href="#" onclick="filterByCategory('ESP')">ESP Boards</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Sensors</h4>
+                                <a href="#" onclick="filterByCategory('Sensors')">All Sensors</a>
+                                <a href="#" onclick="filterByCategory('Temperature Sensors')">Temperature</a>
+                                <a href="#" onclick="filterByCategory('Motion Sensors')">Motion</a>
+                                <a href="#" onclick="filterByCategory('Distance Sensors')">Distance</a>
+                                <a href="#" onclick="filterByCategory('Light Sensors')">Light</a>
+                            </div>
+                        </div>
+                    </div>
                     <a href="#categories" class="nav-link">Categories</a>
                     <a href="#about" class="nav-link">About</a>
                     <a href="#contact" class="nav-link">Contact</a>
@@ -228,15 +61,20 @@
 
                 <!-- User Actions -->
                 <div class="user-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+
                     <div class="action-buttons">
                         <div class="login-dropdown">
                             <button class="user-trigger">
                                 <i class="fas fa-user"></i>
-                                <span id="loginText">Demo User</span>
+                                <span id="loginText">My User ID: Loading...</span>
                             </button>
                         </div>
 
-                        <button class="btn-icon cart-btn" onclick="window.location.href='/Robotech-storeP2/cart_static.html'">
+                        <button class="btn-icon cart-btn">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
@@ -246,25 +84,70 @@
         </div>
     </header>
 
-    <!-- Cart Section -->
-    <section class="cart-section">
+    <!-- Products Section -->
+    <section class="products-page">
         <div class="container">
-            <div class="cart-container">
-                <div class="cart-header">
-                    <h1>Shopping Cart</h1>
-                    <p>Review your items and proceed to checkout</p>
-                </div>
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="/Robotech-storeP2/">Home</a> / <span>Products</span>
+            </div>
 
-                <div id="cartContent">
-                    <!-- Cart items will be loaded here -->
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">All Products</h1>
+                <p class="page-subtitle">Browse our complete collection of electronics components</p>
+            </div>
+
+            <!-- Filters and Sorting -->
+            <div class="products-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('')">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('Microcontrollers')">Microcontrollers</button>
+                    <button class="filter-btn" onclick="filterByCategory('Actuators')">Actuators</button>
+                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
+                    <button class="filter-btn" onclick="filterByCategory('Displays')">Displays</button>
+                    <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
+                    <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
+                    <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
+                    <select id="sortSelect" class="sort-select" onchange="sortProducts()">
+                        <option value="name">Sort by Name</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
                 </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded dynamically -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No products found</h3>
+                <p>Try adjusting your search or browse our categories</p>
+                <button class="btn btn-primary" onclick="window.location.href='/Robotech-storeP2/products_static_for_pages.html'">View All Products</button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="page-btn" id="prevBtn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <div class="page-numbers" id="pageNumbers"></div>
+                <button class="page-btn" id="nextBtn"><i class="fas fa-chevron-right"></i> Next</button>
             </div>
         </div>
     </section>
 
     <!-- Scripts -->
     <script>
-        // Embedded products data for cart reference
+        // Embedded products data for static GitHub Pages
         const ALL_PRODUCTS = [
     {
         "id": 11,
@@ -865,205 +748,338 @@
         "stock_quantity": 95,
         "image_url": "https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg",
         "is_featured": false
+    },
+    {
+        "id": 76,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": true
     }
 ];
 
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountElement = document.getElementById('cartCount');
-            if (cartCountElement) {
-                cartCountElement.textContent = totalItems;
-            }
-        }
+        // Global variables for filtering and sorting
+        let currentCategory = '';
+        let currentSort = 'name';
+        let currentSearch = '';
+        let currentPage = 1;
+        let totalPages = 1;
 
-        function loadCart() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const cartContent = document.getElementById('cartContent');
-
-            if (cart.length === 0) {
-                cartContent.innerHTML = `
-                    <div class="empty-cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h3>Your cart is empty</h3>
-                        <p>Add some amazing products to your cart and start shopping!</p>
-                        <a href="/Robotech-storeP2/products.html" class="shop-btn">
-                            <i class="fas fa-arrow-left"></i> Continue Shopping
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            let cartHTML = '<div class="cart-items">';
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-
-                cartHTML += `
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <i class="fas fa-cube"></i>
-                        </div>
-                        <div class="item-details">
-                            <div class="item-title">${item.name}</div>
-                            <div class="item-price">Rs ${item.price}</div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
-                            <span class="quantity-display">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
-                        </div>
-                        <div class="item-total">Rs ${itemTotal}</div>
-                        <div class="remove-btn" onclick="removeItem(${index})">
-                            <i class="fas fa-trash"></i>
-                        </div>
-                    </div>
-                `;
-            });
-
-            cartHTML += '</div>';
-
-            cartHTML += `
-                <div class="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span>Rs ${total}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Shipping:</span>
-                        <span>Free</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>GST (18%):</span>
-                        <span>Rs ${(total * 0.18).toFixed(2)}</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total:</span>
-                        <span>Rs ${(total * 1.18).toFixed(2)}</span>
-                    </div>
-                    <button class="checkout-btn" onclick="checkout()">
-                        <i class="fas fa-credit-card"></i> Proceed to Checkout
-                    </button>
-                </div>
-            `;
-
-            cartContent.innerHTML = cartHTML;
-        }
-
-        function updateQuantity(index, newQuantity) {
-            if (newQuantity <= 0) {
-                removeItem(index);
-                return;
-            }
-
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            cart[index].quantity = newQuantity;
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            updateCartCount();
-            loadCart();
-        }
-
-        function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            updateCartCount();
-            loadCart();
-
-            showNotification('Item removed from cart', 'warning');
-        }
-
-        function checkout() {
-            alert('Checkout functionality would integrate with payment gateway here.\n\nCart Total: Rs ' + (calculateTotal() * 1.18).toFixed(2) + '\n\nDemo: This would redirect to payment page.');
-        }
-
-        function calculateTotal() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        }
-
-        function showNotification(message, type = 'success') {
-            const colors = {
-                success: '#4CAF50',
-                warning: '#FF9800',
-                error: '#F44336'
-            };
-
-            const notification = document.createElement('div');
-            notification.innerHTML = `
-                <div style="
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: ${colors[type]};
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                    z-index: 10000;
-                    font-size: 14px;
-                    font-weight: 500;
-                    opacity: 0;
-                    transform: translateY(-20px);
-                    transition: all 0.3s ease;
-                ">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'}"></i>
-                    ${message}
-                </div>
-            `;
-
-            document.body.appendChild(notification);
-            const notifElement = notification.firstElementChild;
-
-            setTimeout(() => {
-                notifElement.style.opacity = '1';
-                notifElement.style.transform = 'translateY(0)';
-            }, 10);
-
-            setTimeout(() => {
-                notifElement.style.opacity = '0';
-                notifElement.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-        }
-
-        // Initialize cart and user display on page load
+        // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Static products page loaded');
             initializeUserDisplay();
+            loadProducts();
+            setupSearchEventListeners();
             updateCartCount();
-            loadCart();
         });
 
-        function initializeUserDisplay() {
-            console.log('🛒 Cart page initializeUserDisplay called');
+        function setupSearchEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.querySelector('.search-btn');
 
-            // Check for existing user session (same as other pages)
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch(this.value);
+                    }
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => performSearch(searchInput.value));
+            }
+        }
+
+        function performSearch(query) {
+            if (!query.trim()) return;
+
+            currentSearch = query.trim();
+            currentCategory = '';
+            currentPage = 1;
+
+            loadProducts();
+        }
+
+        function loadProducts(page = 1) {
+            console.log('Loading products for page:', page);
+            currentPage = page;
+
+            // Apply filters
+            let filteredProducts = [...ALL_PRODUCTS];
+
+            // Apply category filter
+            if (currentCategory && currentCategory !== '') {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
+                    product.category === currentCategory
+                );
+            }
+
+            // Apply search filter
+            if (currentSearch) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    product.description.toLowerCase().includes(currentSearch.toLowerCase())
+                );
+            }
+
+            // Apply sorting
+            switch (currentSort) {
+                case 'price_low':
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_high':
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+            }
+
+            // Calculate pagination
+            const productsPerPage = 6;
+            totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            const startIdx = (page - 1) * productsPerPage;
+            const endIdx = startIdx + productsPerPage;
+            const pageProducts = filteredProducts.slice(startIdx, endIdx);
+
+            // Display products
+            displayProducts(pageProducts);
+
+            // Update pagination
+            updatePagination();
+
+            // Update results count
+            updateResultsCount(filteredProducts.length);
+        }
+
+        function displayProducts(products) {
+            console.log('Displaying', products.length, 'products');
+            const grid = document.getElementById('productsGrid');
+            const loading = document.getElementById('loadingContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (!grid) {
+                console.error('productsGrid element not found!');
+                return;
+            }
+
+            // Hide loading
+            if (loading) loading.style.display = 'none';
+
+            // Show/hide no results
+            if (noResults) {
+                noResults.style.display = products.length === 0 ? 'block' : 'none';
+            }
+
+            grid.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const colors = ['#ff6b35', '#f7931e', '#ff4757', '#ffa502'];
+                const colorIndex = product.category ? product.category.length % colors.length : 0;
+                const bgColor = colors[colorIndex];
+
+                let html = '<div class="product-image" style="background: linear-gradient(135deg, ' + bgColor + ' 0%, ' + adjustColor(bgColor, -20) + ' 100%)">';
+
+                if (product.image_url) {
+                    html += '<img src="' + product.image_url + '" alt="' + product.name + '" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display=\'none\';" onerror="this.style.opacity=\'0.3\';" data-has-image="true">';
+                }
+
+                html += '<i class="fas fa-' + getCategoryIcon(product.category) + '" style="color: white; font-size: 3rem; opacity: 0.8;"></i>';
+
+                if (product.is_featured) {
+                    html += '<div class="product-badge">Sale</div>';
+                }
+                html += '</div>';
+
+                html += '<div class="product-content">';
+                html += '<h3 class="product-title">' + product.name + '</h3>';
+                html += '<p class="product-description">' + (product.description || 'High-quality electronics component') + '</p>';
+
+                html += '<div class="product-price">Rs ' + product.price + '<span class="gst-note">(Exc. GST)</span></div>';
+
+                html += '<div class="product-actions">';
+                html += '<button class="btn btn-primary btn-small" onclick="addToCart(' + product.id + ')">';
+                html += '<i class="fas fa-cart-plus"></i> Add to cart';
+                html += '</button>';
+                html += '</div>';
+                html += '</div>';
+
+                card.innerHTML = html;
+                grid.appendChild(card);
+            });
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'Sensors': 'eye',
+                'Microcontrollers': 'microchip',
+                'Actuators': 'cogs',
+                'Communication': 'wifi',
+                'Power Supply': 'bolt',
+                'Displays': 'tv',
+                'Tools & Accessories': 'tools',
+                'Audio Components': 'volume-up'
+            };
+            return icons[category] || 'cube';
+        }
+
+        function adjustColor(color, amount) {
+            const usePound = color[0] === '#';
+            const col = usePound ? color.slice(1) : color;
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = (num >> 8 & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = r > 255 ? 255 : r < 0 ? 0 : r;
+            g = g > 255 ? 255 : g < 0 ? 0 : g;
+            b = b > 255 ? 255 : g < 0 ? 0 : b;
+            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16);
+        }
+
+        function filterByCategory(category) {
+            console.log('Filtering by category:', category);
+            currentCategory = category;
+
+            // Update active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Find and activate the clicked button
+            const clickedBtn = event.target;
+            clickedBtn.classList.add('active');
+
+            // Reload products
+            currentPage = 1;
+            loadProducts(1);
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('sortSelect');
+            currentSort = sortSelect.value;
+            console.log('Sorting by:', currentSort);
+            currentPage = 1;
+            loadProducts(1);
+        }
+
+        function updatePagination() {
+            console.log('Updating pagination - totalPages:', totalPages, 'currentPage:', currentPage);
+            const pagination = document.getElementById('pagination');
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (totalPages > 1) {
+                if (pagination) pagination.style.display = 'flex';
+                if (prevBtn) prevBtn.disabled = currentPage <= 1;
+                if (nextBtn) {
+                    nextBtn.disabled = currentPage >= totalPages;
+                    nextBtn.onclick = () => currentPage < totalPages ? goToPage(currentPage + 1) : null;
+                }
+
+                if (pageNumbers) {
+                    pageNumbers.innerHTML = '';
+
+                    // Show up to 5 pages around current page
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(totalPages, currentPage + 2);
+
+                    // Add first page if not in range
+                    if (startPage > 1) {
+                        const firstBtn = document.createElement('button');
+                        firstBtn.className = 'page-btn';
+                        firstBtn.textContent = '1';
+                        firstBtn.onclick = () => goToPage(1);
+                        pageNumbers.appendChild(firstBtn);
+
+                        if (startPage > 2) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
+                    }
+
+                    // Add pages around current page
+                    for (let i = startPage; i <= endPage; i++) {
+                        const pageBtn = document.createElement('button');
+                        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        pageBtn.textContent = i;
+                        pageBtn.onclick = () => goToPage(i);
+                        pageNumbers.appendChild(pageBtn);
+                    }
+
+                    // Add last page if not in range
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
+
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.onclick = () => goToPage(totalPages);
+                        pageNumbers.appendChild(lastBtn);
+                    }
+                }
+            } else {
+                if (pagination) pagination.style.display = 'none';
+            }
+        }
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                loadProducts(page);
+            }
+        }
+
+        function addToCart(productId) {
+            alert('Added product ' + productId + ' to cart! (Demo - not functional on static page)');
+        }
+
+        function updateResultsCount(count) {
+            // Update any results count display if needed
+            console.log('Total filtered results:', count);
+        }
+
+        function initializeUserDisplay() {
+            console.log('products_static.html: initializeUserDisplay called');
             let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             let phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            let loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+            let isLoggedIn = (sessionStorage.getItem('logged_in') === 'true') || (localStorage.getItem('logged_in') === 'true');
 
-            console.log('🛒 sessionStorage - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
-            console.log('🛒 localStorage - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
+            console.log('products_static.html: sessionStorage check - userId:', sessionStorage.getItem('user_id'), 'phone:', sessionStorage.getItem('phone'), 'loggedIn:', sessionStorage.getItem('logged_in'));
+            console.log('products_static.html: localStorage check - userId:', localStorage.getItem('user_id'), 'phone:', localStorage.getItem('phone'), 'loggedIn:', localStorage.getItem('logged_in'));
 
             const loginTextElement = document.getElementById('loginText');
-
-            if (userId && phone && loggedIn === 'true') {
-                // Show existing user ID
-                loginTextElement.textContent = 'My User ID: ' + userId;
-                console.log('✅ Cart page: Using existing user ID:', userId, 'Phone:', phone);
+            if (loginTextElement) {
+                if (userId && phone && isLoggedIn) {
+                    loginTextElement.textContent = 'My User ID: ' + userId;
+                    console.log('products_static.html: ✅ User found in storage:', userId, 'Phone:', phone);
+                } else {
+                    // For GitHub Pages, if no user is logged in, show demo mode
+                    loginTextElement.textContent = 'Demo Mode - Login from Home';
+                    console.log('products_static.html: ❌ No user logged in, showing demo mode');
+                }
             } else {
-                // No user logged in
-                loginTextElement.textContent = 'Demo Mode - Login from Home';
-                console.log('❌ Cart page: No user logged in, showing demo mode');
+                console.error('products_static.html: loginText element not found!');
             }
         }
     </script>
