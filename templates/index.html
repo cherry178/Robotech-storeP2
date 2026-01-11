@@ -166,7 +166,7 @@
 
                     <div class="action-buttons">
                         <div class="user-dropdown">
-                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
+                            <button class="user-trigger" onclick="toggleAccountMenuHome()" aria-label="Account menu">
                                 <i class="fas fa-user"></i>
                                 <span id="loginText" class="user-text">My User ID: Loading...</span>
                                 <i class="fas fa-chevron-down"></i>
@@ -700,5 +700,14 @@
 
     <!-- Scripts -->
     <script src="./static/js/main.js"></script>
+    <script>
+        // Simple toggle function for home page account menu
+        function toggleAccountMenuHome() {
+            const menu = document.getElementById('accountMenu');
+            if (menu) {
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+    </script>
 </body>
 </html>
