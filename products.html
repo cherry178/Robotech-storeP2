@@ -7,26 +7,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
-    <script src="/Robotech-storeP2/static/js/main.js"></script>
-    <style>
-        .demo-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #ff6b35;
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 10000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-    </style>
 </head>
 <body>
-
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -36,2641 +18,1043 @@
                     <span>Robotech Store</span>
                 </div>
 
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
                 <!-- Navigation -->
-                <nav class="nav">
-                    <a href="/" class="nav-link">Home</a>
-                    <a href="/products" class="nav-link active">Products</a>
-                    <a href="/#categories" class="nav-link">Categories</a>
-                    <a href="/#about" class="nav-link">About</a>
-                    <a href="/#contact" class="nav-link">Contact</a>
+                <nav class="nav" id="mainNav">
+                    <a href="/Robotech-storeP2/" class="nav-link">Home</a>
+                    <div class="nav-dropdown">
+                        <a href="/Robotech-storeP2/products_static_for_pages.html" class="nav-link dropdown-toggle active">Products ▼</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h4>Components</h4>
+                                <a href="#" onclick="filterByCategory('Resistors')">Resistors</a>
+                                <a href="#" onclick="filterByCategory('Capacitors')">Capacitors</a>
+                                <a href="#" onclick="filterByCategory('LEDs')">LEDs</a>
+                                <a href="#" onclick="filterByCategory('Diodes')">Diodes</a>
+                                <a href="#" onclick="filterByCategory('Transistors')">Transistors</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Development Boards</h4>
+                                <a href="#" onclick="filterByCategory('Microcontrollers')">Microcontrollers</a>
+                                <a href="#" onclick="filterByCategory('Arduino')">Arduino</a>
+                                <a href="#" onclick="filterByCategory('Raspberry Pi')">Raspberry Pi</a>
+                                <a href="#" onclick="filterByCategory('ESP')">ESP Boards</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Sensors</h4>
+                                <a href="#" onclick="filterByCategory('Sensors')">All Sensors</a>
+                                <a href="#" onclick="filterByCategory('Temperature Sensors')">Temperature</a>
+                                <a href="#" onclick="filterByCategory('Motion Sensors')">Motion</a>
+                                <a href="#" onclick="filterByCategory('Distance Sensors')">Distance</a>
+                                <a href="#" onclick="filterByCategory('Light Sensors')">Light</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#categories" class="nav-link">Categories</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
                 </nav>
 
                 <!-- User Actions -->
                 <div class="user-actions">
                     <div class="search-box">
                         <input type="text" id="searchInput" placeholder="Search components..." class="search-input">
-                        <button class="search-btn" onclick="performSearch()"><i class="fas fa-search"></i></button>
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
                     </div>
 
                     <div class="action-buttons">
-                        <div class="user-dropdown">
-                            <button class="user-trigger" onclick="toggleAccountMenu()" aria-label="Account menu">
+                        <div class="login-dropdown">
+                            <button class="user-trigger">
                                 <i class="fas fa-user"></i>
-                                <span id="loginText" class="user-text">Demo User</span>
-                                <i class="fas fa-chevron-down"></i>
+                                <span id="loginText">Demo User</span>
                             </button>
+                        </div>
 
-                            <div class="account-menu" id="accountMenu" style="display: none;">
-                                <div class="account-menu-item">
-                                    <i class="fas fa-shopping-bag"></i> My Orders
-                                </div>
-                                <div class="account-menu-item" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </div>
-                                    </div>
-                                </div>
-
-                        <button class="btn-icon cart-btn" onclick="alert('Demo: View cart functionality')">
+                        <button class="btn-icon cart-btn">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count" id="cartCount">0</span>
                         </button>
-                                </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Products Section -->
-    <section class="section">
+    <section class="products-page">
         <div class="container">
             <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="/">Home</a> / <span>Products</span>
-                                            </div>
+                <a href="/Robotech-storeP2/">Home</a> / <span>Products</span>
+            </div>
 
             <!-- Page Header -->
             <div class="page-header">
                 <h1 class="page-title">All Products</h1>
                 <p class="page-subtitle">Browse our complete collection of electronics components</p>
-                                        </div>
+            </div>
 
             <!-- Filters and Sorting -->
             <div class="products-controls">
                 <div class="filter-buttons">
                     <button class="filter-btn active" onclick="filterByCategory('')">All</button>
                     <button class="filter-btn" onclick="filterByCategory('Microcontrollers')">Microcontrollers</button>
-                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
                     <button class="filter-btn" onclick="filterByCategory('Actuators')">Actuators</button>
+                    <button class="filter-btn" onclick="filterByCategory('Sensors')">Sensors</button>
                     <button class="filter-btn" onclick="filterByCategory('Displays')">Displays</button>
                     <button class="filter-btn" onclick="filterByCategory('Power Supply')">Power Supply</button>
                     <button class="filter-btn" onclick="filterByCategory('Tools & Accessories')">Tools & Accessories</button>
                     <button class="filter-btn" onclick="filterByCategory('Audio Components')">Audio Components</button>
-                                            </div>
-                <select id="sortFilter" onchange="sortProducts()">
-                    <option value="name">Sort by Name</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                </select>
+                    <select id="sortSelect" class="sort-select" onchange="sortProducts()">
+                        <option value="name">Sort by Name</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
             </div>
 
+            <!-- Products Grid -->
             <div class="products-grid" id="productsGrid">
-                <!-- All 61+ products from DEMO_PRODUCTS array -->
-                <div class="product-card" style="display: none;" fade-in" data-id="11" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://m.media-amazon.com/images/I/51+N-57gSiL.jpg" alt="Arduino Uno R3" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Arduino Uno R3</h3>
-                        <p class="product-description">ATmega328P microcontroller board with USB interface</p>
-                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(11)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                                            </div>
-                                        </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="12" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%)">
-                        <img src="https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg" alt="ESP32 Development Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">ESP32 Development Board</h3>
-                        <p class="product-description">WiFi & Bluetooth enabled microcontroller</p>
-                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(12)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                                        </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="13" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff4757 0%, #ff6b35 100%)">
-                        <img src="https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg" alt="DHT11 Temperature Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-thermometer-half" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">DHT11 Temperature & Humidity Sensor</h3>
-                        <p class="product-description">Digital temperature and humidity sensor</p>
-                        <div class="product-price">Rs 120<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(13)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                                        </button>
-                        </div>
-                                    </div>
-                                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="14" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg" alt="HC-SR04 Ultrasonic Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">HC-SR04 Ultrasonic Sensor</h3>
-                        <p class="product-description">Ultrasonic ranging sensor for distance measurement</p>
-                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(14)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                                        </button>
-                                    </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="15" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg" alt="SG90 Servo Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">SG90 Servo Motor</h3>
-                        <p class="product-description">9g micro servo motor for robotics</p>
-                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(15)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                                </div>
-                            </div>
-                        </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="16" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg" alt="DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">DC Motor</h3>
-                        <p class="product-description">12V DC geared motor for robotics</p>
-                        <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(16)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                        </button>
-                    </div>
-                </div>
+                <!-- Products will be loaded dynamically -->
             </div>
 
-                <div class="product-card" style="display: none;" fade-in" data-id="17" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://m.media-amazon.com/images/I/51fLU88NI6L.jpg" alt="Stepper Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-        </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Stepper Motor</h3>
-                        <p class="product-description">NEMA 17 stepper motor with 1.8° step angle</p>
-                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(17)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="18" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg" alt="16x2 LCD Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">16x2 LCD Display</h3>
-                        <p class="product-description">Character LCD display with I2C interface</p>
-                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(18)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
+            <!-- Loading Indicator -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
             </div>
 
-                <div class="product-card" style="display: none;" fade-in" data-id="19" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg" alt="OLED Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">OLED Display</h3>
-                        <p class="product-description">0.96 inch I2C OLED display module</p>
-                        <div class="product-price">Rs 220<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(19)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                </div>
-            </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="20" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg" alt="TFT Screen" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">TFT Screen</h3>
-                        <p class="product-description">2.8 inch TFT LCD color touch screen display</p>
-                        <div class="product-price">Rs 850<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(20)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="21" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg" alt="7-Segment Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">7-Segment Display</h3>
-                        <p class="product-description">4-digit 7-segment LED display module</p>
-                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(21)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="22" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg" alt="LED Matrix Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">LED Matrix Display</h3>
-                        <p class="product-description">8x8 LED matrix display with MAX7219 driver</p>
-                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(22)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="23" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg" alt="E-paper Display" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">E-paper Display</h3>
-                        <p class="product-description">1.54 inch e-paper display for low power applications</p>
-                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(23)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="24" data-category="Displays">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg" alt="LCD Touchscreen Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">LCD Touchscreen Module</h3>
-                        <p class="product-description">2.4 inch LCD touchscreen module for user interfaces</p>
-                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(24)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="25" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg" alt="9V Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">9V Battery</h3>
-                        <p class="product-description">Standard 9V alkaline battery</p>
-                        <div class="product-price">Rs 25<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(25)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="26" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg" alt="AA Battery Holder" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">AA Battery Holder</h3>
-                        <p class="product-description">4x AA battery holder with switch</p>
-                        <div class="product-price">Rs 35<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(26)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="27" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg" alt="DC-DC Converter" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">DC-DC Converter</h3>
-                        <p class="product-description">Adjustable DC-DC buck converter module</p>
-                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(27)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="28" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg" alt="Power Bank Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Power Bank Module</h3>
-                        <p class="product-description">18650 lithium battery power bank module</p>
-                        <div class="product-price">Rs 150<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(28)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="29" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg" alt="Breadboard" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Breadboard</h3>
-                        <p class="product-description">830 tie-point solderless breadboard</p>
-                        <div class="product-price">Rs 85<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(29)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="30" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg" alt="Male-Male Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Male-Male Jumper Wires</h3>
-                        <p class="product-description">40-piece male-to-male jumper wire set</p>
-                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(30)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="31" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg" alt="Male-Female Jumper Wires" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Male-Female Jumper Wires</h3>
-                        <p class="product-description">40-piece male-to-female jumper wire set</p>
-                        <div class="product-price">Rs 50<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(31)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="32" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg" alt="Lithium Polymer Battery" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Lithium Polymer Battery</h3>
-                        <p class="product-description">3.7V 1000mAh LiPo battery with JST connector</p>
-                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(32)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="33" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg" alt="PCB Prototyping Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">PCB Prototyping Board</h3>
-                        <p class="product-description">Double-sided PCB prototyping board</p>
-                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(33)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="34" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg" alt="Nuts & Bolts Kit" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Nuts & Bolts Kit</h3>
-                        <p class="product-description">Assorted nuts and bolts set for electronics projects</p>
-                        <div class="product-price">Rs 120<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(34)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="38" data-category="Power Supply">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg" alt="Linear Voltage Regulator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Linear Voltage Regulator</h3>
-                        <p class="product-description">LM7805 5V linear voltage regulator IC</p>
-                        <div class="product-price">Rs 15<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(38)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="39" data-category="Audio Components">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg" alt="Audio Adapter Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Audio Adapter Board</h3>
-                        <p class="product-description">Audio amplifier board with speaker connector</p>
-                        <div class="product-price">Rs 95<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(39)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="40" data-category="Tools & Accessories">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg" alt="USB Cable" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">USB Cable</h3>
-                        <p class="product-description">USB 2.0 A to B cable for programming</p>
-                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(40)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="41" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg" alt="Brushless DC Motor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Brushless DC Motor</h3>
-                        <p class="product-description">High-efficiency brushless DC motor</p>
-                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(41)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="42" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg" alt="Bluetooth Controlled Linear Actuator" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Bluetooth Controlled Linear Actuator</h3>
-                        <p class="product-description">Wireless controlled linear motion actuator</p>
-                        <div class="product-price">Rs 1200<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(42)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="44" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg" alt="Motor Driver Shield" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Motor Driver Shield</h3>
-                        <p class="product-description">Arduino shield for motor control applications</p>
-                        <div class="product-price">Rs 350<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(44)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="45" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg" alt="H-Bridge Motor Control Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">H-Bridge DC Stepper Motor Control Module</h3>
-                        <p class="product-description">Dual H-bridge motor driver for stepper motors</p>
-                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(45)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="46" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg" alt="Raspberry Pi Zero W" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Raspberry Pi Zero W</h3>
-                        <p class="product-description">Compact single-board computer with WiFi</p>
-                        <div class="product-price">Rs 1200<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(46)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="47" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg" alt="Arduino Mega" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Arduino Mega</h3>
-                        <p class="product-description">ATmega2560 microcontroller board</p>
-                        <div class="product-price">Rs 850<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(47)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="49" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg" alt="Arduino Due" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Arduino Due</h3>
-                        <p class="product-description">ARM Cortex-M3 microcontroller board</p>
-                        <div class="product-price">Rs 1800<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(49)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="51" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg" alt="Adafruit Feather M0" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Adafruit Feather M0</h3>
-                        <p class="product-description">ARM Cortex-M0+ microcontroller board</p>
-                        <div class="product-price">Rs 950<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(51)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="53" data-category="Microcontrollers">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg" alt="Banana Pi" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Banana Pi</h3>
-                        <p class="product-description">Single-board computer with Allwinner A20 processor</p>
-                        <div class="product-price">Rs 2200<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(53)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="56" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/4e/8f/7a/4e8f7a4b5a2c5d8f5c9b8a7e6d4c2b1a.jpg" alt="Sound Vibration Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Sound Vibration Sensor</h3>
-                        <p class="product-description">Vibration and sound detection sensor</p>
-                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(56)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="57" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/3c/7a/9d/3c7a9d2b5e8f4a6c8b7d9e2f1a5c8b7.jpg" alt="Color Sensor (TCS34725)" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Color Sensor (TCS34725)</h3>
-                        <p class="product-description">RGB color sensor with IR blocking filter</p>
-                        <div class="product-price">Rs 180<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(57)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="58" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/8f/5c/9b/8f5c9b7a4e2d6f8c9b5a7e3d1f2c8b6.jpg" alt="Sound Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Sound Sensor</h3>
-                        <p class="product-description">Microphone sound detection module</p>
-                        <div class="product-price">Rs 35<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(58)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="59" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/6b/9c/8d/6b9c8d5a7e3f2c9b8d6a4e1f5c2b7a9.jpg" alt="Water Level Sensor" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Water Level Sensor</h3>
-                        <p class="product-description">Liquid level detection sensor</p>
-                        <div class="product-price">Rs 55<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(59)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="60" data-category="Actuators">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/7d/2c/9f/7d2c9f8b5a6e4d1c8f7b9a3e2d5c6b4.jpg" alt="5V Relay Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">5V Relay Module</h3>
-                        <p class="product-description">Electromagnetic relay module for switching</p>
-                        <div class="product-price">Rs 45<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(60)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="61" data-category="Sensors">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/9a/3d/7c/9a3d7c8b5f2e6d4a9c8b7e1f3d5a2c6.jpg" alt="Electret Microphone Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Electret Microphone Module</h3>
-                        <p class="product-description">Condenser microphone module for audio input</p>
-                        <div class="product-price">Rs 25<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(61)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="62" data-category="Audio Components">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://i.pinimg.com/1200x/5c/8b/9a/5c8b9a7d3e6f2b8c9a5d7e1f4c2b6a8.jpg" alt="Voice Recognition Microphone Board" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Voice Recognition Microphone Board</h3>
-                        <p class="product-description">Advanced voice recognition and processing board</p>
-                        <div class="product-price">Rs 650<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(62)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" style="display: none;" fade-in" data-id="63" data-category="Audio Components">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)">
-                        <img src="https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg" alt="Robocraze Speech Recognition Module" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display='none';" onerror="this.style.opacity='0.3';" data-has-image="true">
-                        <i class="fas fa-microchip" style="color: white; font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="product-title">Robocraze Speech Recognition Module</h3>
-                        <p class="product-description">Voice command recognition module</p>
-                        <div class="product-price">Rs 450<span class="gst-note">(Exc. GST)</span></div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary btn-small" onclick="addToCart(63)">
-                                <i class="fas fa-cart-plus"></i> Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No products found</h3>
+                <p>Try adjusting your search or browse our categories</p>
+                <button class="btn btn-primary" onclick="window.location.href='/Robotech-storeP2/products_static_for_pages.html'">View All Products</button>
             </div>
 
             <!-- Pagination -->
-            <div class="pagination" id="pagination">
-                <!-- Pagination will be loaded here -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="page-btn" id="prevBtn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <div class="page-numbers" id="pageNumbers"></div>
+                <button class="page-btn" id="nextBtn"><i class="fas fa-chevron-right"></i> Next</button>
             </div>
         </div>
     </section>
 
-    <!-- Embedded Scripts -->
+    <!-- Scripts -->
     <script>
-        // Demo variables
-        let currentUser = null;
-        let allProducts = [];
-        let filteredProducts = [];
+        // Embedded products data for static GitHub Pages
+        const ALL_PRODUCTS = [
+    {
+        "id": 11,
+        "name": "Arduino Uno R3",
+        "description": "ATmega328P microcontroller board with USB interface",
+        "price": 450.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 30,
+        "image_url": "https://m.media-amazon.com/images/I/51+N-57gSiL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 12,
+        "name": "ESP32 Development Board",
+        "description": "WiFi & Bluetooth enabled microcontroller",
+        "price": 350.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 40,
+        "image_url": "https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 13,
+        "name": "DHT11 Temperature & Humidity Sensor",
+        "description": "Digital temperature and humidity sensor with 1-wire interface",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 14,
+        "name": "HC-SR04 Ultrasonic Sensor",
+        "description": "Ultrasonic ranging sensor for distance measurement",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 15,
+        "name": "SG90 Servo Motor",
+        "description": "9g micro servo motor for robotics",
+        "price": 95.0,
+        "category": "Actuators",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 16,
+        "name": "DC Motor",
+        "description": "12V DC geared motor for robotics and automation projects",
+        "price": 150.0,
+        "category": "Actuators",
+        "stock_quantity": 85,
+        "image_url": "https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 17,
+        "name": "Stepper Motor",
+        "description": "NEMA 17 stepper motor with 1.8° step angle for precision control",
+        "price": 450.0,
+        "category": "Actuators",
+        "stock_quantity": 45,
+        "image_url": "https://m.media-amazon.com/images/I/51fLU88NI6L.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 18,
+        "name": "LCD Crystal Display",
+        "description": "16x2 character LCD display module with backlight",
+        "price": 120.0,
+        "category": "Displays",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 19,
+        "name": "OLED Display",
+        "description": "0.96 inch I2C OLED display module with 128x64 resolution",
+        "price": 150.0,
+        "category": "Displays",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 20,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 21,
+        "name": "7-Segment Display",
+        "description": "4-digit 7-segment display with decimal points",
+        "price": 65.0,
+        "category": "Displays",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 22,
+        "name": "E-paper Display",
+        "description": "1.54 inch e-paper display for low power applications",
+        "price": 650.0,
+        "category": "Displays",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 23,
+        "name": "LED Matrix Display",
+        "description": "8x8 LED matrix display with MAX7219 driver",
+        "price": 95.0,
+        "category": "Displays",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 24,
+        "name": "LCD Touchscreen Module",
+        "description": "2.4 inch LCD touchscreen module for user interfaces",
+        "price": 1200.0,
+        "category": "Displays",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 25,
+        "name": "2 Battery Holders",
+        "description": "AA battery holder for 2 batteries in series",
+        "price": 25.0,
+        "category": "Power Supply",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 26,
+        "name": "3 Battery Holders",
+        "description": "AA battery holder for 3 batteries in series",
+        "price": 35.0,
+        "category": "Power Supply",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 27,
+        "name": "DC-DC Converter",
+        "description": "Adjustable DC-DC buck converter module 5V-35V",
+        "price": 85.0,
+        "category": "Power Supply",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 28,
+        "name": "Power Bank Module",
+        "description": "18650 lithium battery power bank module",
+        "price": 180.0,
+        "category": "Power Supply",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 29,
+        "name": "Breadboard",
+        "description": "830 tie-point solderless breadboard for prototyping",
+        "price": 85.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 30,
+        "name": "Male-Male Jumper Wires",
+        "description": "40-piece male-to-male jumper wire set",
+        "price": 45.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 200,
+        "image_url": "https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 31,
+        "name": "Male-Female Jumper Wires",
+        "description": "40-piece male-to-female jumper wire set",
+        "price": 50.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 180,
+        "image_url": "https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 32,
+        "name": "Lithium Polymer Battery",
+        "description": "3.7V 1000mAh LiPo battery with JST connector",
+        "price": 250.0,
+        "category": "Power Supply",
+        "stock_quantity": 75,
+        "image_url": "https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 33,
+        "name": "PCB Prototyping Board",
+        "description": "Double-sided PCB prototyping board with copper pads",
+        "price": 120.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 34,
+        "name": "Nuts & Bolts Kit",
+        "description": "Assorted nuts and bolts set for electronics projects",
+        "price": 65.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 38,
+        "name": "Linear Voltage Regulator",
+        "description": "LM7805 5V linear voltage regulator IC",
+        "price": 15.0,
+        "category": "Power Supply",
+        "stock_quantity": 300,
+        "image_url": "https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 39,
+        "name": "Audio Adapter Board",
+        "description": "Audio amplifier board with speaker connector",
+        "price": 120.0,
+        "category": "Audio Components",
+        "stock_quantity": 50,
+        "image_url": "https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 40,
+        "name": "USB Cable",
+        "description": "USB 2.0 A to B cable for programming and data transfer",
+        "price": 35.0,
+        "category": "Tools & Accessories",
+        "stock_quantity": 250,
+        "image_url": "https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 41,
+        "name": "Brushless DC Motor",
+        "description": "High-efficiency brushless DC motor for precision applications",
+        "price": 850.0,
+        "category": "Actuators",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 42,
+        "name": "Bluetooth Controlled Linear Actuator",
+        "description": "Wireless controlled linear motion actuator",
+        "price": 2500.0,
+        "category": "Actuators",
+        "stock_quantity": 8,
+        "image_url": "https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 43,
+        "name": "Continuous Rotation Robot Servo",
+        "description": "360-degree continuous rotation servo motor",
+        "price": 180.0,
+        "category": "Actuators",
+        "stock_quantity": 45,
+        "image_url": "https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 44,
+        "name": "Motor Driver Shield",
+        "description": "Arduino shield for motor control applications",
+        "price": 350.0,
+        "category": "Actuators",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 45,
+        "name": "H-Bridge Motor Control Module",
+        "description": "Dual H-bridge motor driver for stepper motors",
+        "price": 120.0,
+        "category": "Actuators",
+        "stock_quantity": 30,
+        "image_url": "https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 46,
+        "name": "Raspberry Pi Zero W",
+        "description": "Compact single-board computer with WiFi",
+        "price": 1200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 35,
+        "image_url": "https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 47,
+        "name": "Arduino Mega",
+        "description": "ATmega2560 microcontroller board",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 20,
+        "image_url": "https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 48,
+        "name": "Arduino Nano",
+        "description": "Compact ATmega328 microcontroller board",
+        "price": 250.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 50,
+        "image_url": "https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 49,
+        "name": "Arduino Due",
+        "description": "ARM Cortex-M3 microcontroller board with 32-bit architecture",
+        "price": 2200.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 15,
+        "image_url": "https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 50,
+        "name": "ESP8266",
+        "description": "WiFi enabled microcontroller module",
+        "price": 150.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 51,
+        "name": "Adafruit Feather M0",
+        "description": "ARM Cortex-M0+ microcontroller board with Bluetooth",
+        "price": 650.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 52,
+        "name": "Teensy 4.1",
+        "description": "ARM Cortex-M7 microcontroller development board",
+        "price": 850.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 22,
+        "image_url": "https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 53,
+        "name": "Banana Pi",
+        "description": "Single-board computer with Allwinner A20 processor",
+        "price": 2500.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 12,
+        "image_url": "https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 54,
+        "name": "Orange Pi",
+        "description": "Single-board computer with H3 processor",
+        "price": 1800.0,
+        "category": "Microcontrollers",
+        "stock_quantity": 18,
+        "image_url": "https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 55,
+        "name": "Rain Sensor",
+        "description": "Rain detection sensor module",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 55,
+        "image_url": "https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 56,
+        "name": "Sound Vibration Sensor",
+        "description": "Vibration and sound detection sensor",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 70,
+        "image_url": "https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 57,
+        "name": "Color Sensor (TCS34725)",
+        "description": "RGB color sensor with IR blocking filter",
+        "price": 180.0,
+        "category": "Sensors",
+        "stock_quantity": 40,
+        "image_url": "https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 58,
+        "name": "Sound Sensor",
+        "description": "Microphone sound detection module",
+        "price": 45.0,
+        "category": "Sensors",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 59,
+        "name": "Water Level Sensor",
+        "description": "Liquid level detection sensor",
+        "price": 65.0,
+        "category": "Sensors",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 60,
+        "name": "5V Relay Module",
+        "description": "Electromagnetic relay module for switching",
+        "price": 35.0,
+        "category": "Actuators",
+        "stock_quantity": 80,
+        "image_url": "https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 61,
+        "name": "Electret Microphone Module",
+        "description": "Condenser microphone module for audio input",
+        "price": 40.0,
+        "category": "Audio Components",
+        "stock_quantity": 75,
+        "image_url": "https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 62,
+        "name": "Voice Recognition Microphone Board",
+        "description": "Advanced voice recognition and processing board",
+        "price": 350.0,
+        "category": "Audio Components",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 63,
+        "name": "Robocraze Speech Recognition Module",
+        "description": "Voice command recognition module",
+        "price": 450.0,
+        "category": "Audio Components",
+        "stock_quantity": 20,
+        "image_url": "https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg",
+        "is_featured": true
+    },
+    {
+        "id": 64,
+        "name": "Active Buzzer Module",
+        "description": "Electronic buzzer module with built-in oscillator",
+        "price": 25.0,
+        "category": "Audio Components",
+        "stock_quantity": 100,
+        "image_url": "https://i.pinimg.com/1200x/43/10/87/431087ed78d6e014a611787cb4ac6963.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 65,
+        "name": "Passive Buzzer",
+        "description": "Piezo buzzer for audio output without oscillator",
+        "price": 20.0,
+        "category": "Audio Components",
+        "stock_quantity": 120,
+        "image_url": "https://i.pinimg.com/736x/7d/58/ed/7d58ed71e86237abc1f31b67d8f08639.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 68,
+        "name": "Infrared Obstacle Sensor",
+        "description": "IR proximity sensor for obstacle detection",
+        "price": 35.0,
+        "category": "Sensors",
+        "stock_quantity": 90,
+        "image_url": "https://i.pinimg.com/736x/15/fe/19/15fe193153c29952640b42ea92b8ba12.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 69,
+        "name": "PIR Motion Sensor",
+        "description": "Passive infrared motion detector sensor",
+        "price": 75.0,
+        "category": "Sensors",
+        "stock_quantity": 65,
+        "image_url": "https://i.pinimg.com/736x/fb/3e/6d/fb3e6d329d4c2356c76c84246ceb1dca.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 70,
+        "name": "Temperature Sensor (DS18B20)",
+        "description": "Digital temperature sensor with 1-wire interface",
+        "price": 55.0,
+        "category": "Sensors",
+        "stock_quantity": 85,
+        "image_url": "https://i.pinimg.com/736x/78/8b/ea/788beaacc3994d3b7a80b04aeb6b08ed.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 71,
+        "name": "Pressure Sensor (BMP280)",
+        "description": "Barometric pressure and temperature sensor",
+        "price": 120.0,
+        "category": "Sensors",
+        "stock_quantity": 45,
+        "image_url": "https://i.pinimg.com/736x/2c/f3/25/2cf3253970912c9d71827c0754d24b52.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 72,
+        "name": "Gas Sensor (MQ-2)",
+        "description": "Combustible gas and smoke sensor",
+        "price": 85.0,
+        "category": "Sensors",
+        "stock_quantity": 60,
+        "image_url": "https://i.pinimg.com/736x/25/45/c7/2545c7432cd113a3d69dab5e25aefe65.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 73,
+        "name": "Gas Sensor (MQ-135)",
+        "description": "Air quality sensor for detecting harmful gases",
+        "price": 90.0,
+        "category": "Sensors",
+        "stock_quantity": 55,
+        "image_url": "https://i.pinimg.com/736x/35/3c/cb/353ccbf6dac0d3e6e924149b04651dd1.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 74,
+        "name": "Light Sensor (LDR)",
+        "description": "Light dependent resistor for light intensity measurement",
+        "price": 15.0,
+        "category": "Sensors",
+        "stock_quantity": 150,
+        "image_url": "https://i.pinimg.com/736x/2a/29/86/2a29868718c02a045dee1db8eb5d1b03.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 75,
+        "name": "Touch Sensor",
+        "description": "Capacitive touch sensor module",
+        "price": 30.0,
+        "category": "Sensors",
+        "stock_quantity": 95,
+        "image_url": "https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg",
+        "is_featured": false
+    },
+    {
+        "id": 76,
+        "name": "TFT Screen",
+        "description": "2.8 inch TFT LCD color touch screen display",
+        "price": 850.0,
+        "category": "Displays",
+        "stock_quantity": 25,
+        "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
+        "is_featured": true
+    }
+];
+
+        // Global variables for filtering and sorting
+        let currentCategory = '';
+        let currentSort = 'name';
+        let currentSearch = '';
         let currentPage = 1;
-        const productsPerPage = 6;
+        let totalPages = 1;
 
-        // DEMO_PRODUCTS data for GitHub Pages - Complete list of all 61 products
-        const DEMO_PRODUCTS = [
-            {
-                "id": 11,
-                "name": "Arduino Uno R3",
-                "description": "ATmega328P microcontroller board with USB interface",
-                "price": 450.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 30,
-                "image_url": "https://m.media-amazon.com/images/I/51+N-57gSiL.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 12,
-                "name": "ESP32 Development Board",
-                "description": "WiFi & Bluetooth enabled microcontroller",
-                "price": 350.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 40,
-                "image_url": "https://i.pinimg.com/736x/02/a1/01/02a101e95d5a8f6be9adca70e9d6f87e.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 13,
-                "name": "DHT11 Temperature & Humidity Sensor",
-                "description": "Digital temperature and humidity sensor with 1-wire interface",
-                "price": 45.0,
-                "category": "Sensors",
-                "stock_quantity": 100,
-                "image_url": "https://i.pinimg.com/1200x/7b/c7/1e/7bc71ed8923c0ad6e8d7bcc115ef59de.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 14,
-                "name": "HC-SR04 Ultrasonic Sensor",
-                "description": "Ultrasonic ranging sensor for distance measurement",
-                "price": 85.0,
-                "category": "Sensors",
-                "stock_quantity": 75,
-                "image_url": "https://i.pinimg.com/1200x/1d/84/dc/1d84dc4fb7a5ac5e2d9121911f4067da.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 15,
-                "name": "SG90 Servo Motor",
-                "description": "9g micro servo motor for robotics",
-                "price": 95.0,
-                "category": "Actuators",
-                "stock_quantity": 120,
-                "image_url": "https://i.pinimg.com/736x/a6/c5/5a/a6c55a797bc6e00f4ca5c91b84afec98.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 16,
-                "name": "DC Motor",
-                "description": "12V DC geared motor for robotics and automation projects",
-                "price": 150.0,
-                "category": "Actuators",
-                "stock_quantity": 85,
-                "image_url": "https://m.media-amazon.com/images/I/41OZaG+qvsL.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 17,
-                "name": "Stepper Motor",
-                "description": "NEMA 17 stepper motor with 1.8° step angle for precision control",
-                "price": 450.0,
-                "category": "Actuators",
-                "stock_quantity": 45,
-                "image_url": "https://m.media-amazon.com/images/I/51fLU88NI6L.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 18,
-                "name": "LCD Crystal Display",
-                "description": "16x2 character LCD display module with backlight",
-                "price": 120.0,
-                "category": "Displays",
-                "stock_quantity": 85,
-                "image_url": "https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 19,
-                "name": "OLED Display",
-                "description": "0.96 inch I2C OLED display module with 128x64 resolution",
-                "price": 150.0,
-                "category": "Displays",
-                "stock_quantity": 60,
-                "image_url": "https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 20,
-                "name": "TFT Screen",
-                "description": "2.8 inch TFT LCD color touch screen display",
-                "price": 850.0,
-                "category": "Displays",
-                "stock_quantity": 25,
-                "image_url": "https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 21,
-                "name": "7-Segment Display",
-                "description": "4-digit 7-segment display with decimal points",
-                "price": 65.0,
-                "category": "Displays",
-                "stock_quantity": 80,
-                "image_url": "https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 22,
-                "name": "E-paper Display",
-                "description": "1.54 inch e-paper display for low power applications",
-                "price": 650.0,
-                "category": "Displays",
-                "stock_quantity": 30,
-                "image_url": "https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 23,
-                "name": "LED Matrix Display",
-                "description": "8x8 LED matrix display with MAX7219 driver",
-                "price": 95.0,
-                "category": "Displays",
-                "stock_quantity": 70,
-                "image_url": "https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 24,
-                "name": "LCD Touchscreen Module",
-                "description": "2.4 inch LCD touchscreen module for user interfaces",
-                "price": 1200.0,
-                "category": "Displays",
-                "stock_quantity": 15,
-                "image_url": "https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 25,
-                "name": "2 Battery Holders",
-                "description": "AA battery holder for 2 batteries in series",
-                "price": 25.0,
-                "category": "Power Supply",
-                "stock_quantity": 150,
-                "image_url": "https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 26,
-                "name": "3 Battery Holders",
-                "description": "AA battery holder for 3 batteries in series",
-                "price": 35.0,
-                "category": "Power Supply",
-                "stock_quantity": 120,
-                "image_url": "https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 27,
-                "name": "DC-DC Converter",
-                "description": "Adjustable DC-DC buck converter module 5V-35V",
-                "price": 85.0,
-                "category": "Power Supply",
-                "stock_quantity": 90,
-                "image_url": "https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 28,
-                "name": "Power Bank Module",
-                "description": "18650 lithium battery power bank module",
-                "price": 180.0,
-                "category": "Power Supply",
-                "stock_quantity": 60,
-                "image_url": "https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 29,
-                "name": "Breadboard",
-                "description": "830 tie-point solderless breadboard for prototyping",
-                "price": 85.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 120,
-                "image_url": "https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 30,
-                "name": "Male-Male Jumper Wires",
-                "description": "40-piece male-to-male jumper wire set",
-                "price": 45.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 200,
-                "image_url": "https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 31,
-                "name": "Male-Female Jumper Wires",
-                "description": "40-piece male-to-female jumper wire set",
-                "price": 50.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 180,
-                "image_url": "https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 32,
-                "name": "Lithium Polymer Battery",
-                "description": "3.7V 1000mAh LiPo battery with JST connector",
-                "price": 250.0,
-                "category": "Power Supply",
-                "stock_quantity": 75,
-                "image_url": "https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 33,
-                "name": "PCB Prototyping Board",
-                "description": "Double-sided PCB prototyping board with copper pads",
-                "price": 120.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 100,
-                "image_url": "https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 34,
-                "name": "Nuts & Bolts Kit",
-                "description": "Assorted nuts and bolts set for electronics projects",
-                "price": 65.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 80,
-                "image_url": "https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 38,
-                "name": "Linear Voltage Regulator",
-                "description": "LM7805 5V linear voltage regulator IC",
-                "price": 15.0,
-                "category": "Power Supply",
-                "stock_quantity": 300,
-                "image_url": "https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 39,
-                "name": "Audio Adapter Board",
-                "description": "Audio amplifier board with speaker connector",
-                "price": 120.0,
-                "category": "Audio Components",
-                "stock_quantity": 50,
-                "image_url": "https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 40,
-                "name": "USB Cable",
-                "description": "USB 2.0 A to B cable for programming and data transfer",
-                "price": 35.0,
-                "category": "Tools & Accessories",
-                "stock_quantity": 250,
-                "image_url": "https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 41,
-                "name": "Brushless DC Motor",
-                "description": "High-efficiency brushless DC motor for precision applications",
-                "price": 850.0,
-                "category": "Actuators",
-                "stock_quantity": 15,
-                "image_url": "https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 42,
-                "name": "Bluetooth Controlled Linear Actuator",
-                "description": "Wireless controlled linear motion actuator",
-                "price": 2500.0,
-                "category": "Actuators",
-                "stock_quantity": 8,
-                "image_url": "https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 43,
-                "name": "Continuous Rotation Robot Servo",
-                "description": "360-degree continuous rotation servo motor",
-                "price": 180.0,
-                "category": "Actuators",
-                "stock_quantity": 45,
-                "image_url": "https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 44,
-                "name": "Motor Driver Shield",
-                "description": "Arduino shield for motor control applications",
-                "price": 350.0,
-                "category": "Actuators",
-                "stock_quantity": 25,
-                "image_url": "https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 45,
-                "name": "H-Bridge DC Stepper Motor Control Module",
-                "description": "Dual H-bridge motor driver for stepper motors",
-                "price": 120.0,
-                "category": "Actuators",
-                "stock_quantity": 30,
-                "image_url": "https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 46,
-                "name": "Raspberry Pi Zero W",
-                "description": "Compact single-board computer with WiFi and Bluetooth",
-                "price": 1200.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 35,
-                "image_url": "https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 47,
-                "name": "Arduino Mega",
-                "description": "ATmega2560 microcontroller board with expanded I/O",
-                "price": 1800.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 20,
-                "image_url": "https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 48,
-                "name": "Arduino Nano",
-                "description": "Compact ATmega328 microcontroller board",
-                "price": 250.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 50,
-                "image_url": "https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 49,
-                "name": "Arduino Due",
-                "description": "ARM Cortex-M3 microcontroller board with 32-bit architecture",
-                "price": 2200.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 15,
-                "image_url": "https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 50,
-                "name": "ESP8266",
-                "description": "WiFi enabled microcontroller module",
-                "price": 150.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 60,
-                "image_url": "https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 51,
-                "name": "Adafruit Feather M0",
-                "description": "ARM Cortex-M0+ microcontroller board with Bluetooth",
-                "price": 650.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 25,
-                "image_url": "https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 52,
-                "name": "Teensy 4.1",
-                "description": "ARM Cortex-M7 microcontroller development board",
-                "price": 850.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 22,
-                "image_url": "https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 53,
-                "name": "Banana Pi",
-                "description": "Single-board computer with Allwinner A20 processor",
-                "price": 2500.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 12,
-                "image_url": "https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 54,
-                "name": "Orange Pi",
-                "description": "Single-board computer with H3 processor",
-                "price": 1800.0,
-                "category": "Microcontrollers",
-                "stock_quantity": 18,
-                "image_url": "https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 55,
-                "name": "Rain Sensor",
-                "description": "Rain detection sensor module",
-                "price": 75.0,
-                "category": "Sensors",
-                "stock_quantity": 55,
-                "image_url": "https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 56,
-                "name": "Sound Vibration Sensor",
-                "description": "Vibration and sound detection sensor",
-                "price": 55.0,
-                "category": "Sensors",
-                "stock_quantity": 70,
-                "image_url": "https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 57,
-                "name": "Color Sensor (TCS34725)",
-                "description": "RGB color sensor with IR blocking filter",
-                "price": 180.0,
-                "category": "Sensors",
-                "stock_quantity": 40,
-                "image_url": "https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 58,
-                "name": "Sound Sensor",
-                "description": "Microphone sound detection module",
-                "price": 45.0,
-                "category": "Sensors",
-                "stock_quantity": 80,
-                "image_url": "https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 59,
-                "name": "Water Level Sensor",
-                "description": "Liquid level detection sensor",
-                "price": 65.0,
-                "category": "Sensors",
-                "stock_quantity": 60,
-                "image_url": "https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 60,
-                "name": "5V Relay Module",
-                "description": "Electromagnetic relay module for switching applications",
-                "price": 35.0,
-                "category": "Actuators",
-                "stock_quantity": 80,
-                "image_url": "https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 61,
-                "name": "Electret Microphone Module",
-                "description": "Condenser microphone module for audio input",
-                "price": 40.0,
-                "category": "Audio Components",
-                "stock_quantity": 75,
-                "image_url": "https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 62,
-                "name": "Voice Recognition Microphone Board",
-                "description": "Advanced voice recognition and processing board",
-                "price": 350.0,
-                "category": "Audio Components",
-                "stock_quantity": 25,
-                "image_url": "https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 63,
-                "name": "Robocraze Speech Recognition Module",
-                "description": "Voice command recognition module",
-                "price": 450.0,
-                "category": "Audio Components",
-                "stock_quantity": 20,
-                "image_url": "https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg",
-                "is_featured": true
-            },
-            {
-                "id": 64,
-                "name": "Active Buzzer Module",
-                "description": "Piezoelectric buzzer for sound generation",
-                "price": 25.0,
-                "category": "Audio Components",
-                "stock_quantity": 100,
-                "image_url": "https://i.pinimg.com/1200x/85/6b/89/856b89b9a45e6b7b26fb7a8a4d3b8b7a.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 65,
-                "name": "Passive Buzzer",
-                "description": "Passive buzzer module for tone generation",
-                "price": 30.0,
-                "category": "Audio Components",
-                "stock_quantity": 90,
-                "image_url": "https://i.pinimg.com/1200x/8f/3b/9c/8f3b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 66,
-                "name": "IR Remote Control",
-                "description": "Infrared remote control for device operation",
-                "price": 120.0,
-                "category": "Sensors",
-                "stock_quantity": 45,
-                "image_url": "https://i.pinimg.com/1200x/7f/5b/9c/7f5b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 67,
-                "name": "IR Receiver Module",
-                "description": "Infrared receiver for remote control applications",
-                "price": 15.0,
-                "category": "Sensors",
-                "stock_quantity": 150,
-                "image_url": "https://i.pinimg.com/736x/5f/8b/9c/5f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 68,
-                "name": "Infrared Obstacle Sensor",
-                "description": "IR proximity sensor for obstacle detection",
-                "price": 35.0,
-                "category": "Sensors",
-                "stock_quantity": 85,
-                "image_url": "https://i.pinimg.com/1200x/9f/8b/9c/9f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 69,
-                "name": "PIR Motion Sensor",
-                "description": "Passive infrared motion detection sensor",
-                "price": 85.0,
-                "category": "Sensors",
-                "stock_quantity": 65,
-                "image_url": "https://i.pinimg.com/736x/1f/8b/9c/1f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 70,
-                "name": "Gas Sensor (MQ-2)",
-                "description": "Combustible gas and smoke detector",
-                "price": 95.0,
-                "category": "Sensors",
-                "stock_quantity": 40,
-                "image_url": "https://i.pinimg.com/1200x/3f/8b/9c/3f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 71,
-                "name": "Gas Sensor (MQ-135)",
-                "description": "Air quality sensor for detecting pollutants",
-                "price": 110.0,
-                "category": "Sensors",
-                "stock_quantity": 35,
-                "image_url": "https://i.pinimg.com/736x/4f/8b/9c/4f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 72,
-                "name": "Gas Sensor (MQ-2)",
-                "description": "LPG, propane and hydrogen gas detector",
-                "price": 90.0,
-                "category": "Sensors",
-                "stock_quantity": 45,
-                "image_url": "https://i.pinimg.com/1200x/5f/8b/9c/5f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 73,
-                "name": "Gas Sensor (MQ-135)",
-                "description": "Ammonia, nitrogen oxide and benzene detector",
-                "price": 105.0,
-                "category": "Sensors",
-                "stock_quantity": 40,
-                "image_url": "https://i.pinimg.com/736x/6f/8b/9c/6f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 74,
-                "name": "Tilt Sensor",
-                "description": "Mercury tilt switch for orientation detection",
-                "price": 20.0,
-                "category": "Sensors",
-                "stock_quantity": 120,
-                "image_url": "https://i.pinimg.com/1200x/7f/8b/9c/7f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 75,
-                "name": "Hall Effect Sensor",
-                "description": "Magnetic field detection sensor",
-                "price": 45.0,
-                "category": "Sensors",
-                "stock_quantity": 70,
-                "image_url": "https://i.pinimg.com/736x/8f/8b/9c/8f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": false
-            },
-            {
-                "id": 76,
-                "name": "TFT Screen",
-                "description": "2.4 inch TFT LCD display with touchscreen",
-                "price": 1200.0,
-                "category": "Displays",
-                "stock_quantity": 10,
-                "image_url": "https://i.pinimg.com/1200x/9f/8b/9c/9f8b9c7b4f8e4c8b4f8e4c8b4f8e4c8b.jpg",
-                "is_featured": true
-            }
-        ];
-
-        // Initialize on page load
+        // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Products page DOM loaded, initializing...');
-
-            // Initialize products from static HTML instead of DEMO_PRODUCTS
-            initializeProductsFromHTML();
-
-            // For now, show ALL products (like local version initially does)
-            showAllProducts();
-
-            updatePagination(); // Create pagination if needed
-            updateCartCount();
-            initializeProductsPage();
+            console.log('Static products page loaded');
+            loadProducts();
+            setupSearchEventListeners();
         });
 
-        function showAllProducts() {
-            console.log('📦 Showing ALL products initially');
-            const allCards = document.querySelectorAll('.product-card');
-            allCards.forEach(card => {
-                card.style.display = 'block';
-            });
-            console.log('✅ All', allCards.length, 'products are now visible');
-        }
+        function setupSearchEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.querySelector('.search-btn');
 
-        function initializeProductsFromHTML() {
-            // Get all product cards from the static HTML
-            const productCards = document.querySelectorAll('.product-card');
-            console.log('📦 Found', productCards.length, 'product cards in HTML');
-
-            // Initialize filteredProducts with all products (no allProducts array needed for static HTML)
-            filteredProducts = [];
-            productCards.forEach((card, index) => {
-                const name = card.querySelector('.product-title')?.textContent || 'Unknown Product';
-                const priceText = card.querySelector('.product-price')?.textContent || 'Rs 0';
-                const price = parseFloat(priceText.replace('Rs ', '').split(' ')[0]) || 0;
-                const category = card.getAttribute('data-category') || 'General';
-
-                filteredProducts.push({
-                    id: index + 1,
-                    name: name,
-                    price: price,
-                    category: category,
-                    element: card // Keep reference to the DOM element
-                });
-            });
-
-            console.log('✅ Initialized', filteredProducts.length, 'products from HTML');
-        }
-
-        function initializeProductsPage() {
-            console.log('Initializing products page...');
-
-            checkUserLoginStatus();
-            loadAllProducts();
-            setupSearch();
-        }
-
-        function checkUserLoginStatus() {
-            console.log('Checking user login status on products page');
-            try {
-                let storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-                let storedPhone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-                let storedLoggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
-
-                console.log('Raw stored values on products page:', {
-                    storedUserId: `"${storedUserId}"`,
-                    storedPhone: `"${storedPhone}"`,
-                    storedLoggedIn: `"${storedLoggedIn}"`,
-                    storedUserIdType: typeof storedUserId,
-                    sessionUserId: `"${sessionStorage.getItem('user_id')}"`,
-                    localUserId: `"${localStorage.getItem('user_id')}"`
-                });
-
-                // Clear any corrupted data immediately
-                if (storedUserId === 'NaN' || storedUserId === null || storedUserId === undefined ||
-                    storedUserId === 'null' || storedUserId === 'undefined' ||
-                    String(storedUserId).toLowerCase() === 'nan' ||
-                    (storedUserId && isNaN(parseInt(storedUserId)))) {
-                    console.log('Found corrupted user ID, clearing storage immediately');
-                    clearUserData();
-                    storedUserId = null;
-                    storedLoggedIn = null;
-                    alert('Corrupted login data detected and cleared. Please login again.');
-                }
-
-                if (storedLoggedIn === 'true' && storedUserId && storedPhone) {
-                    const parsedUserId = parseInt(storedUserId);
-                    if (!isNaN(parsedUserId) && parsedUserId > 0) {
-                        currentUser = {
-                            user_id: parsedUserId,
-                            phone: storedPhone
-                        };
-                        console.log('User restored on products page:', currentUser);
-                        updateCartCount();
-                    } else {
-                        console.log('Invalid user ID after parsing, clearing storage');
-                        clearUserData();
-                        currentUser = null;
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch(this.value);
                     }
-                } else {
-                    console.log('No valid user found on products page');
-                    currentUser = null;
-                }
-            } catch (error) {
-                console.error('Error checking login on products page:', error);
-                clearUserData();
-                currentUser = null;
+                });
             }
-            updateLoginStatus();
-        }
 
-        function clearUserData() {
-            console.log('Clearing all user data from storage');
-            sessionStorage.removeItem('user_id');
-            sessionStorage.removeItem('phone');
-            sessionStorage.removeItem('logged_in');
-            localStorage.removeItem('user_id');
-            localStorage.removeItem('phone');
-            localStorage.removeItem('logged_in');
-
-            // Also clear any demo carts
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('demo_cart_')) {
-                    localStorage.removeItem(key);
-                }
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => performSearch(searchInput.value));
             }
         }
 
-        function forceLogout() {
-            console.log('Force logout triggered');
-            clearUserData();
-            currentUser = null;
-            updateLoginStatus();
-            updateCartCount();
-            alert('Logged out and data cleared. Please refresh the page.');
+        function performSearch(query) {
+            if (!query.trim()) return;
+
+            currentSearch = query.trim();
+            currentCategory = '';
+            currentPage = 1;
+
+            loadProducts();
         }
 
-        function showDebugInfo() {
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
-
-            alert(`🔍 DEBUG INFO:
-SessionStorage:
-- user_id: "${sessionStorage.getItem('user_id')}"
-- phone: "${sessionStorage.getItem('phone')}"
-- logged_in: "${sessionStorage.getItem('logged_in')}"
-
-LocalStorage:
-- user_id: "${localStorage.getItem('user_id')}"
-- phone: "${localStorage.getItem('phone')}"
-- logged_in: "${localStorage.getItem('logged_in')}"
-
-Current User: ${currentUser ? JSON.stringify(currentUser) : 'null'}
-
-Parsed user_id: ${userId ? parseInt(userId) : 'N/A'}
-Is NaN: ${isNaN(parseInt(userId))}`);
-        }
-
-        function updateLoginStatus() {
-            console.log('updateLoginStatus called on products page, currentUser:', currentUser);
-            const loginText = document.getElementById('loginText');
-            const loginTrigger = document.querySelector('.login-trigger');
-
-            if (loginText && currentUser && currentUser.user_id && !isNaN(currentUser.user_id) && currentUser.user_id > 0) {
-                const displayId = Math.abs(Math.floor(currentUser.user_id)); // Ensure positive integer
-                loginText.textContent = `User ${displayId}`;
-                loginTrigger.onclick = () => toggleAccountMenu();
-                console.log('Updated UI for logged in user on products page:', displayId);
-            } else {
-                // Invalid user data - reset to login state
-                if (loginText) {
-                    loginText.textContent = 'Login';
-                    loginTrigger.onclick = () => toggleLoginDropdown();
-                    console.log('Invalid user data - reset to login state on products page');
-                }
-                // Clear corrupted data
-                if (currentUser && (isNaN(currentUser.user_id) || currentUser.user_id <= 0)) {
-                    console.log('Clearing corrupted currentUser data on products page');
-                    currentUser = null;
-                    clearUserData();
-                }
-                // Show helpful message
-                console.log('LOGIN STATUS: Not logged in or invalid data');
-            }
-        }
-
-        function toggleLoginDropdown() {
-            const dropdown = document.getElementById('loginDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-
-        function toggleAccountMenu() {
-            alert('Logged in as User ' + currentUser.user_id + ' - Click to logout');
-            forceLogout();
-        }
-
-        function sendHeaderLoginOTP() {
-            const phoneInput = document.getElementById('headerLoginPhone');
-            let phone = phoneInput.value.trim().replace(/\D/g, '').slice(-10);
-
-            if (!phone || phone.length !== 10) {
-                alert('Please enter a valid 10-digit phone number');
-                return;
-            }
-
-            // DEMO MODE: Generate OTP locally
-            console.log('Using demo mode for OTP generation');
-            setTimeout(() => {
-                const otp = '123456'; // Demo OTP
-                console.log(`Demo OTP generated: ${otp} for phone: ${phone}`);
-
-                // Show OTP input field
-                document.getElementById('headerLoginOtpGroup').style.display = 'block';
-                document.getElementById('headerSendLoginOtpBtn').style.display = 'none';
-                document.getElementById('headerVerifyLoginOtpBtn').style.display = 'block';
-
-                // Start OTP timer
-                startDemoTimer();
-
-                // Reset button
-                sendBtn.disabled = false;
-                sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
-
-                // Focus on OTP input
-                document.getElementById('headerLoginOtp').focus();
-
-                // Show demo OTP notification
-                showDemoOTPNotification(otp);
-
-                console.log(`📱 DEMO OTP: ${otp}`);
-                alert(`Demo OTP: ${otp}\n\nEnter this code to login.`);
-            }, 1000);
-        }
-
-        function verifyHeaderLoginOTP() {
-            const otpInput = document.getElementById('headerLoginOtp');
-            const otp = otpInput.value.trim();
-
-            if (otp !== '123456') {
-                alert('Invalid OTP. Use 123456 for demo.');
-                return;
-            }
-
-            // Clear any corrupted data first
-            clearUserData();
-
-            // Generate a valid user ID (between 1000-9999)
-            let userId;
-            do {
-                userId = Math.floor(Math.random() * 9000) + 1000;
-            } while (isNaN(userId) || userId < 1000 || userId > 9999);
-
-            const phone = document.getElementById('headerLoginPhone').value.trim();
-            const mockUser = {
-                user_id: userId,
-                phone: phone
-            };
-
-            console.log('Generated valid user ID:', userId, 'for user:', mockUser);
-
-            // Store in both storages
-            sessionStorage.setItem('user_id', mockUser.user_id.toString());
-            sessionStorage.setItem('phone', mockUser.phone);
-            sessionStorage.setItem('logged_in', 'true');
-
-            localStorage.setItem('user_id', mockUser.user_id.toString());
-            localStorage.setItem('phone', mockUser.phone);
-            localStorage.setItem('logged_in', 'true');
-
-            // Update current user
-            currentUser = mockUser;
-
-            // Update login button in header
-            updateLoginStatus();
-
-            // Reset form
-            document.getElementById('headerLoginOtp').value = '';
-            document.getElementById('headerLoginOtpGroup').style.display = 'none';
-            document.getElementById('headerSendLoginOtpBtn').style.display = 'block';
-            document.getElementById('headerVerifyLoginOtpBtn').style.display = 'none';
-
-            // Close dropdown
-            const dropdown = document.getElementById('loginDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-
-            alert(`Login successful! Welcome User ${mockUser.user_id}`);
-        }
-
-        function startDemoTimer() {
-            let timeLeft = 30;
-            const timerElement = document.getElementById('headerLoginOtpTimer');
-
-            const timer = setInterval(() => {
-                if (timerElement) {
-                    timerElement.textContent = `Resend OTP in ${timeLeft}s`;
-                }
-                timeLeft--;
-
-                if (timeLeft < 0) {
-                    clearInterval(timer);
-                    if (timerElement) {
-                        timerElement.textContent = 'OTP expired';
-                    }
-                }
-            }, 1000);
-        }
-
-        function showDemoOTPNotification(otp) {
-            // Create a temporary notification
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #28a745;
-                color: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                z-index: 10001;
-                font-size: 16px;
-                text-align: center;
-            `;
-            notification.innerHTML = `
-                <strong>Demo OTP Generated!</strong><br>
-                Use this code: <strong style="font-size: 20px;">${otp}</strong><br>
-                <small>Click anywhere to close</small>
-            `;
-            document.body.appendChild(notification);
-
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 5000);
-
-            // Click to close
-            notification.onclick = () => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            };
-        }
-
-        function addToCart(productId) {
-            if (!currentUser) {
-                alert('Please login to add items to cart');
-                toggleLoginDropdown();
-                return;
-            }
-
-            try {
-                const cartKey = 'demo_cart_' + currentUser.user_id;
-                let cart = [];
-                const cartData = localStorage.getItem(cartKey);
-                if (cartData) {
-                    cart = JSON.parse(cartData);
-                }
-
-                const existingItem = cart.find(item => item.product_id === productId);
-                if (existingItem) {
-                    existingItem.quantity += 1;
-                } else {
-                    cart.push({ product_id: productId, quantity: 1 });
-                }
-
-                localStorage.setItem(cartKey, JSON.stringify(cart));
-                currentCart = cart;
-                updateCartCount();
-                alert('Item added to cart!');
-            } catch (error) {
-                console.error('Error adding to demo cart:', error);
-                alert('Error adding to cart');
-            }
-        }
-
-        function updateCartCount() {
-            if (!currentUser) {
-                updateCartCountDisplay(0);
-                return;
-            }
-
-            try {
-                const cartKey = 'demo_cart_' + currentUser.user_id;
-                const cartData = localStorage.getItem(cartKey);
-                const cart = cartData ? JSON.parse(cartData) : [];
-                const count = cart.reduce((total, item) => total + item.quantity, 0);
-                updateCartCountDisplay(count);
-            } catch (error) {
-                console.error('Error updating demo cart count:', error);
-                updateCartCountDisplay(0);
-            }
-        }
-
-        function updateCartCountDisplay(count) {
-            const cartCountElement = document.getElementById('cartCount');
-            if (cartCountElement) {
-                cartCountElement.textContent = count;
-                cartCountElement.style.display = count > 0 ? 'block' : 'none';
-            }
-        }
-
-        function loadAllProducts() {
-            // Use DEMO_PRODUCTS directly for GitHub Pages
-            console.log('🔄 Loading products from DEMO_PRODUCTS...');
-            console.log('✅ Using DEMO_PRODUCTS with', DEMO_PRODUCTS.length, 'products');
-
-            // Map DEMO_PRODUCTS to match expected format
-            allProducts = DEMO_PRODUCTS.map(product => ({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            category: product.category,
-                description: product.description,
-                            image: product.image_url || 'https://via.placeholder.com/250x200?text=' + product.name
-                        }));
-
-            console.log('🔍 First product:', allProducts[0]);
-            console.log('🔍 All product IDs:', allProducts.map(p => ({id: p.id, name: p.name})));
-                        
-                        filteredProducts = [...allProducts];
-                        displayProducts();
-                        updatePagination();
-            return;
-            
-            // OLD HARDCODED ARRAY (DISABLED - NOW USING API)
-            /*
-            allProducts = [
-                {
-                    id: 1,
-                    name: 'Arduino Uno R3',
-                    price: 450,
-                    category: 'Microcontrollers',
-                    description: 'ATmega328P microcontroller board with USB interface',
-                    image: 'https://m.media-amazon.com/images/I/51+N-57gSiL.jpg'
-                },
-                {
-                    id: 2,
-                    name: 'ESP32 Development Board',
-                    price: 350,
-                    category: 'Microcontrollers',
-                    description: 'WiFi & Bluetooth enabled microcontroller',
-                    image: 'https://i.pinimg.com/736x/d1/66/1b/d1661bdecf277684181694a4fedbf9bf.jpg'
-                },
-                {
-                    id: 3,
-                    name: 'DHT11 Temperature & Humidity Sensor',
-                    price: 45,
-                    category: 'Sensors',
-                    description: 'Digital temperature and humidity sensor with 1-wire interface',
-                    image: 'https://i.pinimg.com/1200x/a1/50/a6/a150a6b5db3d525533522fbba78d999b.jpg'
-                },
-                {
-                    id: 4,
-                    name: 'HC-SR04 Ultrasonic Sensor',
-                    price: 85,
-                    category: 'Sensors',
-                    description: 'Ultrasonic ranging sensor for distance measurement',
-                    image: 'https://i.pinimg.com/1200x/5b/09/06/5b09066c572846471a3df3242abd4375.jpg'
-                },
-                {
-                    id: 5,
-                    name: 'SG90 Servo Motor',
-                    price: 95,
-                    category: 'Actuators',
-                    description: '9g micro servo motor for robotics',
-                    image: 'https://i.pinimg.com/1200x/c6/da/02/c6da024f4702e68756c6d466894a027c.jpg'
-                },
-                {
-                    id: 6,
-                    name: 'DC Motor',
-                    price: 150,
-                    category: 'Actuators',
-                    description: '12V DC geared motor for robotics and automation projects',
-                    image: 'https://m.media-amazon.com/images/I/21xfvGFiirL.jpg'
-                },
-                {
-                    id: 7,
-                    name: 'Stepper Motor',
-                    price: 450,
-                    category: 'Actuators',
-                    description: 'NEMA 17 stepper motor with 1.8° step angle for precision control',
-                    image: 'https://m.media-amazon.com/images/I/41cBDjOi6eL.jpg'
-                },
-                {
-                    id: 8,
-                    name: 'LCD Crystal Display',
-                    price: 120,
-                    category: 'Displays',
-                    description: '16x2 character LCD display module with backlight',
-                    image: 'https://i.pinimg.com/736x/55/fd/a1/55fda180c7904f25067c840a8302d0a7.jpg'
-                },
-                {
-                    id: 9,
-                    name: 'OLED Display',
-                    price: 150,
-                    category: 'Displays',
-                    description: '0.96 inch I2C OLED display module with 128x64 resolution',
-                    image: 'https://i.pinimg.com/1200x/fd/ef/d4/fdefd4f32f98c1a2c6f15b71c12ecc75.jpg'
-                },
-                {
-                    id: 10,
-                    name: 'TFT Screen',
-                    price: 850,
-                    category: 'Displays',
-                    description: '2.8 inch TFT LCD color touch screen display',
-                    image: 'https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg'
-                },
-                {
-                    id: 11,
-                    name: '7-Segment Display',
-                    price: 65,
-                    category: 'Displays',
-                    description: '4-digit 7-segment display with decimal points',
-                    image: 'https://i.pinimg.com/736x/31/a0/60/31a060caefe320fdf1108f364e681f1d.jpg'
-                },
-                {
-                    id: 12,
-                    name: 'E-paper Display',
-                    price: 650,
-                    category: 'Displays',
-                    description: '1.54 inch e-paper display for low power applications',
-                    image: 'https://i.pinimg.com/1200x/50/5d/4a/505d4ab5dff8115c1dc1e2391ed6d1fb.jpg'
-                },
-                {
-                    id: 13,
-                    name: 'LED Matrix Display',
-                    price: 95,
-                    category: 'Displays',
-                    description: '8x8 LED matrix display with MAX7219 driver',
-                    image: 'https://i.pinimg.com/736x/0f/b0/b1/0fb0b100bb886ac9f050213bef229042.jpg'
-                },
-                {
-                    id: 14,
-                    name: 'LCD Touchscreen Module',
-                    price: 1200,
-                    category: 'Displays',
-                    description: '2.4 inch LCD touchscreen module for user interfaces',
-                    image: 'https://i.pinimg.com/1200x/f7/ba/f5/f7baf50e5993ccffc68e5387bda0b342.jpg'
-                },
-                {
-                    id: 15,
-                    name: '2 Battery Holders',
-                    price: 25,
-                    category: 'Power Supply',
-                    description: 'AA battery holder for 2 batteries in series',
-                    image: 'https://i.pinimg.com/1200x/51/d7/f8/51d7f86c3ba3a7e9081902780d10d159.jpg'
-                },
-                {
-                    id: 16,
-                    name: '3 Battery Holders',
-                    price: 35,
-                    category: 'Power Supply',
-                    description: 'AA battery holder for 3 batteries in series',
-                    image: 'https://i.pinimg.com/1200x/d6/ca/b6/d6cab6537f5899be3171be162f5b9fab.jpg'
-                },
-                {
-                    id: 17,
-                    name: 'DC-DC Converter',
-                    price: 85,
-                    category: 'Power Supply',
-                    description: 'Adjustable DC-DC buck converter module 5V-35V',
-                    image: 'https://i.pinimg.com/1200x/f9/f8/fb/f9f8fb91419f05a2436d0a3ca731586a.jpg'
-                },
-                {
-                    id: 18,
-                    name: 'Power Bank Module',
-                    price: 180,
-                    category: 'Power Supply',
-                    description: '18650 lithium battery power bank module',
-                    image: 'https://i.pinimg.com/1200x/4c/45/0f/4c450f39f070b12698645d02dcf10a3a.jpg'
-                },
-                {
-                    id: 19,
-                    name: 'Breadboard',
-                    price: 85,
-                    category: 'Tools & Accessories',
-                    description: '830 tie-point solderless breadboard for prototyping',
-                    image: 'https://i.pinimg.com/1200x/c6/2e/fe/c62efe7156acb4a732ee2a0985cdb1b0.jpg'
-                },
-                {
-                    id: 20,
-                    name: 'Male-Male Jumper Wires',
-                    price: 45,
-                    category: 'Tools & Accessories',
-                    description: '40-piece male-to-male jumper wire set',
-                    image: 'https://i.pinimg.com/1200x/ef/20/2c/ef202c20c5b52e44bb7cef23d80d31ac.jpg'
-                },
-                {
-                    id: 21,
-                    name: 'Male-Female Jumper Wires',
-                    price: 50,
-                    category: 'Tools & Accessories',
-                    description: '40-piece male-to-female jumper wire set',
-                    image: 'https://i.pinimg.com/1200x/fc/51/ee/fc51ee3784738477942608abcf9c8d21.jpg'
-                },
-                {
-                    id: 22,
-                    name: 'Lithium Polymer Battery',
-                    price: 250,
-                    category: 'Power Supply',
-                    description: '3.7V 1000mAh LiPo battery with JST connector',
-                    image: 'https://i.pinimg.com/736x/da/53/f7/da53f7c21e5a4b9df6d544bacc1ff085.jpg'
-                },
-                {
-                    id: 23,
-                    name: 'PCB Prototyping Board',
-                    price: 120,
-                    category: 'Tools & Accessories',
-                    description: 'Double-sided PCB prototyping board with copper pads',
-                    image: 'https://i.pinimg.com/1200x/c0/e7/85/c0e785c8bcfadf88efbdd9bbfbb44e1f.jpg'
-                },
-                {
-                    id: 24,
-                    name: 'Nuts & Bolts Kit',
-                    price: 65,
-                    category: 'Tools & Accessories',
-                    description: 'Assorted nuts and bolts set for electronics projects',
-                    image: 'https://i.pinimg.com/1200x/51/f6/84/51f684e16602b2affc0016f1b32bbb0e.jpg'
-                },
-                {
-                    id: 25,
-                    name: 'Cooling Fan 5V',
-                    price: 45,
-                    category: 'Robotics',
-                    description: '5V computer cooling fan for electronics projects',
-                    image: 'https://i.pinimg.com/1200x/22/e1/12/22e1128c1ffb2110402cfa8c977b5f86.jpg'
-                },
-                {
-                    id: 26,
-                    name: 'Tires',
-                    price: 30,
-                    category: 'Robotics',
-                    description: 'Rubber tires for robotics projects',
-                    image: 'https://i.pinimg.com/1200x/06/56/d3/0656d3389dc7698d1225cd85dfa5c1e4.jpg'
-                },
-                {
-                    id: 27,
-                    name: 'Wheels',
-                    price: 25,
-                    category: 'Robotics',
-                    description: 'Plastic wheels for robotics and automation',
-                    image: 'https://i.pinimg.com/1200x/f5/ea/8a/f5ea8a6ffb2e2937f01395b7dadb5394.jpg'
-                },
-                {
-                    id: 28,
-                    name: 'Linear Voltage Regulator',
-                    price: 15,
-                    category: 'Power Supply',
-                    description: 'LM7805 5V linear voltage regulator IC',
-                    image: 'https://i.pinimg.com/736x/f1/ba/b4/f1bab45eff6c23f981b993006bd5fcd4.jpg'
-                },
-                {
-                    id: 29,
-                    name: 'Audio Adapter Board',
-                    price: 120,
-                    category: 'Audio Components',
-                    description: 'Audio amplifier board with speaker connector',
-                    image: 'https://i.pinimg.com/1200x/f5/25/29/f525292fb2911c4456c36024197caa1a.jpg'
-                },
-                {
-                    id: 30,
-                    name: 'USB Cable',
-                    price: 35,
-                    category: 'Tools & Accessories',
-                    description: 'USB 2.0 A to B cable for programming and data transfer',
-                    image: 'https://i.pinimg.com/736x/96/2a/9d/962a9d51a7b74ec70de4609d1f255f00.jpg'
-                },
-                {
-                    id: 31,
-                    name: 'Brushless DC Motor',
-                    price: 850,
-                    category: 'Actuators',
-                    description: 'High-speed brushless DC motor for robotics and drones',
-                    image: 'https://i.pinimg.com/1200x/f7/17/c3/f717c366e958fc149ff3c5139167afc2.jpg'
-                },
-                {
-                    id: 32,
-                    name: 'Bluetooth Controlled Linear Actuator',
-                    price: 2500,
-                    category: 'Actuators',
-                    description: 'Linear actuator with Bluetooth control for automation projects',
-                    image: 'https://i.pinimg.com/736x/29/76/e3/2976e334ded326d7cec03488972b5005.jpg'
-                },
-                {
-                    id: 33,
-                    name: 'Continuous Rotation Robot Servo',
-                    price: 180,
-                    category: 'Actuators',
-                    description: '360-degree continuous rotation servo motor for robots',
-                    image: 'https://i.pinimg.com/1200x/bb/be/d9/bbbed9dc8ef3e9addf3157f2eb5c494c.jpg'
-                },
-                {
-                    id: 34,
-                    name: 'Motor Driver Shield',
-                    price: 350,
-                    category: 'Actuators',
-                    description: 'Arduino motor driver shield for controlling DC motors',
-                    image: 'https://i.pinimg.com/736x/b7/cc/d7/b7ccd715fa879b2464e4455a88a1b569.jpg'
-                },
-                {
-                    id: 35,
-                    name: 'H-Bridge DC Stepper Motor Control Module',
-                    price: 120,
-                    category: 'Actuators',
-                    description: 'Dual H-bridge module for controlling DC and stepper motors',
-                    image: 'https://i.pinimg.com/1200x/f1/5c/33/f15c3335d76619c8fb68a75b0a3ff676.jpg'
-                },
-                {
-                    id: 36,
-                    name: 'Raspberry Pi Zero W',
-                    price: 1200,
-                    category: 'Microcontrollers',
-                    description: 'Compact Raspberry Pi with WiFi and Bluetooth',
-                    image: 'https://i.pinimg.com/1200x/f7/56/7c/f7567c73f08d270f14b0fccf8f7e18bc.jpg'
-                },
-                {
-                    id: 37,
-                    name: 'Arduino Mega',
-                    price: 1800,
-                    category: 'Microcontrollers',
-                    description: 'Arduino Mega 2560 with 54 digital I/O pins',
-                    image: 'https://i.pinimg.com/1200x/06/08/de/0608de0634b243a211b38aa0ef742c29.jpg'
-                },
-                {
-                    id: 38,
-                    name: 'Arduino Nano',
-                    price: 250,
-                    category: 'Microcontrollers',
-                    description: 'Compact Arduino Nano microcontroller board',
-                    image: 'https://i.pinimg.com/736x/a2/6a/8e/a26a8eb43e8d3f28d30ca4e9e5df3c7e.jpg'
-                },
-                {
-                    id: 39,
-                    name: 'Arduino Due',
-                    price: 2200,
-                    category: 'Microcontrollers',
-                    description: 'Arduino Due with ARM Cortex-M3 processor',
-                    image: 'https://i.pinimg.com/736x/6d/3d/bf/6d3dbf8d5e143594628d4eb40d64ae93.jpg'
-                },
-                {
-                    id: 40,
-                    name: 'ESP8266',
-                    price: 150,
-                    category: 'Microcontrollers',
-                    description: 'WiFi microcontroller module with TCP/IP stack',
-                    image: 'https://i.pinimg.com/1200x/9a/de/f8/9adef8fdfe6b094c40ce148305ebd640.jpg'
-                },
-                {
-                    id: 41,
-                    name: 'Adafruit Feather M0',
-                    price: 650,
-                    category: 'Microcontrollers',
-                    description: 'Adafruit Feather M0 with ATSAMD21 microcontroller',
-                    image: 'https://i.pinimg.com/1200x/27/42/d7/2742d764962b3debf7ec4475259071b1.jpg'
-                },
-                {
-                    id: 42,
-                    name: 'Teensy 4.1',
-                    price: 850,
-                    category: 'Microcontrollers',
-                    description: 'Teensy 4.1 development board with high performance',
-                    image: 'https://m.media-amazon.com/images/I/41GE3LYUSpL.jpg'
-                },
-                {
-                    id: 43,
-                    name: 'Banana Pi',
-                    price: 2500,
-                    category: 'Microcontrollers',
-                    description: 'Banana Pi single board computer with ARM processor',
-                    image: 'https://m.media-amazon.com/images/I/41nUU4o8GiL.jpg'
-                },
-                {
-                    id: 44,
-                    name: 'Orange Pi',
-                    price: 1800,
-                    category: 'Microcontrollers',
-                    description: 'Orange Pi development board with Linux support',
-                    image: 'https://m.media-amazon.com/images/I/41qjsxkbRJL.jpg'
-                },
-                {
-                    id: 45,
-                    name: 'Rain Sensor',
-                    price: 75,
-                    category: 'Sensors',
-                    description: 'Rain detection sensor module for weather monitoring',
-                    image: 'https://i.pinimg.com/736x/ce/c0/d3/cec0d3cf5548a1fbbdbfe666c79d9175.jpg'
-                },
-                {
-                    id: 46,
-                    name: 'Sound Vibration Sensor',
-                    price: 55,
-                    category: 'Sensors',
-                    description: 'Vibration and sound detection sensor module',
-                    image: 'https://i.pinimg.com/736x/4d/40/6c/4d406c89085fbde96a521b2797ff858e.jpg'
-                },
-                {
-                    id: 47,
-                    name: 'Color Sensor (TCS34725)',
-                    price: 180,
-                    category: 'Sensors',
-                    description: 'RGB color sensor with I2C interface',
-                    image: 'https://m.media-amazon.com/images/I/41Q-F-oaBjL.jpg'
-                },
-                {
-                    id: 48,
-                    name: 'Sound Sensor',
-                    price: 45,
-                    category: 'Sensors',
-                    description: 'Analog sound detection sensor module',
-                    image: 'https://i.pinimg.com/1200x/32/93/f5/3293f5f14ee3c654bf5a13c3c851303e.jpg'
-                },
-                {
-                    id: 49,
-                    name: 'Water Level Sensor',
-                    price: 65,
-                    category: 'Sensors',
-                    description: 'Water level detection sensor for liquid monitoring',
-                    image: 'https://i.pinimg.com/1200x/6d/58/76/6d58764a2d251db90da81810cfd54529.jpg'
-                },
-                {
-                    id: 50,
-                    name: '5V Relay Module',
-                    price: 35,
-                    category: 'Actuators',
-                    description: 'Single channel 5V relay module for switching applications',
-                    image: 'https://i.pinimg.com/1200x/2b/93/68/2b9368118a4b55c6d9d1097b55edaeb6.jpg'
-                },
-                {
-                    id: 51,
-                    name: 'Electret Microphone Module',
-                    price: 40,
-                    category: 'Audio Components',
-                    description: 'Electret microphone amplifier module for audio input',
-                    image: 'https://m.media-amazon.com/images/I/41LF+yoKDGS.jpg'
-                },
-                {
-                    id: 52,
-                    name: 'Voice Recognition Microphone Board',
-                    price: 350,
-                    category: 'Audio Components',
-                    description: 'Voice recognition module with microphone',
-                    image: 'https://i.pinimg.com/1200x/82/20/cd/8220cd500d80ce85ae112cb743d27c15.jpg'
-                },
-                {
-                    id: 53,
-                    name: 'Robocraze Speech Recognition Module',
-                    price: 450,
-                    category: 'Audio Components',
-                    description: 'Speech recognition module with built-in microphone',
-                    image: 'https://m.media-amazon.com/images/I/51-1ruiVkVL.jpg'
-                },
-                {
-                    id: 54,
-                    name: 'Active Buzzer Module',
-                    price: 25,
-                    category: 'Audio Components',
-                    description: 'Active buzzer module for sound generation',
-                    image: 'https://i.pinimg.com/1200x/43/10/87/431087ed78d6e014a611787cb4ac6963.jpg'
-                },
-                {
-                    id: 55,
-                    name: 'Passive Buzzer',
-                    price: 20,
-                    category: 'Audio Components',
-                    description: 'Passive buzzer for tone generation',
-                    image: 'https://i.pinimg.com/736x/7d/58/ed/7d58ed71e86237abc1f31b67d8f08639.jpg'
-                },
-                {
-                    id: 56,
-                    name: 'Bluetooth Audio Module',
-                    price: 120,
-                    category: 'Communication',
-                    description: 'Bluetooth audio module for wireless sound streaming',
-                    image: 'https://m.media-amazon.com/images/I/51VBvBJE6oL.jpg'
-                },
-                {
-                    id: 57,
-                    name: 'HC-05 Bluetooth Module',
-                    price: 180,
-                    category: 'Communication',
-                    description: 'Serial Bluetooth module for wireless communication',
-                    image: 'https://i.pinimg.com/736x/f8/05/35/f805354260631494e2c63d66c17e79ed.jpg'
-                },
-                {
-                    id: 58,
-                    name: 'Infrared Obstacle Sensor',
-                    price: 35,
-                    category: 'Sensors',
-                    description: 'IR obstacle avoidance sensor module',
-                    image: 'https://i.pinimg.com/736x/15/fe/19/15fe193153c29952640b42ea92b8ba12.jpg'
-                },
-                {
-                    id: 59,
-                    name: 'PIR Motion Sensor',
-                    price: 75,
-                    category: 'Sensors',
-                    description: 'Passive infrared motion detector for security systems',
-                    image: 'https://i.pinimg.com/736x/fb/3e/6d/fb3e6d329d4c2356c76c84246ceb1dca.jpg'
-                },
-                {
-                    id: 60,
-                    name: 'Temperature Sensor (DS18B20)',
-                    price: 55,
-                    category: 'Sensors',
-                    description: 'Digital temperature sensor with 1-wire interface',
-                    image: 'https://i.pinimg.com/736x/78/8b/ea/788beaacc3994d3b7a80b04aeb6b08ed.jpg'
-                },
-                {
-                    id: 61,
-                    name: 'Pressure Sensor (BMP280)',
-                    price: 120,
-                    category: 'Sensors',
-                    description: 'Barometric pressure and temperature sensor',
-                    image: 'https://i.pinimg.com/736x/2c/f3/25/2cf3253970912c9d71827c0754d24b52.jpg'
-                },
-                {
-                    id: 62,
-                    name: 'Gas Sensor (MQ-2)',
-                    price: 85,
-                    category: 'Sensors',
-                    description: 'Combustible gas and smoke detector sensor',
-                    image: 'https://i.pinimg.com/736x/25/45/c7/2545c7432cd113a3d69dab5e25aefe65.jpg'
-                },
-                {
-                    id: 63,
-                    name: 'Gas Sensor (MQ-135)',
-                    price: 90,
-                    category: 'Sensors',
-                    description: 'Air quality sensor for detecting harmful gases',
-                    image: 'https://i.pinimg.com/736x/35/3c/cb/353ccbf6dac0d3e6e924149b04651dd1.jpg'
-                },
-                {
-                    id: 64,
-                    name: 'Light Sensor (LDR)',
-                    price: 15,
-                    category: 'Sensors',
-                    description: 'Light dependent resistor for light intensity detection',
-                    image: 'https://i.pinimg.com/736x/2a/29/86/2a29868718c02a045dee1db8eb5d1b03.jpg'
-                },
-                {
-                    id: 65,
-                    name: 'Touch Sensor',
-                    price: 30,
-                    category: 'Sensors',
-                    description: 'Capacitive touch sensor module',
-                    image: 'https://i.pinimg.com/736x/29/42/f9/2942f99ba1f9f4c2088a5b53fbf2174c.jpg'
-                },
-                {
-                    id: 66,
-                    name: 'TFT Screen',
-                    price: 850,
-                    category: 'Displays',
-                    description: '2.8 inch TFT LCD color touch screen display with SD card slot',
-                    image: 'https://i.pinimg.com/1200x/e4/d6/fa/e4d6fa1f834a4c26203690590de22ea4.jpg'
-                }
-            ];
-            */
-        }
-
-        function displayProducts() {
-            console.log('🎴 displayProducts: Working with pagination (6 products per page)');
-            console.log('🎴 displayProducts: currentPage =', currentPage);
-            console.log('🎴 displayProducts: filteredProducts.length =', filteredProducts.length);
-
-            // Hide ALL cards first
-            const allCards = document.querySelectorAll('.product-card');
-            console.log('🎴 displayProducts: Hiding ALL', allCards.length, 'cards in DOM');
-            allCards.forEach(card => {
-                card.style.display = 'none';
-            });
-
-            // Calculate which filtered products to show based on current page
-            const startIndex = (currentPage - 1) * productsPerPage;
-            const endIndex = startIndex + productsPerPage;
-
-            console.log(`📄 Page ${currentPage}: showing filtered products ${startIndex + 1} to ${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} total filtered`);
-
-            // Show only the filtered products for current page
-            let shownCount = 0;
-            for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
-                if (filteredProducts[i] && filteredProducts[i].element) {
-                    console.log('🎴 Showing product at index', i, ':', filteredProducts[i].name);
-                    filteredProducts[i].element.style.display = 'block';
-                    shownCount++;
-                } else {
-                    console.error('🎴 Missing element for product at index', i, '- filteredProducts[i] =', filteredProducts[i]);
-                }
-            }
-
-            console.log(`✅ Displayed ${shownCount} products on page ${currentPage}`);
-            if (shownCount === 0) {
-                console.error('❌ NO PRODUCTS WERE DISPLAYED! Check filteredProducts array and element references.');
-            }
-        }
-
-        function updatePagination() {
-            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-            const pagination = document.getElementById('pagination');
-
-            console.log('📄 updatePagination: filteredProducts.length =', filteredProducts.length);
-            console.log('📄 updatePagination: productsPerPage =', productsPerPage);
-            console.log('📄 updatePagination: totalPages =', totalPages);
-
-            if (totalPages <= 1) {
-                console.log('📄 updatePagination: Only 1 page, hiding pagination');
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let paginationHTML = '<div class="pagination-controls" style="display: flex; justify-content: center; gap: 0.5rem; margin: 2rem 0;">';
-
-            console.log('📄 Creating pagination HTML for', totalPages, 'pages, current page:', currentPage);
-
-            // Previous button
-            if (currentPage > 1) {
-                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: white; cursor: pointer;">Previous</button>`;
-                console.log('📄 Added Previous button');
-            }
-
-            // Page numbers
-            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-                const isActive = i === currentPage;
-                paginationHTML += `<button class="page-btn ${isActive ? 'active' : ''}" onclick="changePage(${i})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: ${isActive ? '#ff6b35' : 'white'}; color: ${isActive ? 'white' : 'black'}; cursor: pointer;">${i}</button>`;
-                console.log(`📄 Added page ${i} button${isActive ? ' (active)' : ''}`);
-            }
-
-            // Next button
-            if (currentPage < totalPages) {
-                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})" style="padding: 0.5rem 1rem; border: 1px solid #ddd; background: white; cursor: pointer;">Next</button>`;
-                console.log('📄 Added Next button');
-            }
-
-            paginationHTML += '</div>';
-            pagination.innerHTML = paginationHTML;
-            console.log('📄 Pagination HTML set:', paginationHTML);
-        }
-
-        function changePage(page) {
+        function loadProducts(page = 1) {
+            console.log('Loading products for page:', page);
             currentPage = page;
-            displayProducts();
+
+            // Apply filters
+            let filteredProducts = [...ALL_PRODUCTS];
+
+            // Apply category filter
+            if (currentCategory && currentCategory !== '') {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
+                    product.category === currentCategory
+                );
+            }
+
+            // Apply search filter
+            if (currentSearch) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    product.description.toLowerCase().includes(currentSearch.toLowerCase())
+                );
+            }
+
+            // Apply sorting
+            switch (currentSort) {
+                case 'price_low':
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_high':
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+            }
+
+            // Calculate pagination
+            const productsPerPage = 6;
+            totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            const startIdx = (page - 1) * productsPerPage;
+            const endIdx = startIdx + productsPerPage;
+            const pageProducts = filteredProducts.slice(startIdx, endIdx);
+
+            // Display products
+            displayProducts(pageProducts);
+
+            // Update pagination
             updatePagination();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update results count
+            updateResultsCount(filteredProducts.length);
+        }
+
+        function displayProducts(products) {
+            console.log('Displaying', products.length, 'products');
+            const grid = document.getElementById('productsGrid');
+            const loading = document.getElementById('loadingContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (!grid) {
+                console.error('productsGrid element not found!');
+                return;
+            }
+
+            // Hide loading
+            if (loading) loading.style.display = 'none';
+
+            // Show/hide no results
+            if (noResults) {
+                noResults.style.display = products.length === 0 ? 'block' : 'none';
+            }
+
+            grid.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const colors = ['#ff6b35', '#f7931e', '#ff4757', '#ffa502'];
+                const colorIndex = product.category ? product.category.length % colors.length : 0;
+                const bgColor = colors[colorIndex];
+
+                let html = '<div class="product-image" style="background: linear-gradient(135deg, ' + bgColor + ' 0%, ' + adjustColor(bgColor, -20) + ' 100%)">';
+
+                if (product.image_url) {
+                    html += '<img src="' + product.image_url + '" alt="' + product.name + '" loading="lazy" class="product-image-element" onload="this.nextElementSibling.style.display=\'none\';" onerror="this.style.opacity=\'0.3\';" data-has-image="true">';
+                }
+
+                html += '<i class="fas fa-' + getCategoryIcon(product.category) + '" style="color: white; font-size: 3rem; opacity: 0.8;"></i>';
+
+                if (product.is_featured) {
+                    html += '<div class="product-badge">Sale</div>';
+                }
+                html += '</div>';
+
+                html += '<div class="product-content">';
+                html += '<h3 class="product-title">' + product.name + '</h3>';
+                html += '<p class="product-description">' + (product.description || 'High-quality electronics component') + '</p>';
+
+                html += '<div class="product-price">Rs ' + product.price + '<span class="gst-note">(Exc. GST)</span></div>';
+
+                html += '<div class="product-actions">';
+                html += '<button class="btn btn-primary btn-small" onclick="addToCart(' + product.id + ')">';
+                html += '<i class="fas fa-cart-plus"></i> Add to cart';
+                html += '</button>';
+                html += '</div>';
+                html += '</div>';
+
+                card.innerHTML = html;
+                grid.appendChild(card);
+            });
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'Sensors': 'eye',
+                'Microcontrollers': 'microchip',
+                'Actuators': 'cogs',
+                'Communication': 'wifi',
+                'Power Supply': 'bolt',
+                'Displays': 'tv',
+                'Tools & Accessories': 'tools',
+                'Audio Components': 'volume-up'
+            };
+            return icons[category] || 'cube';
+        }
+
+        function adjustColor(color, amount) {
+            const usePound = color[0] === '#';
+            const col = usePound ? color.slice(1) : color;
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = (num >> 8 & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = r > 255 ? 255 : r < 0 ? 0 : r;
+            g = g > 255 ? 255 : g < 0 ? 0 : g;
+            b = b > 255 ? 255 : g < 0 ? 0 : b;
+            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16);
         }
 
         function filterByCategory(category) {
-            console.log('🔍 Filtering by category:', category);
+            console.log('Filtering by category:', category);
+            currentCategory = category;
 
-            // Update active button state
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-
-            // Find and activate the clicked button
-            const activeButton = document.querySelector(`.filter-btn[onclick="filterByCategory('${category}')"]`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-
-            // Get all product cards and filter them
-            const allCards = document.querySelectorAll('.product-card');
-            filteredProducts = [];
-
-            allCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category') || '';
-                if (category === '' || cardCategory === category) {
-                    filteredProducts.push({
-                        element: card,
-                        category: cardCategory
-                    });
-                }
+            // Update active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
             });
 
-            currentPage = 1;
-            displayProducts();
-            updatePagination();
+            // Find and activate the clicked button
+            const clickedBtn = event.target;
+            clickedBtn.classList.add('active');
 
-            console.log(`✅ Filtered to ${filteredProducts.length} products in category "${category || 'All'}"`);
+            // Reload products
+            currentPage = 1;
+            loadProducts(1);
         }
 
         function sortProducts() {
-            const sortFilter = document.getElementById('sortFilter').value;
-            console.log('🔄 Sorting products by:', sortFilter);
+            const sortSelect = document.getElementById('sortSelect');
+            currentSort = sortSelect.value;
+            console.log('Sorting by:', currentSort);
+            currentPage = 1;
+            loadProducts(1);
+        }
 
-            // Sort filteredProducts array based on sort criteria
-            filteredProducts.sort((a, b) => {
-                const aElement = a.element;
-                const bElement = b.element;
+        function updatePagination() {
+            console.log('Updating pagination - totalPages:', totalPages, 'currentPage:', currentPage);
+            const pagination = document.getElementById('pagination');
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
 
-                if (sortFilter === 'price-low' || sortFilter === 'price-high') {
-                    const aPrice = parseFloat(aElement.querySelector('.product-price').textContent.replace('₹', '')) || 0;
-                    const bPrice = parseFloat(bElement.querySelector('.product-price').textContent.replace('₹', '')) || 0;
-                    return sortFilter === 'price-low' ? aPrice - bPrice : bPrice - aPrice;
+            if (totalPages > 1) {
+                if (pagination) pagination.style.display = 'flex';
+                if (prevBtn) prevBtn.disabled = currentPage <= 1;
+                if (nextBtn) {
+                    nextBtn.disabled = currentPage >= totalPages;
+                    nextBtn.onclick = () => currentPage < totalPages ? goToPage(currentPage + 1) : null;
                 }
 
-                // Default: sort by name
-                const aName = aElement.querySelector('.product-title').textContent || '';
-                const bName = bElement.querySelector('.product-title').textContent || '';
-                return aName.localeCompare(bName);
-            });
+                if (pageNumbers) {
+                    pageNumbers.innerHTML = '';
 
-            currentPage = 1;
-            displayProducts();
-            updatePagination();
+                    // Show up to 5 pages around current page
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(totalPages, currentPage + 2);
 
-            console.log(`✅ Sorted ${filteredProducts.length} products by ${sortFilter}`);
-        }
+                    // Add first page if not in range
+                    if (startPage > 1) {
+                        const firstBtn = document.createElement('button');
+                        firstBtn.className = 'page-btn';
+                        firstBtn.textContent = '1';
+                        firstBtn.onclick = () => goToPage(1);
+                        pageNumbers.appendChild(firstBtn);
 
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-                filteredProducts = allProducts.filter(product =>
-                    product.name.toLowerCase().includes(query) ||
-                    product.description.toLowerCase().includes(query) ||
-                    product.category.toLowerCase().includes(query)
-                );
-                currentPage = 1;
-                displayProducts();
-                updatePagination();
-            });
-        }
+                        if (startPage > 2) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
+                    }
 
-        function performSearch() {
-            // Search is handled by the input event listener
-            alert('Search functionality is active - start typing in the search box!');
-        }
+                    // Add pages around current page
+                    for (let i = startPage; i <= endPage; i++) {
+                        const pageBtn = document.createElement('button');
+                        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        pageBtn.textContent = i;
+                        pageBtn.onclick = () => goToPage(i);
+                        pageNumbers.appendChild(pageBtn);
+                    }
 
-        // Auto-fix any "User NaN" that appears (checks every second)
-        setInterval(() => {
-            const loginText = document.getElementById('loginText');
-            if (loginText && (loginText.textContent === 'User NaN' || loginText.textContent.includes('NaN'))) {
-                console.error('AUTO-FIX: Detected User NaN on products page, fixing automatically');
-                loginText.textContent = 'Login';
-                document.querySelector('.login-trigger').onclick = () => toggleLoginDropdown();
-                currentUser = null;
-                clearUserData();
+                    // Add last page if not in range
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            const ellipsis = document.createElement('span');
+                            ellipsis.textContent = '...';
+                            ellipsis.className = 'page-ellipsis';
+                            pageNumbers.appendChild(ellipsis);
+                        }
+
+                        const lastBtn = document.createElement('button');
+                        lastBtn.className = 'page-btn';
+                        lastBtn.textContent = totalPages;
+                        lastBtn.onclick = () => goToPage(totalPages);
+                        pageNumbers.appendChild(lastBtn);
+                    }
+                }
+            } else {
+                if (pagination) pagination.style.display = 'none';
             }
-        }, 1000);
-
-        function showLoginTab(tabType) {
-            document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.login-tab-content').forEach(content => content.classList.remove('active'));
-
-            event.target.classList.add('active');
-            document.getElementById(tabType + 'LoginTab').classList.add('active');
         }
 
-        function loginWithGmail() {
-            alert('Demo: Gmail login not implemented');
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                loadProducts(page);
+            }
+        }
+
+        function addToCart(productId) {
+            alert('Added product ' + productId + ' to cart! (Demo - not functional on static page)');
+        }
+
+        function updateResultsCount(count) {
+            // Update any results count display if needed
+            console.log('Total filtered results:', count);
         }
     </script>
 </body>
