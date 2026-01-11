@@ -153,10 +153,10 @@
             }
 
             // Generate order summary HTML
-            const orderSummaryHTML = cartItems.length > 0 ? `
+            const orderSummaryHTML = currentCartItems.length > 0 ? `
                 <div class="order-summary">
                     <h3><i class="fas fa-receipt"></i> Order Summary</h3>
-                    ${cartItems.map(item => `
+                    ${currentCartItems.map(item => `
                         <div class="order-item">
                             <div style="display: flex; align-items: center; gap: 1rem;">
                                 ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">` : '<i class="fas fa-cube" style="font-size: 24px; color: #ccc;"></i>'}
@@ -169,7 +169,7 @@
                         </div>
                     `).join('')}
                     <div class="order-item order-total">
-                        <span><strong>Total (${cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</strong></span>
+                        <span><strong>Total (${currentCartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</strong></span>
                         <span><strong>₹${totalAmount}</strong></span>
                     </div>
                 </div>
