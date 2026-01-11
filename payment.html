@@ -103,35 +103,9 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Payment page DOM loaded, initializing...');
-
-            // Check if user is logged in
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
-            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
-
-            if (!userId || !phone || loggedIn !== 'true') {
-                console.log('User not logged in, redirecting to home');
-                alert('Please login first to access payment page!');
-                window.location.href = '/Robotech-storeP2/';
-                return;
-            }
-
-            // Sync to sessionStorage
-            sessionStorage.setItem('user_id', userId);
-            sessionStorage.setItem('phone', phone);
-            sessionStorage.setItem('logged_in', 'true');
-
-            console.log('User authenticated for payment:', userId);
-            initializePaymentPage();
+            console.log('Payment page loaded');
+            showPaymentForm();
         });
-
-        function initializePaymentPage() {
-            console.log('Initializing payment page...');
-
-
-            loadPaymentPage();
-        }
 
         function clearUserData() {
             console.log('Clearing all user data from storage');
@@ -151,76 +125,91 @@
             alert('User data cleared. Please refresh the page.');
         }
 
-        function loadPaymentPage() {
+        function showPaymentForm() {
+            console.log('Showing payment form');
+
             const paymentContent = document.getElementById('paymentContent');
-
-            // Load cart from localStorage (GitHub Pages compatible)
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            console.log('💳 Loading cart for payment, user_id:', userId);
-
-            if (!userId) {
-                paymentContent.innerHTML = `
-                    <div class="login-required">
-                        <h3><i class="fas fa-exclamation-triangle"></i> No Cart Found</h3>
-                        <p>Please add items to your cart before proceeding to checkout.</p>
-                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
-                        <br>
-                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
-                    </div>
-                `;
+            if (!paymentContent) {
+                console.error('Payment content element not found');
                 return;
             }
 
-            // Get cart from localStorage
-            const cartKey = `cart_user_${userId}`;
-            const cartData = localStorage.getItem(cartKey);
-
-            console.log('💳 Cart key:', cartKey, 'Raw data:', cartData);
-
-            if (!cartData) {
-                paymentContent.innerHTML = `
-                    <div class="login-required">
-                        <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
-                        <p>Add some products to your cart before proceeding to payment.</p>
-                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
-                        <br><br>
-                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
+            paymentContent.innerHTML = `
+                <div class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    <div class="order-item order-total">
+                        <span><strong>Demo Order</strong></span>
+                        <span><strong>₹999</strong></span>
                     </div>
-                `;
-                return;
-            }
+                </div>
 
-            const cart = JSON.parse(cartData);
-            console.log('💳 Parsed cart:', cart);
-
-            if (!cart || cart.length === 0) {
-                paymentContent.innerHTML = `
-                    <div class="login-required">
-                        <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
-                        <p>Add some products to your cart before proceeding to payment.</p>
-                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
-                        <br><br>
-                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
+                <form class="payment-form" onsubmit="processPayment(event)">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Billing Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Shipping Address</label>
+                            <input type="text" id="address" placeholder="Street address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">ZIP Code</label>
+                                <input type="text" id="zipCode" required>
+                            </div>
+                        </div>
                     </div>
-                `;
-                return;
-            }
 
-            // Convert cart items to payment format (images already included in cart data)
-            cartItems = cart.map(item => ({
-                product_id: item.id,
-                quantity: item.quantity,
-                price: item.price,
-                name: item.name,
-                image_url: item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'
-            }));
+                    <div class="form-section">
+                        <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
+                        <div class="payment-methods">
+                            <div class="payment-method" onclick="selectPaymentMethod('card')">
+                                <i class="fas fa-credit-card"></i>
+                                <div>Credit/Debit Card</div>
+                            </div>
+                            <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                                <i class="fas fa-mobile-alt"></i>
+                                <div>UPI</div>
+                            </div>
+                            <div class="payment-method" onclick="selectPaymentMethod('cod')">
+                                <i class="fas fa-truck"></i>
+                                <div>Cash on Delivery</div>
+                            </div>
+                        </div>
 
-            console.log('💳 Cart loaded:', cartItems.length, 'items');
-            console.log('💳 Cart items details:', JSON.stringify(cartItems, null, 2));
+                        <div id="paymentDetails" class="payment-details" style="display: none;">
+                            <!-- Payment method specific fields will be inserted here -->
+                        </div>
+                    </div>
 
-            // Display the payment form
-            console.log('💳 Calling displayPaymentForm()...');
-            displayPaymentForm();
+                    <button type="submit" class="pay-btn" id="payBtn">
+                        <i class="fas fa-lock"></i> Pay ₹999
+                    </button>
+                </form>
+            `;
+
+            console.log('Payment form displayed');
+        }
         }
         
         let orderItems = []; // Make it global for processPayment
@@ -520,12 +509,7 @@
         function processPayment(event) {
             event.preventDefault();
 
-            if (!selectedPaymentMethod) {
-                alert('Please select a payment method');
-                return;
-            }
-
-            // Validate form
+            // Basic validation
             const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
             for (const field of requiredFields) {
                 const element = document.getElementById(field);
@@ -536,113 +520,36 @@
                 }
             }
 
-            // Validate payment method specific fields
-            if (selectedPaymentMethod === 'card') {
-                const cardFields = ['cardNumber', 'cardName', 'expiryDate', 'cvv'];
-                for (const field of cardFields) {
-                    const element = document.getElementById(field);
-                    if (!element.value.trim()) {
-                        alert(`Please fill in card ${field.replace('card', '').toLowerCase()}`);
-                        element.focus();
-                        return;
-                    }
-                }
-                // Basic card number validation
-                const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-                if (cardNumber.length < 13 || cardNumber.length > 19 || !/^\d+$/.test(cardNumber)) {
-                    alert('Please enter a valid card number');
-                    document.getElementById('cardNumber').focus();
-                    return;
-                }
-            } else if (selectedPaymentMethod === 'upi') {
-                const upiId = document.getElementById('upiId').value.trim();
-                if (!upiId) {
-                    alert('Please enter your UPI ID');
-                    document.getElementById('upiId').focus();
-                    return;
-                }
-                // Basic UPI validation
-                if (!upiId.includes('@')) {
-                    alert('Please enter a valid UPI ID (must contain @)');
-                    document.getElementById('upiId').focus();
-                    return;
-                }
-            } else if (selectedPaymentMethod === 'netbanking') {
-                const bankName = document.getElementById('bankName').value;
-                const customerId = document.getElementById('customerId').value.trim();
-                if (!bankName) {
-                    alert('Please select your bank');
-                    document.getElementById('bankName').focus();
-                    return;
-                }
-                if (!customerId) {
-                    alert('Please enter your customer ID');
-                    document.getElementById('customerId').focus();
-                    return;
-                }
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
             }
-            // COD doesn't need additional validation
 
             // Show processing
             const payBtn = document.getElementById('payBtn');
             payBtn.disabled = true;
             payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
 
-            // Prepare billing info
-            const billingInfo = {
-                firstName: document.getElementById('firstName').value.trim(),
-                lastName: document.getElementById('lastName').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                address: document.getElementById('address').value.trim(),
-                city: document.getElementById('city').value.trim(),
-                zipCode: document.getElementById('zipCode').value.trim()
-            };
-
-            // Simulate payment processing (GitHub Pages compatible)
+            // Simulate payment processing
             setTimeout(() => {
-                try {
-                    // Simulate successful payment
-                    const data = {
-                        success: true,
-                        order_id: 'ORD-' + Date.now(),
-                        message: 'Payment processed successfully!'
-                    };
+                const orderId = 'ORD-' + Date.now();
 
-                    // Save order to order history
-                    const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-                    if (userId) {
-                        saveOrderToHistory(userId, data.order_id, cartItems, selectedPaymentMethod);
-                        console.log('📋 Order saved to history:', data.order_id);
-
-                        // Clear cart after successful payment
-                        const cartKey = `cart_user_${userId}`;
-                        localStorage.removeItem(cartKey);
-                        console.log('🛒 Cart cleared after successful payment');
-                    }
-
-                    // Show success message
-                    document.getElementById('paymentContent').innerHTML = `
-                        <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
-                            <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
-                            <h2>Payment Successful!</h2>
-                            <p>Thank you for your order. Your payment has been processed successfully.</p>
-                            <p><strong>Order ID:</strong> #${data.order_id}</p>
-                            <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                            <p><strong>Total Amount:</strong> ₹${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</p>
-                            <div style="margin-top: 2rem;">
-                                <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                                <a href="/Robotech-storeP2/cart" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
-                            </div>
+                // Show success message
+                document.getElementById('paymentContent').innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
+                        <h2>Payment Successful!</h2>
+                        <p>Thank you for your order. Your payment has been processed successfully.</p>
+                        <p><strong>Order ID:</strong> #${orderId}</p>
+                        <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
+                        <p><strong>Total Amount:</strong> ₹999</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
+                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
                         </div>
-                    `;
-                } catch (error) {
-                    console.error('❌ Payment error:', error);
-                    payBtn.disabled = false;
-                    payBtn.innerHTML = `<i class="fas fa-lock"></i> Pay ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}`;
-                    alert('Payment failed: ' + error.message);
-                }
-            }, 2000); // 2 second delay to simulate processing
+                    </div>
+                `;
+            }, 2000);
         }
 
         function saveOrderToHistory(userId, orderId, items, paymentMethod) {
