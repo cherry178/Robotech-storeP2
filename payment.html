@@ -6,8 +6,7 @@
     <title>Payment - Robotech Store</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./static/css/style.css">
-    <script src="./static/js/main.js"></script>
+    <link rel="stylesheet" href="/Robotech-storeP2/static/css/style.css">
     <style>
         .demo-banner {
             position: fixed;
@@ -101,12 +100,25 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Payment page DOM loaded, initializing...');
-            // Immediate check for corrupted data
-            const storedUserId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            if (storedUserId && (storedUserId === 'NaN' || isNaN(parseInt(storedUserId)) || storedUserId.includes('demo_'))) {
-                console.log('Found corrupted data on payment page load, clearing...');
-                forceLogout();
+
+            // Check if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const loggedIn = sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in');
+
+            if (!userId || !phone || loggedIn !== 'true') {
+                console.log('User not logged in, redirecting to home');
+                alert('Please login first to access payment page!');
+                window.location.href = '/Robotech-storeP2/';
+                return;
             }
+
+            // Sync to sessionStorage
+            sessionStorage.setItem('user_id', userId);
+            sessionStorage.setItem('phone', phone);
+            sessionStorage.setItem('logged_in', 'true');
+
+            console.log('User authenticated for payment:', userId);
             initializePaymentPage();
         });
 
@@ -434,10 +446,8 @@
             };
 
             // Simulate payment processing (GitHub Pages compatible)
-            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-
-                // Simulate API delay
-                setTimeout(() => {
+            setTimeout(() => {
+                try {
                     // Simulate successful payment
                     const data = {
                         success: true,
@@ -445,44 +455,36 @@
                         message: 'Payment processed successfully!'
                     };
 
-                    // Simulate order completion
-                    const completeData = { success: true };
-
-                    if (completeData.success) {
-                        // Clear cart after successful payment
-                        const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-                        if (userId) {
-                            const cartKey = `cart_user_${userId}`;
-                            localStorage.removeItem(cartKey);
-                            console.log('🛒 Cart cleared after successful payment');
-                        }
-
-                        // Show success message
-                        document.getElementById('paymentContent').innerHTML = `
-                            <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
-                                <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
-                                <h2>Payment Successful!</h2>
-                                <p>Thank you for your order. Your payment has been processed successfully.</p>
-                                <p><strong>Order ID:</strong> #${data.order_id}</p>
-                                <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                                <p><strong>Total Amount:</strong> ₹${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</p>
-                                <div style="margin-top: 2rem;">
-                                    <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                                    <a href="/Robotech-storeP2/cart" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        throw new Error('Failed to complete payment');
+                    // Clear cart after successful payment
+                    const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                    if (userId) {
+                        const cartKey = `cart_user_${userId}`;
+                        localStorage.removeItem(cartKey);
+                        console.log('🛒 Cart cleared after successful payment');
                     }
-                }, 2000); // 2 second delay to simulate processing
 
-            }).catch(error => {
-                console.error('❌ Payment error:', error);
-                payBtn.disabled = false;
-                payBtn.innerHTML = `<i class="fas fa-lock"></i> Pay ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}`;
-                alert('Payment failed: ' + error.message);
-            });
+                    // Show success message
+                    document.getElementById('paymentContent').innerHTML = `
+                        <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
+                            <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
+                            <h2>Payment Successful!</h2>
+                            <p>Thank you for your order. Your payment has been processed successfully.</p>
+                            <p><strong>Order ID:</strong> #${data.order_id}</p>
+                            <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
+                            <p><strong>Total Amount:</strong> ₹${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</p>
+                            <div style="margin-top: 2rem;">
+                                <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
+                                <a href="/Robotech-storeP2/cart" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
+                            </div>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('❌ Payment error:', error);
+                    payBtn.disabled = false;
+                    payBtn.innerHTML = `<i class="fas fa-lock"></i> Pay ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}`;
+                    alert('Payment failed: ' + error.message);
+                }
+            }, 2000); // 2 second delay to simulate processing
         }
 
         // Login functionality removed from payment page
