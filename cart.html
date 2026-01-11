@@ -902,6 +902,17 @@
 
             const cartData = localStorage.getItem(cartKey);
             console.log('🛒 Cart key:', cartKey, 'Raw data from localStorage:', cartData);
+
+            // Debug: Check all cart-related keys
+            const allKeys = Object.keys(localStorage);
+            const cartKeys = allKeys.filter(key => key.includes('cart'));
+            console.log('🛒 All cart-related localStorage keys:', cartKeys);
+
+            // Show what data exists for each cart key
+            cartKeys.forEach(key => {
+                console.log('🛒 Key:', key, 'Data:', localStorage.getItem(key));
+            });
+
             const cart = JSON.parse(cartData || '[]');
             console.log('🛒 Parsed cart data:', cart, 'Length:', cart.length);
             const cartContent = document.getElementById('cartContent');

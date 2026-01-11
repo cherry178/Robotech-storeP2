@@ -770,7 +770,12 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Static products page loaded');
+            console.log('Static products page loaded at:', window.location.href);
+
+            // Test localStorage
+            localStorage.setItem('test_key', 'test_value_' + Date.now());
+            console.log('🧪 localStorage test - set test_key, retrieved:', localStorage.getItem('test_key'));
+
             initializeUserDisplay();
             loadProducts();
             setupSearchEventListeners();
@@ -1071,20 +1076,15 @@
         }
 
         function addToUserCart(productId, productName, price) {
-            // Get user ID more reliably - check both storages
+            // Get user ID - prioritize sessionStorage, fallback to localStorage
             let userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
             console.log('🛒 addToUserCart called - sessionStorage userId:', sessionStorage.getItem('user_id'), 'localStorage userId:', localStorage.getItem('user_id'), 'product:', productName);
 
             if (!userId) {
-                console.log('❌ No user ID found, checking if user needs to login');
-                // Try to get from localStorage directly
-                userId = localStorage.getItem('user_id');
-                if (!userId) {
-                    alert('Please login first to add items to cart!');
-                    window.location.href = '/Robotech-storeP2/';
-                    return;
-                }
-                console.log('🛒 Found user ID in localStorage:', userId);
+                console.log('❌ No user ID found, cannot add to cart');
+                alert('Please login first to add items to cart!');
+                window.location.href = '/Robotech-storeP2/';
+                return;
             }
 
             const cartKey = `cart_user_${userId}`;
@@ -1107,6 +1107,10 @@
 
             localStorage.setItem(cartKey, JSON.stringify(userCart));
             console.log('💾 Saved cart data to localStorage key:', cartKey, 'Data:', JSON.stringify(userCart));
+
+            // Verify the data was saved
+            const verifyData = localStorage.getItem(cartKey);
+            console.log('💾 Verification - retrieved data:', verifyData);
             console.log('💾 All localStorage keys after save:', Object.keys(localStorage));
 
             updateCartCount();
