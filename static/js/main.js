@@ -1979,7 +1979,7 @@ window.toggleAccountMenu = function() {
         const ordersItem = document.createElement('div');
         ordersItem.style.cssText = 'padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; background: white; transition: background 0.2s;';
         ordersItem.innerHTML = '<i class="fas fa-shopping-bag" style="color: #007bff; font-size: 16px;"></i><span style="font-weight: 500;">My Orders</span>';
-        ordersItem.onclick = () => window.location.href = 'http://127.0.0.1:8888/orders';
+        ordersItem.onclick = () => window.location.href = '/Robotech-storeP2/orders';
 
         const logoutItem = document.createElement('div');
         logoutItem.style.cssText = 'padding: 15px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; background: white; transition: background 0.2s;';
