@@ -1996,7 +1996,7 @@ body {
     }
 }
 
-/* Tablets: Show 3 products per row for better display */
+/* Tablets: Show 3 products per row for products page */
 @media (min-width: 600px) and (max-width: 767px) {
     .products-grid {
         grid-template-columns: repeat(3, 1fr) !important;
@@ -2008,11 +2008,11 @@ body {
     }
 }
 
-/* Tablets: Show 2 products per row */
-@media (min-width: 600px) and (max-width: 767px) {
+/* Mobile: Show 1 product per row for very small screens */
+@media (max-width: 599px) {
     .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1.5rem;
+        grid-template-columns: repeat(1, 1fr) !important;
+        gap: 1rem;
     }
 }
 
