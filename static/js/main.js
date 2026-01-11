@@ -1915,9 +1915,13 @@ function updateLoginStatus() {
             // Valid user ID - show it
             loginText.textContent = `User ${parsedUserId}`;
             console.log('updateLoginStatus - Set text to:', loginText.textContent);
-            // Only set onclick if not already set (to avoid overriding home page custom handler)
-            if (!loginTrigger.onclick || loginTrigger.onclick.toString().indexOf('toggleAccountMenuHome') === -1) {
-                loginTrigger.onclick = () => toggleAccountMenu();
+            // Skip onclick setup for home page to avoid conflicts
+            if (window.location.pathname !== '/' && window.location.pathname !== '/Robotech-storeP2/' &&
+                window.location.pathname !== '/Robotech-storeP2/index.html') {
+                // Only set onclick for non-home pages
+                if (!loginTrigger.onclick || loginTrigger.onclick.toString().indexOf('toggleAccountMenuHome') === -1) {
+                    loginTrigger.onclick = () => toggleAccountMenu();
+                }
             }
         } else {
             // Invalid or no user ID - show login

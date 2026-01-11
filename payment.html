@@ -494,6 +494,10 @@
                     console.log('💳 User session reinforced for navigation');
                 }
 
+                // Calculate correct total amount from cart items
+                const correctTotalAmount = currentCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                console.log('💳 Payment success - calculated total:', correctTotalAmount, 'from', currentCartItems.length, 'items');
+
                 // Show success message
                 document.getElementById('paymentContent').innerHTML = `
                     <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
@@ -502,7 +506,7 @@
                         <p>Thank you for your order. Your payment has been processed successfully.</p>
                         <p><strong>Order ID:</strong> #${orderId}</p>
                         <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                        <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
+                        <p><strong>Total Amount:</strong> ₹${correctTotalAmount}</p>
                         <div style="margin-top: 2rem;">
                             <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
                             <button onclick="navigateToOrders()" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">View Orders</button>
@@ -573,6 +577,30 @@
             // Redirect to home page
             window.location.href = '/Robotech-storeP2/';
         }
+
+        // Update user display
+        function initializeUserDisplay() {
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+            const isLoggedIn = (sessionStorage.getItem('logged_in') || localStorage.getItem('logged_in')) === 'true';
+
+            const loginTextElement = document.getElementById('loginText');
+            if (loginTextElement) {
+                if (userId && phone && isLoggedIn) {
+                    loginTextElement.textContent = 'My User ID: ' + userId;
+                    console.log('Payment page: User display updated:', userId);
+                } else {
+                    loginTextElement.textContent = 'Login';
+                    console.log('Payment page: No valid user found');
+                }
+            }
+        }
+
+        // Initialize user display when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Payment page initializing...');
+            initializeUserDisplay();
+        });
 
         // Login functionality removed from payment page
     </script>
