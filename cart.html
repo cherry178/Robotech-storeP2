@@ -903,14 +903,24 @@
             const cartData = localStorage.getItem(cartKey);
             console.log('🛒 Cart key:', cartKey, 'Raw data from localStorage:', cartData);
 
-            // Debug: Check all cart-related keys
+            // Debug: Check all localStorage keys
             const allKeys = Object.keys(localStorage);
+            console.log('🔍 ALL localStorage keys:', allKeys);
+
             const cartKeys = allKeys.filter(key => key.includes('cart'));
-            console.log('🛒 All cart-related localStorage keys:', cartKeys);
+            console.log('🛒 Cart-related localStorage keys:', cartKeys);
 
             // Show what data exists for each cart key
             cartKeys.forEach(key => {
-                console.log('🛒 Key:', key, 'Data:', localStorage.getItem(key));
+                const data = localStorage.getItem(key);
+                console.log('🛒 Key:', key, 'Data:', data, 'Length:', data ? data.length : 0);
+            });
+
+            // Also check for any data with 'user' in key
+            const userKeys = allKeys.filter(key => key.includes('user'));
+            console.log('👤 User-related localStorage keys:', userKeys);
+            userKeys.forEach(key => {
+                console.log('👤 Key:', key, 'Data:', localStorage.getItem(key));
             });
 
             const cart = JSON.parse(cartData || '[]');
@@ -1021,7 +1031,29 @@
         }
 
         function checkout() {
-            alert('Checkout functionality would integrate with payment gateway here.\n\nCart Total: Rs ' + (calculateTotal() * 1.18).toFixed(2) + '\n\nDemo: This would redirect to payment page.');
+            // Check if user is logged in
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            if (!userId) {
+                alert('Please login first to proceed to checkout!');
+                window.location.href = '/Robotech-storeP2/';
+                return;
+            }
+
+            // Check if cart has items
+            const cartKey = getUserCartKey();
+            if (!cartKey) {
+                alert('Please login first!');
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            if (cart.length === 0) {
+                alert('Your cart is empty! Add some products first.');
+                return;
+            }
+
+            // Redirect to payment page
+            window.location.href = '/Robotech-storeP2/payment';
         }
 
         function calculateTotal() {

@@ -1071,8 +1071,11 @@
             }
 
             // Add to user-specific cart
+            console.log('🛒 About to call addToUserCart for product:', productId, product.name);
             addToUserCart(productId, product.name, product.price);
+            console.log('🛒 About to show notification for:', product.name);
             showNotification(`${product.name} added to cart!`, 'success');
+            console.log('🛒 Notification shown for:', product.name);
         }
 
         function addToUserCart(productId, productName, price) {

@@ -65,8 +65,8 @@
                 <!-- Navigation -->
                 <nav class="nav">
                     <a href="static_index.html" class="nav-link">Home</a>
-                    <a href="products.html" class="nav-link">Products</a>
-                    <a href="cart.html" class="nav-link">Cart</a>
+                    <a href="/Robotech-storeP2/products" class="nav-link">Products</a>
+                    <a href="/Robotech-storeP2/cart" class="nav-link">Cart</a>
                     <a href="payment.html" class="nav-link active">Payment</a>
                 </nav>
 
@@ -145,60 +145,69 @@
         function loadPaymentPage() {
             const paymentContent = document.getElementById('paymentContent');
 
-            // Load cart from backend API
+            // Load cart from localStorage (GitHub Pages compatible)
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            console.log('🛒 Loading cart for payment, user_id:', userId);
-            console.log('🛒 Backend URL: http://127.0.0.1:8888/api/cart?user_id=' + userId);
+            console.log('💳 Loading cart for payment, user_id:', userId);
 
             if (!userId) {
                 paymentContent.innerHTML = `
                     <div class="login-required">
                         <h3><i class="fas fa-exclamation-triangle"></i> No Cart Found</h3>
                         <p>Please add items to your cart before proceeding to checkout.</p>
-                        <a href="products.html" class="btn">Continue Shopping</a>
+                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
                         <br>
-                        <a href="cart.html">Back to Cart</a>
+                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
                     </div>
                 `;
                 return;
             }
 
-            paymentContent.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p>Loading cart...</p></div>';
+            // Get cart from localStorage
+            const cartKey = `cart_user_${userId}`;
+            const cartData = localStorage.getItem(cartKey);
 
-            fetch(`http://127.0.0.1:8888/api/cart?user_id=${userId}`)
-                .then(response => {
-                    console.log('🛒 Cart API response status:', response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('🛒 Cart API response data:', JSON.stringify(data, null, 2));
+            console.log('💳 Cart key:', cartKey, 'Raw data:', cartData);
 
-                    if (data.success && data.cart) {
-                        cartItems = data.cart.map(item => ({
-                            product_id: item.product_id,
-                            quantity: item.quantity,
-                            price: item.price,
-                            name: item.name,
-                            image_url: item.image_url
-                        }));
+            if (!cartData) {
+                paymentContent.innerHTML = `
+                    <div class="login-required">
+                        <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
+                        <p>Add some products to your cart before proceeding to payment.</p>
+                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
+                        <br><br>
+                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
+                    </div>
+                `;
+                return;
+            }
 
-                        console.log('🛒 Cart loaded:', cartItems.length, 'items');
-                        console.log('🛒 Cart items details:', JSON.stringify(cartItems, null, 2));
+            const cart = JSON.parse(cartData);
+            console.log('💳 Parsed cart:', cart);
 
-                        if (cartItems.length === 0) {
-                            paymentContent.innerHTML = `
-                                <div class="login-required">
-                                    <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
-                                    <p>Add some products to your cart before proceeding to payment.</p>
-                                    <a href="products.html" class="btn">Continue Shopping</a>
-                                    <br><br>
-                                    <button onclick="testBackendConnection()" style="margin-top: 10px; padding: 10px; background: #17a2b8; color: white; border: none; border-radius: 4px;">Test Backend Connection</button>
-                                    <br><br>
-                                    <button onclick="addTestItemToCart()" style="margin-top: 10px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px;">Add Test Item to Cart</button>
-                                </div>
-                            `;
-                            return;
-                        }
+            if (!cart || cart.length === 0) {
+                paymentContent.innerHTML = `
+                    <div class="login-required">
+                        <h3><i class="fas fa-shopping-cart"></i> Cart is Empty</h3>
+                        <p>Add some products to your cart before proceeding to payment.</p>
+                        <a href="/Robotech-storeP2/products" class="btn">Continue Shopping</a>
+                        <br><br>
+                        <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Convert cart items to payment format
+            cartItems = cart.map(item => ({
+                product_id: item.id,
+                quantity: item.quantity,
+                price: item.price,
+                name: item.name,
+                image_url: '' // No image URL in cart data
+            }));
+
+            console.log('💳 Cart loaded:', cartItems.length, 'items');
+            console.log('💳 Cart items details:', JSON.stringify(cartItems, null, 2));
 
                         console.log('🛒 Calling displayPaymentForm()...');
                         displayPaymentForm();
@@ -209,7 +218,7 @@
                                 <h3><i class="fas fa-exclamation-triangle"></i> Error Loading Cart</h3>
                                 <p>Could not load your cart items. Error: ${data.error || 'Unknown error'}</p>
                                 <p>Please try again or contact support.</p>
-                                <a href="cart.html" class="btn">Back to Cart</a>
+                                <a href="/Robotech-storeP2/cart" class="btn">Back to Cart</a>
                             </div>
                         `;
                     }
@@ -446,56 +455,51 @@
                 zipCode: document.getElementById('zipCode').value.trim()
             };
 
-            // Create order via backend API
+            // Simulate payment processing (GitHub Pages compatible)
             const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
-            fetch('http://127.0.0.1:8888/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id: userId,
-                    billing_info: billingInfo,
-                    payment_method: selectedPaymentMethod
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Complete payment (update order status)
-                    return fetch(`http://127.0.0.1:8888/api/orders/${data.order_id}/complete`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
+
+                // Simulate API delay
+                setTimeout(() => {
+                    // Simulate successful payment
+                    const data = {
+                        success: true,
+                        order_id: 'ORD-' + Date.now(),
+                        message: 'Payment processed successfully!'
+                    };
+
+                    // Simulate order completion
+                    const completeData = { success: true };
+
+                    if (completeData.success) {
+                        // Clear cart after successful payment
+                        const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+                        if (userId) {
+                            const cartKey = `cart_user_${userId}`;
+                            localStorage.removeItem(cartKey);
+                            console.log('🛒 Cart cleared after successful payment');
                         }
-                    })
-                    .then(response => response.json())
-                    .then(completeData => {
-                        if (completeData.success) {
-                            // Show success message
-                            document.getElementById('paymentContent').innerHTML = `
-                                <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
-                                    <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
-                                    <h2>Payment Successful!</h2>
-                                    <p>Thank you for your order. Your payment has been processed successfully.</p>
-                                    <p><strong>Order ID:</strong> #${data.order_id}</p>
-                                    <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
-                                    <p><strong>Total Amount:</strong> ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}</p>
-                                    <div style="margin-top: 2rem;">
-                                        <a href="static_index.html" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                                        <a href="cart.html" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
-                                    </div>
+
+                        // Show success message
+                        document.getElementById('paymentContent').innerHTML = `
+                            <div style="text-align: center; padding: 3rem; background: #d4edda; border-radius: 8px; color: #155724;">
+                                <i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem; color: #28a745;"></i>
+                                <h2>Payment Successful!</h2>
+                                <p>Thank you for your order. Your payment has been processed successfully.</p>
+                                <p><strong>Order ID:</strong> #${data.order_id}</p>
+                                <p><strong>Payment Method:</strong> ${selectedPaymentMethod.toUpperCase()}</p>
+                                <p><strong>Total Amount:</strong> ₹${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</p>
+                                <div style="margin-top: 2rem;">
+                                    <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
+                                    <a href="/Robotech-storeP2/cart" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">View Orders</a>
                                 </div>
-                            `;
-                        } else {
-                            throw new Error(completeData.error || 'Failed to complete payment');
-                        }
-                    });
-                } else {
-                    throw new Error(data.error || 'Failed to create order');
-                }
-            })
-            .catch(error => {
+                            </div>
+                        `;
+                    } else {
+                        throw new Error('Failed to complete payment');
+                    }
+                }, 2000); // 2 second delay to simulate processing
+
+            }).catch(error => {
                 console.error('❌ Payment error:', error);
                 payBtn.disabled = false;
                 payBtn.innerHTML = `<i class="fas fa-lock"></i> Pay ₹${orderItems.reduce((sum, item) => sum + item.subtotal, 0)}`;
