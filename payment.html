@@ -486,7 +486,7 @@
                         <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
                         <div style="margin-top: 2rem;">
                             <a href="/Robotech-storeP2/" class="btn" style="background: #28a745; margin-right: 1rem; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;">Continue Shopping</a>
-                            <a href="/Robotech-storeP2/orders" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px;" onclick="console.log('📋 Navigating to orders with userId:', '${userId}')">View Orders</a>
+                            <button onclick="navigateToOrders()" class="btn" style="background: #6c757d; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">View Orders</button>
                         </div>
                     </div>
                 `;
@@ -509,6 +509,30 @@
             orderHistory.unshift(newOrder); // Add to beginning of array
             localStorage.setItem(orderHistoryKey, JSON.stringify(orderHistory));
             console.log('📋 Order saved to history:', orderId, 'Total orders:', orderHistory.length);
+        }
+
+        // Navigation function to maintain user session
+        function navigateToOrders() {
+            console.log('📋 Navigating to orders - ensuring session is maintained');
+
+            // Double-check user session exists before navigation
+            const userId = sessionStorage.getItem('user_id') || localStorage.getItem('user_id');
+            const phone = sessionStorage.getItem('phone') || localStorage.getItem('phone');
+
+            if (!userId || !phone) {
+                console.error('❌ No user session found for orders navigation');
+                alert('Please log in again to view your orders.');
+                window.location.href = '/Robotech-storeP2/';
+                return;
+            }
+
+            // Reinforce session data before navigation
+            localStorage.setItem('user_id', userId);
+            localStorage.setItem('phone', phone);
+            localStorage.setItem('logged_in', 'true');
+
+            console.log('✅ User session reinforced, navigating to orders');
+            window.location.href = '/Robotech-storeP2/orders';
         }
 
         // Login functionality removed from payment page
