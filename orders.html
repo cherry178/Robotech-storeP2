@@ -209,7 +209,7 @@
             }
 
             console.log('User authenticated for orders:', userId);
-            loadOrders();
+                    loadOrders();
         });
 
         function showLoginRequired() {
@@ -268,7 +268,7 @@
                             <div class="order-item">
                                 <div class="item-info">
                                     <div class="item-image">
-                                        <img src="${item.image_url || '/Robotech-storeP2/static/images/product-placeholder.jpg'}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                                        ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">` : '<i class="fas fa-cube" style="font-size: 24px; color: #ccc;"></i>'}
                                     </div>
                                     <div class="item-details">
                                         <h4>${item.name}</h4>
@@ -280,8 +280,24 @@
                         `).join('')}
                     </div>
 
-                    <div class="order-total">
-                        Total: ₹${order.total}
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem; margin-top: 0.75rem;">
+                        ${order.subtotal !== undefined ? `
+                            <div class="order-item" style="border-bottom: none; padding-bottom: 0.25rem;">
+                                <span>Subtotal:</span>
+                                <span>₹${order.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="order-item" style="border-bottom: none; padding-bottom: 0.25rem;">
+                                <span>Shipping:</span>
+                                <span>Free</span>
+                            </div>
+                            <div class="order-item" style="border-bottom: none; padding-bottom: 0.25rem;">
+                                <span>GST (18%):</span>
+                                <span>₹${(order.gst || (order.subtotal * 0.18)).toFixed(2)}</span>
+                            </div>
+                        ` : ''}
+                        <div class="order-total" style="border-top: 2px solid #e2e8f0; padding-top: 0.75rem; margin-top: 0.5rem;">
+                            Total: ₹${(order.total || order.subtotal * 1.18 || order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.18).toFixed(2)}
+                        </div>
                     </div>
                 </div>
             `).join('');
