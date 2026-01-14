@@ -1132,22 +1132,27 @@ function showNotification(message, type = 'info') {
     const isMobile = window.innerWidth <= 768;
     
     // Add notification styles with mobile responsiveness
+    // On mobile: small pill near top-right, not full-width
     notification.style.cssText = `
         position: fixed;
-        top: ${isMobile ? '20px' : '20px'};
-        ${isMobile ? 'left: 10px; right: 10px;' : 'right: 20px;'}
+        top: 16px;
+        right: 16px;
         background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
         color: white;
-        padding: ${isMobile ? '10px 15px' : '1rem 1.5rem'};
-        border-radius: 0.5rem;
+        padding: ${isMobile ? '6px 10px' : '12px 16px'};
+        border-radius: 999px;
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: ${isMobile ? '0.5rem' : '0.75rem'};
         z-index: 10000;
         animation: slideIn 0.3s ease;
-        max-width: ${isMobile ? 'calc(100% - 20px)' : '400px'};
-        font-size: ${isMobile ? '13px' : '0.875rem'};
+        max-width: ${isMobile ? '260px' : '360px'};
+        font-size: ${isMobile ? '12px' : '0.875rem'};
+        line-height: 1.3;
+        white-space: ${isMobile ? 'nowrap' : 'normal'};
+        overflow: hidden;
+        text-overflow: ellipsis;
     `;
 
     // Add close button styles
