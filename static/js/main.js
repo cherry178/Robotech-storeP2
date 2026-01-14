@@ -1120,54 +1120,64 @@ function showNotification(message, type = 'info') {
                  type === 'error' ? 'exclamation-circle' :
                  type === 'warning' ? 'exclamation-triangle' : 'info-circle';
 
-    notification.innerHTML = `
-        <i class="fas fa-${icon}"></i>
-        <span>${message}</span>
-        <button class="notification-close" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-
     // Check if mobile device
     const isMobile = window.innerWidth <= 768;
     
+    // On mobile: show only icon, on desktop show full message with close button
+    if (isMobile) {
+        notification.innerHTML = `<i class="fas fa-${icon}" style="font-size: 14px;"></i>`;
+    } else {
+        notification.innerHTML = `
+            <i class="fas fa-${icon}"></i>
+            <span>${message}</span>
+            <button class="notification-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+    }
+    
     // Add notification styles with mobile responsiveness
-    // On mobile: small pill near top-right, not full-width
+    // On mobile: tiny pill in top-right corner
     notification.style.cssText = `
         position: fixed;
-        top: 16px;
-        right: 16px;
+        top: ${isMobile ? '12px' : '16px'};
+        right: ${isMobile ? '12px' : '16px'};
         background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
         color: white;
-        padding: ${isMobile ? '6px 10px' : '12px 16px'};
+        padding: ${isMobile ? '4px 8px' : '12px 16px'};
         border-radius: 999px;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         display: inline-flex;
         align-items: center;
-        gap: ${isMobile ? '0.5rem' : '0.75rem'};
+        justify-content: center;
+        gap: ${isMobile ? '0' : '0.75rem'};
         z-index: 10000;
         animation: slideIn 0.3s ease;
-        max-width: ${isMobile ? '260px' : '360px'};
-        font-size: ${isMobile ? '12px' : '0.875rem'};
-        line-height: 1.3;
-        white-space: ${isMobile ? 'nowrap' : 'normal'};
+        max-width: ${isMobile ? '36px' : '360px'};
+        min-width: ${isMobile ? '36px' : 'auto'};
+        height: ${isMobile ? '36px' : 'auto'};
+        font-size: ${isMobile ? '11px' : '0.875rem'};
+        line-height: 1;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     `;
 
-    // Add close button styles
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.style.cssText = `
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        opacity: 0.8;
-        margin-left: auto;
-    `;
+    // Add close button styles (only on desktop)
+    if (!isMobile) {
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.style.cssText = `
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            margin-left: auto;
+        `;
 
-    closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
-    closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.8');
+        closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
+        closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.8');
+    }
 
     document.body.appendChild(notification);
 
