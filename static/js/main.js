@@ -1125,7 +1125,7 @@ function showNotification(message, type = 'info') {
     
     // On mobile: show only icon, on desktop show full message with close button
     if (isMobile) {
-        notification.innerHTML = `<i class="fas fa-${icon}" style="font-size: 14px;"></i>`;
+        notification.innerHTML = `<i class="fas fa-${icon}" style="font-size: 12px !important;"></i>`;
     } else {
         notification.innerHTML = `
             <i class="fas fa-${icon}"></i>
@@ -1137,30 +1137,35 @@ function showNotification(message, type = 'info') {
     }
     
     // Add notification styles with mobile responsiveness
-    // On mobile: tiny pill in top-right corner
+    // On mobile: tiny pill in top-right corner - use !important to override CSS
     notification.style.cssText = `
-        position: fixed;
-        top: ${isMobile ? '12px' : '16px'};
-        right: ${isMobile ? '12px' : '16px'};
-        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
-        color: white;
-        padding: ${isMobile ? '4px 8px' : '12px 16px'};
-        border-radius: 999px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        display: inline-flex;
+        position: fixed !important;
+        top: ${isMobile ? '10px' : '16px'} !important;
+        right: ${isMobile ? '10px' : '16px'} !important;
+        left: ${isMobile ? 'auto' : 'auto'} !important;
+        bottom: ${isMobile ? 'auto' : 'auto'} !important;
+        width: ${isMobile ? '28px' : 'auto'} !important;
+        height: ${isMobile ? '28px' : 'auto'} !important;
+        max-width: ${isMobile ? '28px' : '360px'} !important;
+        min-width: ${isMobile ? '28px' : 'auto'} !important;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'} !important;
+        color: white !important;
+        padding: ${isMobile ? '2px' : '12px 16px'} !important;
+        margin: 0 !important;
+        border-radius: 50% !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+        display: inline-flex !important;
         align-items: center;
         justify-content: center;
         gap: ${isMobile ? '0' : '0.75rem'};
-        z-index: 10000;
+        z-index: 10000 !important;
         animation: slideIn 0.3s ease;
-        max-width: ${isMobile ? '36px' : '360px'};
-        min-width: ${isMobile ? '36px' : 'auto'};
-        height: ${isMobile ? '36px' : 'auto'};
-        font-size: ${isMobile ? '11px' : '0.875rem'};
+        font-size: ${isMobile ? '10px' : '0.875rem'};
         line-height: 1;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        box-sizing: border-box !important;
     `;
 
     // Add close button styles (only on desktop)

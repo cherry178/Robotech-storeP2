@@ -1605,14 +1605,7 @@ body {
         height: 40px;
     }
 
-    /* Notification Mobile */
-    .notification {
-        left: 1rem;
-        right: 1rem;
-        bottom: 1rem;
-        width: auto;
-        margin: 0;
-    }
+    /* Notification Mobile - removed conflicting styles, handled by inline styles with !important */
 
     /* Hide desktop-only elements on mobile */
     .desktop-only {
